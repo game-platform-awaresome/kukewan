@@ -39,5 +39,7 @@ export default new Router({
       path: '/customer-service',
       component: CustomerService
     }
-  ]
+  ],
+  linkActiveClass: 'active',
+  linkExactActiveClass: 'exact-active'
 })

@@ -1,13 +1,10 @@
 <template>
-  <div class="app">
-    <k-header></k-header>
-    <router-view></router-view>
+  <div class="footer">
+
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import KHeader from 'components/k-header/k-header'
-
   export default {
     data () {
       return {
@@ -15,7 +12,7 @@
       }
     },
     components: {
-      KHeader
+
     }
   }
 </script>
@@ -24,4 +21,3 @@
 
 
 </style>
-
