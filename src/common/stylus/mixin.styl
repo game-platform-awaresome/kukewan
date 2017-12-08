@@ -14,3 +14,15 @@ extend-click()
     left: -10px
     right: -10px
     bottom: -10px
+clear-fix()
+  &:before,&:after
+    content: ''
+    display: table
+  &:after
+    clear both
+
+link-a()
+  color $color-text
+  transition all .6s
+  &:hover
+    color $color-theme

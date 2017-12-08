@@ -16,7 +16,9 @@
           <a href="/login">登录</a> | <a href="/register">注册</a>
         </div>
       </div>
-      <div class="other-nav"></div>
+      <div class="other-nav">
+
+      </div>
     </div>
   </div>
 </template>
@@ -61,6 +63,7 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable.styl"
+  @import "~common/stylus/mixin.styl"
 
   .k-header
     height 80px
@@ -86,22 +89,22 @@
           .nav-item
             display inline-block
             width 100px
-            height 88px
-            line-height 88px
+            height 78px
+            line-height 78px
             text-align center
             border-bottom 2px solid #fff
             font-size $font-size-large
-            color $color-nav
+            color $color-title
+            transition all .6s
+            cursor pointer
             &.active
               border-bottom 2px solid $color-theme
+              color $color-theme
         .login-register-wrapper
           float right
           height 100%
           color $color-text
           line-height 80px
           a
-            color $color-text
-            transition all .6s
-            &:hover
-              color $color-theme
+            link-a()
 </style>
