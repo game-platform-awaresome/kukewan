@@ -23,6 +23,18 @@ clear-fix()
 
 link-a()
   color $color-text
+  cursor pointer
   transition all .6s
   &:hover
     color $color-theme
+btn(height,radius,bgColor,fontSize,fontColor)
+  height height
+  line-height height
+  border-radius radius
+  background-color bgColor
+  font-size fontSize
+  color fontColor
+  text-align: center
+  cursor: pointer
+bg($theurl)
+  background url($theurl) 0 0 no-repeat
