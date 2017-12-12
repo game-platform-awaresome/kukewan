@@ -16,9 +16,16 @@
         <!-- login -->
         <login></login>
         <!-- game-server -->
-        <game-server></game-server>
+        <game-server :server="server"></game-server>
+        <!-- gift -->
+        <gift :gifts="gifts"></gift>
+        <!-- article-list -->
+        <article-list :news="news"></article-list>
       </div>
-      <div class="index-right"></div>
+      <div class="index-right">
+        <!-- recommend -->
+        <recommend :recommends="recommends"></recommend>
+      </div>
     </div>
   </div>
 </template>
@@ -27,10 +34,14 @@
   import { Slider, SliderItem } from 'vue-easy-slider'
   import Login from 'base/login/login'
   import GameServer from 'base/game-server/game-server'
+  import Gift from 'base/gift/gift'
+  import ArticleList from 'base/article-list/article-list'
+  import Recommend from 'base/recommend/recommend'
 
   export default {
     data () {
       return {
+        // 轮播
         slider: [{
           img: require('common/image/test/index/banner.png')
         },
@@ -39,6 +50,145 @@
         },
         {
           img: require('common/image/test/index/banner.png')
+        }],
+        // 服
+        server: [
+          [
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服20区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              link: ''
+            },
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服20区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              link: ''
+            }
+          ],
+          [
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服30区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              link: ''
+            },
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服30区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              link: ''
+            }
+          ],
+          [
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服10区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              link: ''
+            },
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服10区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              link: ''
+            }
+          ]
+        ],
+        // 礼包
+        gifts: {
+          title: '游戏礼包',
+          gifts: [{
+            img: require('common/image/test/index/gift.png'),
+            name: '烈焰传奇礼包',
+            num: '1314',
+            url: ''
+          },
+          {
+            img: require('common/image/test/index/gift.png'),
+            name: '烈焰传奇礼包',
+            num: '1314',
+            url: ''
+          },
+          {
+            img: require('common/image/test/index/gift.png'),
+            name: '烈焰传奇礼包',
+            num: '1314',
+            url: ''
+          },
+          {
+            img: require('common/image/test/index/gift.png'),
+            name: '烈焰传奇礼包',
+            num: '1314',
+            url: ''
+          },
+          {
+            img: require('common/image/test/index/gift.png'),
+            name: '烈焰传奇礼包',
+            num: '1314',
+            url: ''
+          }]
+        },
+        // 新闻
+        news: {
+          title: '新闻公告',
+          notice: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
+          lists: [{
+            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
+            url: ''
+          },
+          {
+            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
+            url: ''
+          },
+          {
+            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
+            url: ''
+          },
+          {
+            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
+            url: ''
+          },
+          {
+            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
+            url: ''
+          }]
+        },
+        // 推荐
+        // type: 0: H  1: N
+        recommends: [{
+          img: require('common/image/test/index/recommend.png'),
+          logo: require('common/image/test/index/recommend-logo2.png'),
+          name: '大战神',
+          type: 0,
+          url: ''
+        },
+        {
+          img: require('common/image/test/index/recommend.png'),
+          logo: require('common/image/test/index/recommend-logo2.png'),
+          name: '大战神',
+          type: 1,
+          url: ''
+        },
+        {
+          img: require('common/image/test/index/recommend.png'),
+          logo: require('common/image/test/index/recommend-logo2.png'),
+          name: '大战神',
+          type: 0,
+          url: ''
         }]
       }
     },
@@ -46,7 +196,10 @@
       Slider,
       SliderItem,
       Login,
-      GameServer
+      GameServer,
+      Gift,
+      ArticleList,
+      Recommend
     },
     methods: {
 
@@ -85,10 +238,25 @@
       margin 0 auto
       clear-fix()
       .index-left
+        clear-fix()
         width $width-left
+        float left
         .login-block
           margin-top 60px
           border-top 2px solid $color-theme
         .game-server
           margin-top 60px
+          height 415px
+        .gift
+          margin-top 30px
+          height 438px
+        .article-list
+          margin-top 30px
+          height 392px
+      .index-right
+        clear-fix()
+        float right
+        width 860px
+        margin-top 60px + 60px + 365px
+
 </style>

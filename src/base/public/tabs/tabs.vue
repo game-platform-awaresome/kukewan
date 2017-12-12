@@ -114,7 +114,8 @@
                 width 30%
                 text-align right
           .content-wrapper-hover
-            border 1px solid $color-border
+            border($color-border)
+            border-bottom none
             height 62px
             clear-fix()
             .img
@@ -128,9 +129,25 @@
               float left
               box-sizing border-box
               height 62px
-              padding 5px 10px
-
+              padding 10px 15px
+              text-align center
+              .name,.type
+                height 20px
+                line-height 20px
+              .name
+                font-size $font-size-medium
+                font-weight 600
+              .type
+                font-size $font-size-small
+                color $color-description
             .start-game
-              float left
+              float right
+              margin 20px 10px 0 0
+              border($color-theme)
+              btn(22px,3px,transparent,$font-size-small,$color-theme)
+              width 50px
+              &:hover
+                background-color $color-theme
+                color #fff
 
 </style>

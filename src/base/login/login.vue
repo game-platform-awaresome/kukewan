@@ -56,6 +56,7 @@
   @import "~common/stylus/variable.styl"
 
   .login-block
+    box-sizing border-box
     background-color rgba(255,255,255,.8)
     padding 30px 25px
     .title
@@ -69,7 +70,7 @@
         float right
         font-size $font-size-medium
     .input-wrapper
-      border 1px solid $color-border
+      border($color-border)
       background-color #fff
       border-radius 5px
       padding 15px
