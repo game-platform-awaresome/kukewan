@@ -15,12 +15,12 @@
     </div>
     <div class="index-right">
       <div class="game-center">
-        <p class="game-center-title">
+        <div class="game-center-title">
           <span>游戏中心</span>
           <div class="icon-wrapper">
             <i class="icon icon-more_horiz"></i>
           </div>
-        </p>
+        </div>
         <div class="list-wrapper">
           <ul>
             <li v-for="(center,index) in gameCenter" :key="index">
@@ -138,7 +138,7 @@
             position absolute
             padding 10px
             cursor pointer
-            top 14px
+            top 0
             right 5px
             &:hover
               .icon
