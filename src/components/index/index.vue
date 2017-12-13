@@ -22,10 +22,13 @@
         <!-- article-list -->
         <article-list :news="news"></article-list>
       </div>
-      <div class="index-right">
+      <div class="index-right top">
         <!-- recommend -->
         <recommend :recommends="recommends"></recommend>
+        <!-- boutique -->
+        <boutique :boutiques="boutiques"></boutique>
       </div>
+      <index-bottom :ad="ad" :gameCenter="gameCenter"></index-bottom>
     </div>
   </div>
 </template>
@@ -36,7 +39,9 @@
   import GameServer from 'base/game-server/game-server'
   import Gift from 'base/gift/gift'
   import ArticleList from 'base/article-list/article-list'
-  import Recommend from 'base/recommend/recommend'
+  import Recommend from 'components/index/recommend/recommend'
+  import Boutique from 'components/index/boutique/boutique'
+  import IndexBottom from 'components/index/index-bottom/index-bottom'
 
   export default {
     data () {
@@ -189,6 +194,100 @@
           name: '大战神',
           type: 0,
           url: ''
+        }],
+        // 精品游戏
+        boutiques: [{
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 1
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 1
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        }],
+        // 广告
+        ad: require('common/image/test/index/ad.png'),
+        // 游戏中心
+        gameCenter: [{
+          name: '九阴九阳',
+          type: '0'
+        },
+        {
+          name: '九阴九阳',
+          type: '0'
+        },
+        {
+          name: '九阴九阳',
+          type: '1'
+        },
+        {
+          name: '九阴九阳',
+          type: '1'
+        },
+        {
+          name: '九阴九阳',
+          type: '0'
+        },
+        {
+          name: '九阴九阳',
+          type: '0'
+        },
+        {
+          name: '九阴九阳',
+          type: '0'
+        },
+        {
+          name: '九阴九阳',
+          type: '0'
+        },
+        {
+          name: '九阴九阳',
+          type: '0'
         }]
       }
     },
@@ -199,7 +298,9 @@
       GameServer,
       Gift,
       ArticleList,
-      Recommend
+      Recommend,
+      Boutique,
+      IndexBottom
     },
     methods: {
 
@@ -248,15 +349,18 @@
           margin-top 60px
           height 415px
         .gift
-          margin-top 30px
+          margin-top $height-block-top
           height 438px
         .article-list
-          margin-top 30px
+          margin-top $height-block-top
           height 392px
       .index-right
         clear-fix()
         float right
         width 860px
-        margin-top 60px + 60px + 365px
+        &.top
+          margin-top 60px + 60px + 365px
+        .boutique
+          margin-top $height-block-top
 
 </style>

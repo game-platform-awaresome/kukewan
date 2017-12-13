@@ -113,7 +113,7 @@
           box-sizing border-box
           padding 16px 15px
           height 415px - 66px - 300px
-          border($color-border)
+          border()
           border-top none
           .name
             display inline-block
@@ -121,20 +121,20 @@
             font-size $font-size-medium-x
             color $color-title
           .type
-            display inline-block
-            vertical-align top
-            margin-left 5px
-            width 16px
-            height 16px
-            line-height 16px
-            text-align center
-            font-size $font-size-small
-            color #fff
-            border-radius 2px
-            &.hot
-              background-color $color-hot
-            &.new
-              background-color $color-new
+              display inline-block
+              vertical-align top
+              margin-left 5px
+              width $font-size-medium-x
+              height $font-size-medium-x
+              line-height $font-size-medium-x
+              text-align center
+              font-size $font-size-small
+              color #fff
+              border-radius 2px
+              &.hot
+                background-color $color-hot
+              &.new
+                background-color $color-new
           .btn
             position absolute
             top 12px
@@ -143,7 +143,7 @@
             box-sizing border-box
             padding 0 5px
             border($color-theme)
-            btn(24px,3px,#fff,$font-size-small,$color-theme)
+            btn(70px,24px,3px,#fff,$font-size-small,$color-theme)
             transition all .4s
             &:hover
               background-color $color-theme

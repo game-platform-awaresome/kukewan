@@ -70,14 +70,14 @@
         float right
         font-size $font-size-medium
     .input-wrapper
-      border($color-border)
+      border()
       background-color #fff
       border-radius 5px
       padding 15px
       color $color-description
       transition all .3s
       &.user
-        margin-top 30px
+        margin-top $height-block-top
       &.password
         margin-top 15px
       &.borderInput
@@ -95,7 +95,7 @@
         color $color-description
     .login-btn
       margin-top 5px
-      btn(50px,5px,$color-theme,$font-size-medium-x,#fff)
+      btn(,50px,5px,$color-theme,$font-size-medium-x,#fff)
       background $color-theme
     .other-login
       padding 20px 35px 0

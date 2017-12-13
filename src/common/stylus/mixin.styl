@@ -14,30 +14,42 @@ extend-click()
     left: -10px
     right: -10px
     bottom: -10px
+// 清除浮动
 clear-fix()
   &:before,&:after
     content: ''
     display: table
   &:after
     clear both
-
-link-a()
-  color $color-text
+// 链接
+link-a($color = $color-text,$fontSize = $font-size-small)
+  color $color
   cursor pointer
   transition all .6s
+  font-size: $fontSize
   &:hover
     color $color-theme
-btn(height,radius,bgColor,fontSize,fontColor)
-  height height
-  line-height height
-  border-radius radius
-  background-color bgColor
-  font-size fontSize
-  color fontColor
+// 按钮
+btn($width = 100%,$height,$radius = 5px,
+$bgColor = transparent,$fontSize = $font-size-small,
+$fontColor = $color-text)
+  display block
+  width $width
+  height $height
+  line-height $height
+  border-radius $radius
+  background-color $bgColor
+  font-size $fontSize
+  color $fontColor
   text-align: center
   cursor: pointer
   transition all .3s
+// 背景图
 bg($theurl)
   background url($theurl) 0 0 no-repeat
-border($color,$px=1px)
+// 边框
+border($color = $color-border,$px = 1px)
   border $px solid $color
+
+
+

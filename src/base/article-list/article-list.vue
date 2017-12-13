@@ -41,6 +41,7 @@
   @import "~common/stylus/variable.styl"
 
   .article-list
+    box-sizing border-box
     border($color-border)
     position relative
     .list-wrapper

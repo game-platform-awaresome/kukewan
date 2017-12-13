@@ -43,6 +43,7 @@
   @import "~common/stylus/variable.styl"
 
   .gift
+    box-sizing border-box
     border($color-border)
     .gift-list-wrapper
       padding 0 24px
@@ -76,8 +77,7 @@
           margin-top 15px
           float right
           border($color-theme)
-          btn(22px,3px,#fff,$font-size-small,$color-theme)
-          width 50px
+          btn(50px,22px,3px,#fff,$font-size-small,$color-theme)
           &:hover
            background-color $color-theme
            color #fff

@@ -82,9 +82,8 @@
       .tab-select-item
         float left
         border-top 2px solid #fff
-        width 33.3333%
         transition all .6s
-        btn(66px,0,transparent,$font-size-medium-x,$color-title)
+        btn(33.3333%,66px,0,transparent,$font-size-medium-x,$color-title)
         &.active
           border-top 2px solid $color-theme
     .tab-content
@@ -144,8 +143,7 @@
               float right
               margin 20px 10px 0 0
               border($color-theme)
-              btn(22px,3px,transparent,$font-size-small,$color-theme)
-              width 50px
+              btn(50px,22px,3px,transparent,$font-size-small,$color-theme)
               &:hover
                 background-color $color-theme
                 color #fff
