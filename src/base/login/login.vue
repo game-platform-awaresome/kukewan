@@ -90,8 +90,10 @@
       padding 15px 10px
       font-size $font-size-medium
       .forget
+        display inline-block
+        line-height 16px
         float right
-        link-a()
+        link-a(,$font-size-medium)
         color $color-description
     .login-btn
       margin-top 5px

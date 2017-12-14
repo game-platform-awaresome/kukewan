@@ -2,10 +2,9 @@
   <div class="title">
     <div class="border"></div>
     <span class="title-text">{{title}}</span>
-    <div class="icon-wrapper">
+    <div class="icon-wrapper" v-show="show">
       <i class="icon icon-more_horiz"></i>
     </div>
-
   </div>
 </template>
 
@@ -14,6 +13,10 @@
     props: {
       title: {
         type: String
+      },
+      show: {
+        type: Boolean,
+        default: true
       }
     },
     data () {

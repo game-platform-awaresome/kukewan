@@ -68,6 +68,8 @@
   .k-header
     height 80px
     background-color #fff
+    border-bottom 1px solid $color-border
+    box-shadow 0 5px 10px 30px $color-border outset
     .header-center
       margin 0 auto
       width 1200px

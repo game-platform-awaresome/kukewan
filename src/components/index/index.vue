@@ -28,7 +28,7 @@
         <!-- boutique -->
         <boutique :boutiques="boutiques"></boutique>
       </div>
-      <index-bottom :ad="ad" :gameCenter="gameCenter"></index-bottom>
+      <index-bottom :ad="ad" :gameCenter="gameCenter" :friendlyLink="friendlyLink"></index-bottom>
     </div>
   </div>
 </template>
@@ -255,39 +255,99 @@
         // 游戏中心
         gameCenter: [{
           name: '九阴九阳',
-          type: '0'
+          type: 0
         },
         {
           name: '九阴九阳',
-          type: '0'
+          type: 0
         },
         {
           name: '九阴九阳',
-          type: '1'
+          type: 1
         },
         {
           name: '九阴九阳',
-          type: '1'
+          type: 1
         },
         {
           name: '九阴九阳',
-          type: '0'
+          type: 0
         },
         {
           name: '九阴九阳',
-          type: '0'
+          type: 0
         },
         {
           name: '九阴九阳',
-          type: '0'
+          type: 0
         },
         {
           name: '九阴九阳',
-          type: '0'
+          type: 0
         },
         {
           name: '九阴九阳',
-          type: '0'
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        },
+        {
+          name: '九阴九阳',
+          type: 0
+        }],
+        friendlyLink: [{
+          name: '四季游戏',
+          url: ''
+        },
+        {
+          name: '四季游戏',
+          url: ''
+        },
+        {
+          name: '四季游戏',
+          url: ''
+        },
+        {
+          name: '四季游戏',
+          url: ''
         }]
       }
     },

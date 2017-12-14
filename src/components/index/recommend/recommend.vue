@@ -19,8 +19,7 @@
             </transition>
           <div class="game-content-wrapper">
             <span class="name">{{recommend.name}}</span>
-            <span class="type hot" v-show="recommend.type === 0">H</span>
-            <span class="type new" v-show="recommend.type === 1">N</span>
+            <type-icon :typeIcon="recommend.type"></type-icon>
             <span class="btn" data-url="recommend.url">开始游戏</span>
           </div>
         </li>
@@ -32,6 +31,7 @@
 
 <script type="text/ecmascript-6">
   import PublicTitle from 'public/title/title'
+  import TypeIcon from 'public/type-icon/type-icon'
 
   export default {
     props: {
@@ -46,7 +46,8 @@
       }
     },
     components: {
-      PublicTitle
+      PublicTitle,
+      TypeIcon
     },
     methods: {
       overIndex(index) {
@@ -54,13 +55,6 @@
       },
       outIndex() {
         this.currentIndex = -1
-      },
-      gameType(type) {
-        if (type === 0) {
-          return 'hot'
-        } else {
-          return 'new'
-        }
       }
     }
   }
@@ -80,6 +74,9 @@
         float left
         width 270px
         cursor pointer
+        transition all .3s
+        &:hover
+          transform translate3d(0,-10px,0)
         +.list-item
           margin-left 25px
         .game-image-wrapper

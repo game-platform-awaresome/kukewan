@@ -1,8 +1,7 @@
 <template>
   <div class="game-list">
     <div class="list-wrapper">
-      <!-- <ul> -->
-      <!-- <transition-group name="slide" tag="ul"> -->
+      <ul>
         <li v-for="(list,index) in gameList" :key="index" class="list-item"
         @mouseenter="overIndex(index)" @mouseleave="outIndex()">
           <div class="img-wrapper">
@@ -10,27 +9,25 @@
           </div>
           <div class="content title">
             <span class="name">{{list.name}}</span>
-            <span class="type hot" v-show="list.type === 0">H</span>
-            <span class="type new" v-show="list.type === 1">N</span>
+            <type-icon :typeIcon="list.type"></type-icon>
           </div>
-          <transition name="slide">
-            <div class="content hover" v-show="currentIndex === index">
-              <span class="link">新服</span>
-              <span class="dot">|</span>
-              <span class="link">官网</span>
-              <span class="dot">|</span>
-              <span class="link">礼包</span>
-              <span class="start-game">开始游戏</span>
-            </div>
-          </transition>
+          <div class="content hover">
+            <span class="link">新服</span>
+            <span class="dot">|</span>
+            <span class="link">官网</span>
+            <span class="dot">|</span>
+            <span class="link">礼包</span>
+            <span class="start-game">开始游戏</span>
+          </div>
         </li>
-      <!-- </transition-group> -->
       </ul>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import TypeIcon from 'base/public/type-icon/type-icon'
+
   export default {
     props: {
       gameList: Array
@@ -41,7 +38,7 @@
       }
     },
     components: {
-
+      TypeIcon
     },
     methods: {
       overIndex(index) {
@@ -60,8 +57,13 @@
 
   .game-list
     .list-wrapper
-      no-wrap()
+      clear-fix()
       .list-item
+        &:hover
+          .content.hover
+            transform translate3d(0,0,0)
+          .game-img
+            transform scale(1.1)
         position relative
         width 270px
         height 248px
@@ -78,9 +80,11 @@
           margin-left 0
         .img-wrapper
           height 200px
+          // overflow hidden
           .game-img
             width 100%
             height 100%
+            transition all .4s
         .content
           box-sizing border-box
           height 48px
@@ -111,11 +115,6 @@
               &.new
                 background-color $color-new
           &.hover
-            &.slide-enter-active, .slide-leave-active
-              transition all .3s
-              transform translate3d(0,0,0)
-            &.slide-enter, .slide-leave-to
-              transform translate3d(0,47px,0)
             position absolute
             padding 12px
             bottom 0
@@ -124,6 +123,8 @@
             line-height 24px
             text-align left
             background-color #fff
+            transform translate3d(0,48px,0)
+            transition all .3s
             .link
               link-a($color-description,$font-size-medium)
             .dot
@@ -138,6 +139,4 @@
               &:hover
                 color #fff
                 background-color $color-theme
-
-
 </style>
