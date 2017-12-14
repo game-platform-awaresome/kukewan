@@ -66,10 +66,14 @@
   @import "~common/stylus/mixin.styl"
 
   .k-header
-    height 80px
+    position fixed
+    top 0
+    left 0
+    height 70px
+    width 100%
+    z-index 3
     background-color #fff
     border-bottom 1px solid $color-border
-    box-shadow 0 5px 10px 30px $color-border outset
     .header-center
       margin 0 auto
       width 1200px
@@ -77,7 +81,7 @@
       vertical-align middle
       .logo-wrapper
         float left
-        margin-top 20px
+        margin-top 15px
         width 210px
         height 40px
       .common-nav
@@ -91,8 +95,8 @@
           .nav-item
             display inline-block
             width 100px
-            height 78px
-            line-height 78px
+            height 68px
+            line-height 68px
             text-align center
             border-bottom 2px solid #fff
             font-size $font-size-large
@@ -106,7 +110,7 @@
           float right
           height 100%
           color $color-text
-          line-height 80px
+          line-height 70px
           a
             link-a()
 </style>

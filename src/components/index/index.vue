@@ -373,6 +373,7 @@
   @import "~common/stylus/variable.styl"
 
   .index
+    margin-top 71px
     position relative
     min-height 1000px
     .slider-wrapper
@@ -393,15 +394,9 @@
           &.slider-indicator-active
             background-color $color-theme
     .index-wrapper
-      position relative
-      z-index 2
-      width $width-base
-      margin 0 auto
-      clear-fix()
+      wrapper()
       .index-left
-        clear-fix()
-        width $width-left
-        float left
+        wrapper-left()
         .login-block
           margin-top 60px
           border-top 2px solid $color-theme
@@ -415,9 +410,7 @@
           margin-top $height-block-top
           height 392px
       .index-right
-        clear-fix()
-        float right
-        width 860px
+        wrapper-right()
         &.top
           margin-top 60px + 60px + 365px
         .boutique

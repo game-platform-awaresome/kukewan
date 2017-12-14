@@ -51,5 +51,20 @@ bg($theurl)
 border($color = $color-border,$px = 1px)
   border $px solid $color
 
+// 包裹
+wrapper()
+  position relative
+  z-index 2
+  width $width-base
+  margin 0 auto
+  clear-fix()
 
+wrapper-left()
+  clear-fix()
+  width $width-left
+  float left
 
+wrapper-right()
+  clear-fix()
+  width $width-right
+  float right
