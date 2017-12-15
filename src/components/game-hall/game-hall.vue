@@ -11,13 +11,13 @@
       </el-carousel>
       <div class="game-hall-left">
         <!-- rank -->
-        <rank></rank>
-        <i class="icon-medal"></i>
+        <rank :rank="rank"></rank>
         <!-- game-server -->
+        <game-server :server="server"></game-server>
       </div>
       <div class="game-hall-right">
         <!-- search -->
-        <!-- game-list -->
+        <search :gameList="gameList"></search>
       </div>
     </div>
   </div>
@@ -27,9 +27,12 @@
   import GameServer from 'base/game-server/game-server'
   import GameList from 'base/game-list/game-list'
   import Rank from 'components/game-hall/rank/rank'
+  import Search from 'components/game-hall/search/search'
+
   export default {
     data () {
       return {
+        // 轮播
         slider: [{
           img: require('common/image/test/game-hall/slider.png'),
           name: '热血传奇',
@@ -45,16 +48,156 @@
           name: '热血传奇',
           url: ''
         }],
-        ranks: [{
+        // 排行
+        rank: [{
+          gid: 100,
           name: '烈焰传奇',
-          type: ''
+          type: '角色扮演'
+        },
+        {
+          gid: 100,
+          name: '烈焰传奇',
+          type: '角色扮演'
+        },
+        {
+          gid: 100,
+          name: '烈焰传奇',
+          type: '角色扮演'
+        },
+        {
+          gid: 100,
+          name: '烈焰传奇',
+          type: '角色扮演'
+        },
+        {
+          gid: 100,
+          name: '烈焰传奇',
+          type: '角色扮演'
+        },
+        {
+          gid: 100,
+          name: '烈焰传奇',
+          type: '角色扮演'
+        }],
+        // 服
+        server: [
+          [
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服20区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              url: ''
+            },
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服20区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              url: ''
+            }
+          ],
+          [
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服30区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              url: ''
+            },
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服30区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              url: ''
+            }
+          ],
+          [
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服10区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              url: ''
+            },
+            {
+              time: '09/27 15:30',
+              name: '烈焰传奇',
+              server: '新服10区',
+              image: require('common/image/test/index/server.png'),
+              type: '角色扮演',
+              url: ''
+            }
+          ]
+        ],
+        // 全部游戏
+        gameList: [{
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 1
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 1
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
+        },
+        {
+          img: require('common/image/test/index/boutique.png'),
+          name: '武极天下',
+          officialWebsite: '',
+          type: 0
         }]
       }
     },
     components: {
       GameServer,
       GameList,
-      Rank
+      Rank,
+      Search
     }
   }
 </script>
@@ -66,6 +209,7 @@
   .game-hall
     margin-top 71px
     .game-hall-wrapper
+      padding-bottom 40px
       wrapper()
       .el-carousel__item
         .slider-item-wrapper
@@ -83,7 +227,11 @@
             background-color rgba(35,114,244,.3)
       .game-hall-left
         wrapper-left()
-
+        .game-server
+          border()
+          height 727px
+          margin-top $height-block-top
       .game-hall-right
         wrapper-right()
+
 </style>

@@ -29,5 +29,5 @@
   @import "~common/stylus/variable.styl"
 
   .game-server
-    background-color rgba(255,255,255,.8)
+    box-sizing border-box
 </style>

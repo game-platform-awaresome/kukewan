@@ -28,7 +28,7 @@
         <!-- boutique -->
         <boutique :boutiques="boutiques"></boutique>
       </div>
-      <index-bottom :ad="ad" :gameCenter="gameCenter" :friendlyLink="friendlyLink"></index-bottom>
+      <index-bottom :ad="ad" :gameCenter="gameCenter" :friendlyurl="friendlyurl"></index-bottom>
     </div>
   </div>
 </template>
@@ -65,7 +65,7 @@
               server: '新服20区',
               image: require('common/image/test/index/server.png'),
               type: '角色扮演',
-              link: ''
+              url: ''
             },
             {
               time: '09/27 15:30',
@@ -73,7 +73,7 @@
               server: '新服20区',
               image: require('common/image/test/index/server.png'),
               type: '角色扮演',
-              link: ''
+              url: ''
             }
           ],
           [
@@ -83,7 +83,7 @@
               server: '新服30区',
               image: require('common/image/test/index/server.png'),
               type: '角色扮演',
-              link: ''
+              url: ''
             },
             {
               time: '09/27 15:30',
@@ -91,7 +91,7 @@
               server: '新服30区',
               image: require('common/image/test/index/server.png'),
               type: '角色扮演',
-              link: ''
+              url: ''
             }
           ],
           [
@@ -101,7 +101,7 @@
               server: '新服10区',
               image: require('common/image/test/index/server.png'),
               type: '角色扮演',
-              link: ''
+              url: ''
             },
             {
               time: '09/27 15:30',
@@ -109,7 +109,7 @@
               server: '新服10区',
               image: require('common/image/test/index/server.png'),
               type: '角色扮演',
-              link: ''
+              url: ''
             }
           ]
         ],
@@ -333,7 +333,7 @@
           name: '九阴九阳',
           type: 0
         }],
-        friendlyLink: [{
+        friendlyurl: [{
           name: '四季游戏',
           url: ''
         },
@@ -401,6 +401,7 @@
           margin-top 60px
           border-top 2px solid $color-theme
         .game-server
+          background-color rgba(255,255,255,.8)
           margin-top 60px
           height 415px
         .gift
