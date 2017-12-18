@@ -2,6 +2,13 @@
   <div class="search">
     <div class="search-nav">
       <public-title :title="title" :show="false"></public-title>
+      <div class="search-input" :class="{active: isFocus === true}">
+        <input type="text" placeholder="请输入搜索内容" v-model="searchInput" class="search-input-start"
+         @focus="focus" @blur="blur">
+        <div class="search-input-icon-wrapper">
+          <i class="el-icon-search"></i>
+        </div>
+      </div>
       <div class="search-select-wrapper">
         <ul>
           <li class="select-nav-item">
@@ -73,6 +80,8 @@
     data () {
       return {
         title: '全部游戏',
+        searchInput: '',
+        isFocus: false,
         gameType: [
           {
             name: '角色扮演',
@@ -190,6 +199,12 @@
     methods: {
       selectNavItem(nav, index) {
         this.currentIndex[nav] = index
+      },
+      focus() {
+        this.isFocus = true
+      },
+      blur() {
+        this.isFocus = false
       }
     }
   }
@@ -201,7 +216,33 @@
 
   .search
     .search-nav
+      position relative
       border()
+      .search-input
+        position absolute
+        right 33px
+        top 19px
+        width 200px
+        box-sizing border-box
+        font-size $font-size-medium-x
+        border()
+        border-radius 15px
+        padding 6px 0 6px 10px
+        transition all .3s
+        &.active
+          border($color-theme)
+        .search-input-start
+          width 160px
+        .search-input-icon-wrapper
+          position absolute
+          right 5px
+          top 0
+          bottom 0
+          width 32px
+          line-height 32px
+          text-align center
+          border-radius 50%
+          cursor pointer
       .search-select-wrapper
         padding 0 14px
         .select-nav-item
@@ -231,6 +272,9 @@
                 background-color $color-theme
                 color #fff
                 border-radius 5px
+
+
+
     .game-list
       margin-top $height-block-top
     .pagination-wrapper
