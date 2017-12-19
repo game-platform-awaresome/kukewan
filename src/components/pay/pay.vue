@@ -27,32 +27,37 @@
         <div class="pay-type">
           <ul>
             <li v-for="(payType,index) in payTypeList" :key="index"
-             @click="selectPayType(payType.type)" class="pay-type-item">
-              <i class="icon"></i>
+             @click="selectPayType(payType.type,index)" class="pay-type-item" :class="{active: paytypeCurrentIndex === index}">
+              <i class="icon" :class="payType.type"></i>
               <span class="pay-type-text">{{payType.text}}</span>
-              <i class="icon"></i>
+              <i class="el-icon-arrow-right"></i>
             </li>
           </ul>
         </div>
       </div>
       <div class="pay-right">
         <!-- common-input -->
-
+        <pay-form></pay-form>
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import PayForm from 'components/pay/pay-form/pay-form'
   import animations from 'create-keyframe-animation'
   export default {
     created() {
+
+    },
+    mounted() {
       this.$nextTick(() => {
         this.widthMove()
       })
     },
     data () {
       return {
+        paytypeCurrentIndex: 0,
         user: {
           sign: true,
           avatar: require('common/image/test/pay/avatar.png'),
@@ -84,12 +89,14 @@
       }
     },
     components: {
-
+      PayForm
     },
     methods: {
-      selectPayType(type) {
+      selectPayType(type, index) {
         this.payType = type
+        this.paytypeCurrentIndex = index
       },
+      // 安全动画宽度
       widthMove() {
         let animation = {
           0: {
@@ -118,15 +125,26 @@
   @import "~common/stylus/mixin.styl"
   @import "~common/stylus/variable.styl"
 
+  $pay-type-location = './image/pay-type/'
+  $pay-unionpay-location = './image/union/'
+
+  paytype-icon($icon)
+    background url($pay-type-location + "pay-" +  $icon + ".png") 0 0 no-repeat
+  union-icon($icon)
+    background url($pay-unionpay-location + "pay-" + $icon + ".png") 0 0 no-repeat
+
+
   .pay
     margin-top 71px
     .pay-wrapper
+      box-sizing border-box
       wrapper()
+      border-left 1px solid $color-border
+      border-right 1px solid $color-border
       .pay-left
         box-sizing border-box
         wrapper-left()
-        border()
-        border-top none
+        height 100%
         .user-info
           position relative
           height 188px
@@ -192,14 +210,49 @@
                 height 100%
                 background-color $color-hot
         .pay-type
-          height 464px
+          min-height 464px
           .pay-type-item
-            height 58px
-            line-height 58px
-
+            position relative
+            height (58 - 17*2)px
+            line-height (58 - 17*2)px
+            font-size $font-size-medium-x
+            padding 17px 0 17px 100px
+            border-bottom 1px solid $color-border
+            cursor pointer
+            background-color #f7fafe
+            &:hover
+              background-color #fff
+            &.active
+              background-color #fff
+            .pay-type-text
+              display inline-block
+              vertical-align middle
+              margin-left 20px
+            .icon
+              display inline-block
+              vertical-align middle
+              width 24px
+              height 24px
+              &.alipay
+                paytype-icon('alipay')
+              &.wechat
+                paytype-icon('wechat')
+              &.unionpay
+                paytype-icon('unionpay')
+              &.game-card
+                paytype-icon('game')
+              &.phone-card
+                paytype-icon('phone')
+            .el-icon-arrow-right
+              position absolute
+              right 14px
+              top 50%
+              transform translateY(-50%)
       .pay-right
+        box-sizing border-box
         wrapper-right()
-
-
+        width 888px
+        border-left 1px solid $color-border
+        min-height 660px
 
 </style>
