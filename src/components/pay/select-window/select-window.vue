@@ -1,34 +1,34 @@
 <template>
-  <div class="select-window">
+  <div class="select-window" @click.stop>
     <div class="window-nav-wrapper" v-show="isGameList">
       <ul>
-        <li class="nav-item" :class="{active: selectCurrentListCls}" @click="selectCurrentList(0,true)">最近在玩</li>
-        <li class="nav-item" :class="{active: !selectCurrentListCls}" @click="selectCurrentList(1,false)">全部游戏</li>
+        <li class="nav-item" :class="{active: selectCurrentListCls}" @click.stop="selectCurrentList(0,true)">最近在玩</li>
+        <li class="nav-item" :class="{active: !selectCurrentListCls}" @click.stop="selectCurrentList(1,false)">全部游戏</li>
       </ul>
       <div class="close-the-window">
-        <i class="el-icon-close" @click="closeTheWindow"></i>
+        <i class="el-icon-close" @click.stop="closeTheWindow"></i>
       </div>
     </div>
     <div class="window-nav-wrapper" v-show="!isGameList">
       <ul>
-        <li class="nav-item" :class="{active: selectCurrentListCls}" @click="selectCurrentList(0,true)">最近在玩</li>
-        <li class="nav-item" :class="{active: !selectCurrentListCls}" @click="selectCurrentList(1,false)">全部区服</li>
+        <li class="nav-item" :class="{active: selectCurrentListCls}" @click.stop="selectCurrentList(0,true)">最近在玩</li>
+        <li class="nav-item" :class="{active: !selectCurrentListCls}" @click.stop="selectCurrentList(1,false)">全部区服</li>
       </ul>
       <div class="close-the-window">
-        <i class="el-icon-close" @click="closeTheWindow"></i>
+        <i class="el-icon-close" @click.stop="closeTheWindow"></i>
       </div>
     </div>
     <div class="window-list-wrapper" v-show="showCurrentList === 0">
       <ul>
-        <li v-for="(list,index) in recentLists" :key="index" class="window-list-item">
-          <span class="recent-play-item" @click="selectGame(list.gid)">{{list.name}}</span>
+        <li v-for="(list,index) in recentLists" :key="index" class="window-list-item" @click.stop="selectId(list)">
+          <span class="recent-play-item">{{list.name}}</span>
         </li>
       </ul>
     </div>
     <div class="window-list-wrapper" v-show="showCurrentList === 1">
       <ul>
-        <li v-for="(list,index) in allLists" :key="index" class="window-list-item">
-          <span class="recent-play-item" @click="selectGame(list.gid)">{{list.name}}</span>
+        <li v-for="(list,index) in allLists" :key="index" class="window-list-item" @click.stop="selectId(list)">
+          <span class="recent-play-item">{{list.name}}</span>
         </li>
       </ul>
     </div>
@@ -67,6 +67,13 @@
       // 关闭当前窗口
       closeTheWindow() {
         this.$emit('close', this.isGameList)
+      },
+      selectId(list) {
+        if (this.isGameList) {
+          this.$emit('selectId', list)
+        } else {
+          this.$emit('selectId', list)
+        }
       }
     }
   }

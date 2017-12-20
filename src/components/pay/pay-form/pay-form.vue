@@ -1,48 +1,59 @@
 <template>
   <div class="pay-form">
     <div class="common-form-wrapper">
+      <!-- account -->
       <div class="single-form-wrapper">
         <span class="input-title">充值账号 : </span>
-        <div class="input-wrapper" :class="usernameCls">
-          <input type="text" placeholder="请输入账号" v-model="formData.username"
-           @focus="usernameFocus" @blur="usernameBlur">
+        <div class="input-wrapper" :class="accountCls">
+          <input type="text" placeholder="请输入账号" v-model="formData.account"
+           @focus="accountFocus" @blur="accountBlur">
         </div>
-        <p v-show="isCorrectUsername === 0" class="form-msg"><span class="icon correct"></span></p>
-        <p v-show="isCorrectUsername === 1" class="form-msg">
+        <p v-show="isCorrectAccount === 0" class="form-msg"><span class="icon correct"></span></p>
+        <p v-show="isCorrectAccount === 1" class="form-msg">
           <span class="icon error"></span>
           <span class="text">账户不存在</span>
         </p>
       </div>
       <div class="single-form-wrapper">
         <span class="input-title">选择游戏 : </span>
-        <div class="select-btn" @click="openGameList">选择游戏 <i class="el-icon-caret-bottom"></i></div>
-        <div class="select-btn" @click="openGameServerList">选择区服 <i class="el-icon-caret-bottom"></i></div>
+        <div class="select-btn" @click.stop="openGameList">{{showGid}} <i class="el-icon-caret-bottom"></i></div>
+        <div class="select-btn" @click.stop="openGameServerList">{{showSid}} <i class="el-icon-caret-bottom"></i></div>
         <!-- game-select-window -->
         <transition name="mode">
           <div class="game-select-window select-window-wrapper" v-show="showGameList">
             <select-window :isGameList="true" :recentLists="recentPlayList"
-            :allLists="allGameList" @close="closeTheWindow"></select-window>
+            :allLists="allGameList" @close="closeTheWindow" @selectId="selectId"></select-window>
           </div>
         </transition>
         <!-- server-select-window -->
         <transition name="mode">
           <div class="server-select-window select-window-wrapper" v-show="showGameServerList">
             <select-window :isGameList="false" :recentLists="recentServerList"
-            :allLists="allServerList" @close="closeTheWindow"></select-window>
+            :allLists="allServerList" @close="closeTheWindow" @selectId="selectId"></select-window>
           </div>
         </transition>
       </div>
+      <!-- money -->
       <div class="single-form-wrapper">
         <span class="input-title">选择金额 : <s></s></span>
         <div class="money-list-wrapper">
           <ul>
-            <li v-for="(item,index) in moneyList" :key="index" class="money-list-item">
+            <li v-for="(item,index) in moneyList" :key="index" class="money-list-item"
+             @click="selectMoney(item,index)" :class="{active: currentMoneyIndex === index}">
               {{item}}
             </li>
-            <li class="money-list-item">
-              <input type="text" v-model="formData.money" class="input-money" placeholder="其他金额">
+            <li class="money-list-item input-money-list-item" :class="{active: currentOtherMoneyCls}">
+              <input type="text" v-model.number="otherMoney" class="input-money" placeholder="其他金额"
+              @focus="otherMoneyFocus" @blur="otherMoneyBlur">
             </li>
           </ul>
+        </div>
+      </div>
+      <!-- other pay unionpay game-card phone-card -->
+      <div class="single-form-wrapper" v-show="showUnionList">
+        <span class="input-title">选择{{currentPayTypeTitle}} : </span>
+        <div class="other-pay-list-wrapper">
+          <pay-list :payType="formData.payType" :selectId="selectId" @selectUnionpay="selectUnionpay"></pay-list>
         </div>
       </div>
     </div>
@@ -54,116 +65,98 @@
 
 <script type="text/ecmascript-6">
   import SelectWindow from 'components/pay/select-window/select-window'
+  import PayList from 'components/pay/pay-list/pay-list'
 
   export default {
+    props: {
+      closeWindow: {
+        type: Number
+      },
+      formData: {
+        type: Object
+      },
+      recentPlayList: {
+        type: Array
+      },
+      allGameList: {
+        type: Array
+      },
+      recentServerList: {
+        type: Array
+      },
+      allServerList: {
+        type: Array
+      }
+    },
+    mounted() {
+
+    },
+    watch: {
+      closeWindow() {
+        if (this.showGameList || this.showGameServerList) {
+          this.showGameList = false
+          this.showGameServerList = false
+          console.log('close the window')
+        }
+      }
+    },
+    computed: {
+      showUnionList() {
+        let payType = this.formData.payType
+        if (payType === 'unionpay' || payType === 'game-card' || payType === 'phone-card') {
+          return true
+        } else {
+          return false
+        }
+      },
+      currentPayTypeTitle() {
+        if (this.formData.payType === 'unionpay') {
+          return '银行'
+        } else if (this.formData.payType === 'game-card') {
+          return '游戏卡'
+        } else if (this.formData.payType === 'phone-card') {
+          return '手机卡'
+        }
+      }
+    },
     data () {
       return {
+        // 选择游戏 & 选择区服显示
+        showGid: '选择游戏',
+        showSid: '选择区服',
         // 表单错误提示
-
-        isCorrectUsername: 2,   // 0 填写正确,1 填写错误
-        usernameCls: {
+        isCorrectAccount: 2,   // 0 填写正确,1 填写错误
+        accountCls: {
           focus: false,
           warn: false
         },
-        // 表单参数
-        formData: {
-          username: '',
-          gid: 0,
-          sid: 0,
-          money: '',
-          union: '',
-          gameCard: ''
-        },
         showGameList: false,
         showGameServerList: false,
-        // 最近在玩游戏列表
-        recentPlayList: [{
-          name: '大美人',
-          gid: '1'
-        },
-        {
-          name: '大美人',
-          gid: '1'
-        },
-        {
-          name: '大美人',
-          gid: '1'
-        }],
-        // 所有游戏列表
-        allGameList: [{
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        }],
-        // 最近在玩的服务器列表
-        recentServerList: [{
-          name: '双线123区',
-          sid: 22
-        }],
-        // 所有服务器列表
-        allServerList: [{
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
-        }],
-        moneyList: [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 1000]
+        moneyList: [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
+        otherMoney: '',
+        currentMoneyIndex: 0,
+        currentOtherMoneyCls: false    // 当前其他金额Cls
       }
     },
     components: {
-      SelectWindow
+      SelectWindow,
+      PayList
     },
     methods: {
-      usernameFocus() {
-        this.usernameCls.warn = false
-        this.usernameCls.focus = !this.usernameCls.warn
+      accountFocus() {
+        this.accountCls.warn = false
+        this.accountCls.focus = !this.accountCls.warn
       },
-      usernameBlur() {
+      accountBlur() {
         /* 接口调用 */
         // 失败
-        // this.usernameCls.focus = false
-        // this.usernameCls.warn = !this.usernameCls.focus
-        // this.isCorrectUsername = 1
+        // this.accountCls.focus = false
+        // this.accountCls.warn = !this.accountCls.focus
+        // this.isCorrectAccount = 1
         // 正确
-        this.usernameCls.focus = false
-        this.isCorrectUsername = 0
+        this.accountCls.focus = false
+        this.isCorrectAccount = 0
+        this.backAccount()
       },
       closeTheWindow(isGameList) {
         if (isGameList) {
@@ -173,6 +166,7 @@
         }
       },
       openGameList() {
+        // 窗口控制
         if (this.showGameServerList) {
           this.showGameServerList = false
         }
@@ -183,6 +177,54 @@
           this.showGameList = false
         }
         this.showGameServerList = true
+      },
+      otherMoneyFocus() {
+        this.currentOtherMoneyCls = true
+        // 关闭所有金额样式
+        this.currentMoneyIndex = -1
+      },
+      otherMoneyBlur() {
+        if (this.otherMoney) {
+          this.$emit('getMoney', this.otherMoney)
+        }
+      },
+      /*
+        数据传递部分
+       */
+      // 通过子窗口获取gid 或 sid
+      selectId(obj) {
+        if (obj.gid) {
+          this.$emit('getGid', obj.gid)
+          this.showGid = obj.name
+          // 关闭选择游戏窗口 开启选择区服窗口
+          this.showGameList = false
+          this.showGameServerList = true
+        } else {
+          this.$emit('getSid', obj.sid)
+          this.showSid = obj.name
+          // 关闭选择区服窗口
+          this.showGameServerList = false
+        }
+      },
+      // 返回账户名
+      backAccount() {
+        // 检查数据
+        // 修改数据
+        this.$emit('getAccount', this.formData.account)
+      },
+      // 返回金额
+      selectMoney(money, index) {
+        // 关闭otherMoney
+        this.currentOtherMoneyCls = false
+        this.otherMoney = ''
+        // 返回数据
+        this.$emit('getMoney', money)
+        // 样式索引
+        this.currentMoneyIndex = index
+      },
+      // 返回unionpay
+      selectUnionpay(id) {
+        this.$emit('getUnionpay', id)
       }
     }
   }
@@ -224,9 +266,9 @@
           position absolute
           top 63px
           z-index 2
-          &.mode-enter-active,.mode-leave-active
+          &.mode-enter-active,&.mode-leave-active
             transition all .5s
-          &.mode-enter,.mode-leave-to
+          &.mode-enter,&.mode-leave-to
             opacity 0
           &.game-select-window
             left 96px
@@ -263,8 +305,8 @@
             margin-left 30px
         .money-list-wrapper
           display inline-block
-          width (80*6 + 25*6)px
           vertical-align middle
+          width (80*6 + 25*6)px
           .money-list-item
             float left
             width 78px
@@ -285,10 +327,23 @@
             .input-money
               width 70px
               text-indent 5px
+            &.active
+              border($color-theme)
+            &.input-money-list-item
+              &.active
+                border($color-theme)
+        .other-pay-list-wrapper
+          display inline-block
+          vertical-align middle
+          width 630px
     .charge-btn-wrapper
-      padding 20px
+      padding 30px
       .charge-btn
-        btn(125px,44px,,$color-new,$font-size-large,#fff)
+        btn(125px,44px,,#fff,$font-size-large,$color-new)
+        border($color-new)
         margin 0 auto
+        &:hover
+          background-color $color-new
+          color #fff
 
 </style>

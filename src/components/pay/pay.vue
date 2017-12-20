@@ -1,5 +1,5 @@
 <template>
-  <div class="pay">
+  <div class="pay" @click="bodyCloseWindow">
     <div class="pay-wrapper">
       <div class="pay-left">
         <!-- user-info -->
@@ -12,9 +12,9 @@
           <div class="avatar">
             <img :src="user.avatar" alt="">
           </div>
-          <div class="username">
-            <span class="username-text">{{user.nickname}}</span>
-            <span class="username-vip"></span>
+          <div class="account">
+            <span class="account-text">{{user.nickname}}</span>
+            <span class="account-vip"></span>
           </div>
           <div class="security">
             <span class="security-text">安全等级 : </span>
@@ -26,10 +26,10 @@
         <!-- select-pay-type -->
         <div class="pay-type">
           <ul>
-            <li v-for="(payType,index) in payTypeList" :key="index"
-             @click="selectPayType(payType.type,index)" class="pay-type-item" :class="{active: paytypeCurrentIndex === index}">
-              <i class="icon" :class="payType.type"></i>
-              <span class="pay-type-text">{{payType.text}}</span>
+            <li v-for="(item,index) in payTypeList" :key="index"
+             @click="selectPayType(item.type,index)" class="pay-type-item" :class="{active: paytypeCurrentIndex === index}">
+              <i class="icon" :class="item.type"></i>
+              <span class="pay-type-text">{{item.text}}</span>
               <i class="el-icon-arrow-right"></i>
             </li>
           </ul>
@@ -37,7 +37,10 @@
       </div>
       <div class="pay-right">
         <!-- common-input -->
-        <pay-form></pay-form>
+        <pay-form :closeWindow="closeWindow"
+         @getAccount="getAccount" @getGid="getGid" @getSid="getSid" @getMoney="getMoney" @getUnionpay="getUnionpay"
+        :formData="formData" :recentPlayList="recentPlayList" :allGameList="allGameList"
+          :recentServerList="recentServerList" :allServerList="allServerList"></pay-form>
       </div>
     </div>
   </div>
@@ -57,15 +60,22 @@
     },
     data () {
       return {
+        // 是否开启debug formData
+        debug: true,
+        // 关闭窗口参数
+        closeWindow: 0,
+        // 支付类型当前索引
         paytypeCurrentIndex: 0,
-        user: {
-          sign: true,
-          avatar: require('common/image/test/pay/avatar.png'),
-          nickname: 'Greentea',
-          securityLevel: 0.6
-        },
         // 表单参数配置
-        payType: 'wechat',
+        formData: {
+          payType: 'alipay',
+          account: 'Greentea',
+          gid: 0,
+          sid: 0,
+          money: 10,
+          unionpay: ''
+        },
+        // 支付类型列表
         payTypeList: [{
           text: '支付宝',
           type: 'alipay'
@@ -85,6 +95,84 @@
         {
           text: '手机卡',
           type: 'phone-card'
+        }],
+        /*
+           接口数据
+        */
+        // 用户信息
+        user: {
+          sign: true,
+          avatar: require('common/image/test/pay/avatar.png'),
+          nickname: 'Greentea',
+          securityLevel: 0.6
+        },
+        // 最近在玩游戏列表
+        recentPlayList: [{
+          name: '大美人',
+          gid: '1'
+        },
+        {
+          name: '大美人',
+          gid: '1'
+        },
+        {
+          name: '大美人',
+          gid: '1'
+        }],
+        // 所有游戏列表
+        allGameList: [{
+          name: '大战神',
+          gid: '2'
+        },
+        {
+          name: '大战神',
+          gid: '2'
+        },
+        {
+          name: '大战神',
+          gid: '2'
+        },
+        {
+          name: '大战神',
+          gid: '2'
+        },
+        {
+          name: '大战神',
+          gid: '2'
+        },
+        {
+          name: '大战神',
+          gid: '2'
+        }],
+        // 最近在玩的服务器列表
+        recentServerList: [{
+          name: '双线123区',
+          sid: 22
+        }],
+        // 所有服务器列表
+        allServerList: [{
+          name: '双线123区',
+          sid: 22
+        },
+        {
+          name: '双线123区',
+          sid: 22
+        },
+        {
+          name: '双线123区',
+          sid: 22
+        },
+        {
+          name: '双线123区',
+          sid: 22
+        },
+        {
+          name: '双线123区',
+          sid: 22
+        },
+        {
+          name: '双线123区',
+          sid: 22
         }]
       }
     },
@@ -92,9 +180,22 @@
       PayForm
     },
     methods: {
+      // 数据测试
+      testFormData() {
+        if (this.debug) {
+          console.log('------数 据 测 试------')
+          for (let key in this.formData) {
+            console.log(`${key}:${this.formData[key]}`)
+          }
+          console.log('----------------------')
+        }
+      },
+      // 选择支付类型
       selectPayType(type, index) {
-        this.payType = type
+        this.formData.payType = type
         this.paytypeCurrentIndex = index
+        // 调用数据测试
+        this.testFormData()
       },
       // 安全动画宽度
       widthMove() {
@@ -116,6 +217,41 @@
           }
         })
         animations.runAnimation(this.$refs.range, 'move')
+      },
+      // 页面窗口关闭
+      bodyCloseWindow() {
+        this.closeWindow += 1
+      },
+      // 更新account
+      getAccount(account) {
+        // 调用接口
+        this.formData.account = account
+        // 调用数据测试
+        this.testFormData()
+      },
+      // 更新gid
+      getGid(gid) {
+        this.formData.gid = gid
+        // 调用数据测试
+        this.testFormData()
+      },
+      // 更新sid
+      getSid(sid) {
+        this.formData.sid = sid
+        // 调用数据测试
+        this.testFormData()
+      },
+      // 更新money
+      getMoney(money) {
+        this.formData.money = money
+        // 调用数据测试
+        this.testFormData()
+      },
+      // 更新unionpay
+      getUnionpay(unionpay) {
+        this.formData.unionpay = unionpay
+        // 调用数据测试
+        this.testFormData()
       }
     }
   }
@@ -176,14 +312,14 @@
               img
                 width 100%
                 height 100%
-          .username
+          .account
             text-align center
             font-size 14px
             color $color-text
-            .username-text
+            .account-text
               vertical-align top
               display inline-block
-            .username-vip
+            .account-vip
               display inline-block
               vertical-align top
               width 16px
