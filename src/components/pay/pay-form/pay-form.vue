@@ -317,6 +317,7 @@
             font-size $font-size-medium
             margin-right 20px
             cursor pointer
+            transition all .4s
             &:nth-of-type(1),
             &:nth-of-type(2),
             &:nth-of-type(3),
@@ -332,6 +333,8 @@
             &.input-money-list-item
               &.active
                 border($color-theme)
+            &:hover
+              border($color-theme)
         .other-pay-list-wrapper
           display inline-block
           vertical-align middle

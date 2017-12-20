@@ -2,20 +2,20 @@
   <div class="pay-list">
     <div class="pay-list-common-wrapper unionpay" v-show="payType === 'unionpay'">
       <ul>
-        <li class="pay-list-item" :class="unionpay.id" v-for="(unionpay,index) in unionpayList"
-         :data-id="unionpay.id" :key="index" @click="selectUnionpay(unionpay.id)"></li>
+        <li class="pay-list-item" v-for="(unionpay,index) in unionpayList" :class="[unionpay.id,{active: currentIndex === index}]"
+         :data-id="unionpay.id" :key="index" @click="selectUnionpay(unionpay.id,index)"></li>
       </ul>
     </div>
     <div class="pay-list-common-wrapper game-card" v-show="payType === 'game-card'">
       <ul>
-        <li class="pay-list-item" :class="gameCard.cls" v-for="(gameCard,index) in gameCardList"
-         :data-id="gameCard.id" :key="index" @click="selectUnionpay(gameCard.id)"></li>
+        <li class="pay-list-item" v-for="(gameCard,index) in gameCardList" :class="[gameCard.cls,{active: currentIndex === index}]"
+         :data-id="gameCard.id" :key="index" @click="selectUnionpay(gameCard.id,index)"></li>
       </ul>
     </div>
     <div class="pay-list-common-wrapper phone-card" v-show="payType === 'phone-card'">
       <ul>
-        <li class="pay-list-item" :class="phoneCard.cls" v-for="(phoneCard,index) in phoneCardList"
-         :data-id="phoneCard.id" :key="index" @click="selectUnionpay(phoneCard.id)"></li>
+        <li class="pay-list-item" v-for="(phoneCard,index) in phoneCardList" :class="[phoneCard.cls,{active: currentIndex === index}]"
+         :data-id="phoneCard.id" :key="index" @click="selectUnionpay(phoneCard.id,index)"></li>
       </ul>
     </div>
   </div>
@@ -30,6 +30,7 @@
     },
     data () {
       return {
+        currentIndex: 0,
         unionpayList: [{
           name: '工商银行',
           id: 'ICBC'
@@ -135,7 +136,8 @@
 
     },
     methods: {
-      selectUnionpay(id) {
+      selectUnionpay(id, index) {
+        this.currentIndex = index
         this.$emit('selectUnionpay', id)
       }
     }
@@ -158,6 +160,11 @@
         btn(100px,36px,0,,,)
         border()
         margin 15px 25px 0 0
+        transition all .4s
+        &.active
+          border($color-theme)
+        &:hover
+          border($color-theme)
         // unionpay
         &.ICBC
           pay-bg('ICBC')
