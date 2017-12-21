@@ -218,13 +218,13 @@
           img
             width 100%
             height 100%
-        .el-carousel__arrow
-          background-color rgba(35,114,244,.2)
-          &:hover
-            background-color rgba(35,114,244,.6)
-        .el-carousel__indicators--outside
-          button
-            background-color rgba(35,114,244,.3)
+      .el-carousel__arrow
+        background-color rgba(56,54,54,.3)
+        &:hover
+          background-color rgba(56,54,54,.6)
+      .el-carousel__indicators--outside
+        button
+          background-color rgba(35,114,244,.3)
       .game-hall-left
         wrapper-left()
         .game-server

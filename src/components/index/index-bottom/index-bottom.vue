@@ -159,6 +159,8 @@
           padding 14px
           font-size $font-size-medium-x
           border-bottom 1px solid $color-border
+          span
+            font-weight 600
           .icon-wrapper
             position absolute
             padding 10px

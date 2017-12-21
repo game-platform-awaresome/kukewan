@@ -105,12 +105,12 @@
               display block
               float left
               font-size $font-size-medium
-              font-weight 550
+              // font-weight 550
               &.time
-                width 30%
+                width 33%
                 text-align left
               &.name
-                width 40%
+                width 37%
                 text-align center
               &.server
                 width 30%

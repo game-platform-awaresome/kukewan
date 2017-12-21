@@ -260,18 +260,12 @@
             height 22px
             line-height 22px
             .select-type-item
-              height 22px
-              line-height 22px
-              font-size $font-size-medium
-              color $color-title
+              btn(auto,22px,3px,,$font-size-medium,$color-title)
               padding 0 10px
               float left
-              cursor pointer
-              transition all .3s
               &.active
                 background-color $color-theme
                 color #fff
-                border-radius 5px
               &:first-of-type
                 margin-left 10px
 

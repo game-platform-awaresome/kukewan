@@ -298,8 +298,10 @@
         if (type === payTypes.PHONECARD) {
           message = '切换到手机卡支付'
         }
-        this.$message({
-          showClose: true,
+        this.$notify.info({
+          title: '支付方式',
+          showClose: false,
+          duration: 2000,
           message
         })
       },
@@ -317,7 +319,7 @@
           name: 'move',
           animation,
           presets: {
-            duration: 2000,
+            duration: 1000,
             easing: 'cubic-bezier(.05,.81,.69,.97)',
             delay: 1000
           }

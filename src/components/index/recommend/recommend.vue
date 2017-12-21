@@ -117,6 +117,7 @@
             vertical-align top
             font-size $font-size-medium-x
             color $color-title
+            font-weight 600
           .type
               display inline-block
               vertical-align top

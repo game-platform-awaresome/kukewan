@@ -78,7 +78,7 @@
             width 70px
             color $color-text
           &.start
-            btn(69px,20px)
+            btn(69px,20px,3px)
             float right
             margin-top 10px
             border($color-theme)
