@@ -28,7 +28,7 @@
         <!-- boutique -->
         <boutique :boutiques="boutiques"></boutique>
       </div>
-      <index-bottom :ad="ad" :gameCenter="gameCenter" :friendlyurl="friendlyurl"></index-bottom>
+      <index-bottom :ad="ad" :gameCenter="gameCenter" :friendlyLink="friendlyLink"></index-bottom>
     </div>
   </div>
 </template>
@@ -46,6 +46,9 @@
   export default {
     data () {
       return {
+        /*
+          接口数据
+        */
         // 轮播
         slider: [{
           img: require('common/image/test/index/banner.png')
@@ -333,7 +336,7 @@
           name: '九阴九阳',
           type: 0
         }],
-        friendlyurl: [{
+        friendlyLink: [{
           name: '四季游戏',
           url: ''
         },
@@ -379,10 +382,12 @@
     .slider-wrapper
       position absolute
       z-index 1
-      width 100%
-      height 1000px
+      width 1920px
+      left 50%
+      transform translate3d(-50%,0,0)
+      height 100%
         .slider-item-wrapper
-          height 1000px
+          height 100%
           img
             width 100%
             height 100%

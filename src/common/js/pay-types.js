@@ -1,0 +1,5 @@
+export const ALIPAY = 'alipay'
+export const WECHAT = 'wechat'
+export const UNIONPAY = 'unionpay'
+export const GAMECARD = 'game-card'
+export const PHONECARD = 'phone-card'

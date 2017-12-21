@@ -224,7 +224,7 @@
         top 19px
         width 200px
         box-sizing border-box
-        font-size $font-size-medium-x
+        font-size $font-size-medium
         border()
         border-radius 15px
         padding 6px 0 6px 10px
@@ -239,7 +239,7 @@
           top 0
           bottom 0
           width 32px
-          line-height 32px
+          line-height 27px
           text-align center
           border-radius 50%
           cursor pointer
@@ -272,7 +272,8 @@
                 background-color $color-theme
                 color #fff
                 border-radius 5px
-
+              &:first-of-type
+                margin-left 10px
 
 
     .game-list

@@ -1,27 +1,44 @@
 <template>
   <div class="pay-list">
-    <div class="pay-list-common-wrapper unionpay" v-show="payType === 'unionpay'">
+    <div class="pay-list-common-wrapper unionpay" v-show="payType === payTypes.UNIONPAY">
       <ul>
         <li class="pay-list-item" v-for="(unionpay,index) in unionpayList" :class="[unionpay.id,{active: currentIndex === index}]"
-         :data-id="unionpay.id" :key="index" @click="selectUnionpay(unionpay.id,index)"></li>
+         :data-id="unionpay.id" :key="index" @click="selectUnionpayId(unionpay.id,index)">
+          <div class="triangle"></div>
+          <p class="correct">
+            <i class="el-icon-check"></i>
+          </p>
+        </li>
       </ul>
     </div>
-    <div class="pay-list-common-wrapper game-card" v-show="payType === 'game-card'">
+    <div class="pay-list-common-wrapper game-card" v-show="payType === payTypes.GAMECARD">
       <ul>
         <li class="pay-list-item" v-for="(gameCard,index) in gameCardList" :class="[gameCard.cls,{active: currentIndex === index}]"
-         :data-id="gameCard.id" :key="index" @click="selectUnionpay(gameCard.id,index)"></li>
+         :data-id="gameCard.id" :key="index" @click="selectUnionpayId(gameCard.id,index)">
+          <div class="triangle"></div>
+          <p class="correct">
+            <i class="el-icon-check"></i>
+          </p>
+        </li>
       </ul>
     </div>
-    <div class="pay-list-common-wrapper phone-card" v-show="payType === 'phone-card'">
+    <div class="pay-list-common-wrapper phone-card" v-show="payType === payTypes.PHONECARD">
       <ul>
         <li class="pay-list-item" v-for="(phoneCard,index) in phoneCardList" :class="[phoneCard.cls,{active: currentIndex === index}]"
-         :data-id="phoneCard.id" :key="index" @click="selectUnionpay(phoneCard.id,index)"></li>
+         :data-id="phoneCard.id" :key="index" @click="selectUnionpayId(phoneCard.id,index)">
+          <div class="triangle"></div>
+          <p class="correct">
+            <i class="el-icon-check"></i>
+          </p>
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import * as payTypes from 'common/js/pay-types'
+
   export default {
     props: {
       payType: {
@@ -30,7 +47,8 @@
     },
     data () {
       return {
-        currentIndex: 0,
+        payTypes,
+        currentIndex: -1,
         unionpayList: [{
           name: '工商银行',
           id: 'ICBC'
@@ -136,9 +154,9 @@
 
     },
     methods: {
-      selectUnionpay(id, index) {
+      selectUnionpayId(id, index) {
         this.currentIndex = index
-        this.$emit('selectUnionpay', id)
+        this.$emit('selectUnionpayId', id)
       }
     }
   }
@@ -155,6 +173,7 @@
     .pay-list-common-wrapper
       clear-fix()
       .pay-list-item
+        position relative
         float left
         box-sizing border-box
         btn(100px,36px,0,,,)
@@ -163,8 +182,27 @@
         transition all .4s
         &.active
           border($color-theme)
+          .triangle
+            border-bottom 15px solid $color-theme
         &:hover
           border($color-theme)
+          .triangle
+            border-bottom 15px solid $color-theme
+        .triangle
+          position absolute
+          right 0
+          bottom 0
+          border-left 15px solid transparent
+          border-bottom 15px solid transparent
+          transition all .4s
+        .correct
+          position absolute
+          width 14px
+          height 14px
+          z-index 2
+          right -3px
+          bottom 8px
+          color #fff
         // unionpay
         &.ICBC
           pay-bg('ICBC')

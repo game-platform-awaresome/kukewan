@@ -5,7 +5,7 @@
       <div class="single-form-wrapper">
         <span class="input-title">充值账号 : </span>
         <div class="input-wrapper" :class="accountCls">
-          <input type="text" placeholder="请输入账号" v-model="formData.account"
+          <input type="text" placeholder="请输入账号" v-model.trim="formData.account"
            @focus="accountFocus" @blur="accountBlur">
         </div>
         <p v-show="isCorrectAccount === 0" class="form-msg"><span class="icon correct"></span></p>
@@ -41,10 +41,15 @@
             <li v-for="(item,index) in moneyList" :key="index" class="money-list-item"
              @click="selectMoney(item,index)" :class="{active: currentMoneyIndex === index}">
               {{item}}
+              <div class="triangle"></div>
+              <p class="correct">
+                <i class="el-icon-check"></i>
+              </p>
             </li>
             <li class="money-list-item input-money-list-item" :class="{active: currentOtherMoneyCls}">
-              <input type="text" v-model.number="otherMoney" class="input-money" placeholder="其他金额"
+              <input type="number" v-model.number="otherMoney" class="input-money" placeholder="其他金额"
               @focus="otherMoneyFocus" @blur="otherMoneyBlur">
+
             </li>
           </ul>
         </div>
@@ -53,20 +58,18 @@
       <div class="single-form-wrapper" v-show="showUnionList">
         <span class="input-title">选择{{currentPayTypeTitle}} : </span>
         <div class="other-pay-list-wrapper">
-          <pay-list :payType="formData.payType" :selectId="selectId" @selectUnionpay="selectUnionpay"></pay-list>
+          <pay-list :payType="formData.payType" @selectUnionpayId="selectUnionpayId"></pay-list>
         </div>
       </div>
     </div>
-    <div class="charge-btn-wrapper">
-      <div class="charge-btn">立即充值</div>
-    </div>
+
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import SelectWindow from 'components/pay/select-window/select-window'
   import PayList from 'components/pay/pay-list/pay-list'
-
+  import * as payTypes from 'common/js/pay-types'
   export default {
     props: {
       closeWindow: {
@@ -103,18 +106,18 @@
     computed: {
       showUnionList() {
         let payType = this.formData.payType
-        if (payType === 'unionpay' || payType === 'game-card' || payType === 'phone-card') {
+        if (payType === payTypes.UNIONPAY || payType === payTypes.GAMECARD || payType === payTypes.PHONECARD) {
           return true
         } else {
           return false
         }
       },
       currentPayTypeTitle() {
-        if (this.formData.payType === 'unionpay') {
+        if (this.formData.payType === payTypes.UNIONPAY) {
           return '银行'
-        } else if (this.formData.payType === 'game-card') {
+        } else if (this.formData.payType === payTypes.GAMECARD) {
           return '游戏卡'
-        } else if (this.formData.payType === 'phone-card') {
+        } else if (this.formData.payType === payTypes.PHONECARD) {
           return '手机卡'
         }
       }
@@ -156,7 +159,7 @@
         // 正确
         this.accountCls.focus = false
         this.isCorrectAccount = 0
-        this.backAccount()
+        this.backAccount(this.isCorrectAccount)
       },
       closeTheWindow(isGameList) {
         if (isGameList) {
@@ -207,10 +210,10 @@
         }
       },
       // 返回账户名
-      backAccount() {
+      backAccount(isCorrect) {
         // 检查数据
         // 修改数据
-        this.$emit('getAccount', this.formData.account)
+        this.$emit('getAccount', this.formData.account, isCorrect)
       },
       // 返回金额
       selectMoney(money, index) {
@@ -222,9 +225,9 @@
         // 样式索引
         this.currentMoneyIndex = index
       },
-      // 返回unionpay
-      selectUnionpay(id) {
-        this.$emit('getUnionpay', id)
+      // 返回unionpayId
+      selectUnionpayId(unionpayId) {
+        this.$emit('getUnionpayId', unionpayId)
       }
     }
   }
@@ -308,6 +311,7 @@
           vertical-align middle
           width (80*6 + 25*6)px
           .money-list-item
+            position relative
             float left
             width 78px
             height 44px
@@ -326,27 +330,39 @@
             &:nth-of-type(6)
               margin-bottom 15px
             .input-money
-              width 70px
+              width 90px
               text-indent 5px
             &.active
               border($color-theme)
+              .triangle
+                border-bottom 15px solid $color-theme
             &.input-money-list-item
+              overflow hidden
               &.active
                 border($color-theme)
             &:hover
               border($color-theme)
+              .triangle
+                border-bottom 15px solid $color-theme
+            .triangle
+              position absolute
+              right 0
+              bottom 0
+              border-left 15px solid transparent
+              border-bottom 15px solid transparent
+              transition all .4s
+            .correct
+              position absolute
+              width 14px
+              height 14px
+              z-index 2
+              right -2px
+              bottom 12px
+              color #fff
         .other-pay-list-wrapper
           display inline-block
           vertical-align middle
           width 630px
-    .charge-btn-wrapper
-      padding 30px
-      .charge-btn
-        btn(125px,44px,,#fff,$font-size-large,$color-new)
-        border($color-new)
-        margin 0 auto
-        &:hover
-          background-color $color-new
-          color #fff
+
 
 </style>

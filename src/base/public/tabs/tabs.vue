@@ -15,7 +15,7 @@
           v-show="currentIndex === index">
             <ul>
               <li v-for="(content,index2) in tabContent" :key="index2"
-              class="tab-content-item-content" @mouseover="changeHover(index2)">
+              class="tab-content-item-content" @mouseover="changeHover(index2)" @mouseout="changeOut()">
 
                   <div class="content-wrapper" v-show="currentIndex2 !== index2">
                     <span class="time">{{content.time}}</span>
@@ -64,6 +64,9 @@
       },
       changeHover(index2) {
         this.currentIndex2 = index2
+      },
+      changeOut() {
+        this.currentIndex2 = -1
       }
     },
     components: {

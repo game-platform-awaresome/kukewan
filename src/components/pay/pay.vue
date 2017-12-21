@@ -38,9 +38,22 @@
       <div class="pay-right">
         <!-- common-input -->
         <pay-form :closeWindow="closeWindow"
-         @getAccount="getAccount" @getGid="getGid" @getSid="getSid" @getMoney="getMoney" @getUnionpay="getUnionpay"
+         @getAccount="getAccount" @getGid="getGid" @getSid="getSid" @getMoney="getMoney" @getUnionpayId="getUnionpayId"
         :formData="formData" :recentPlayList="recentPlayList" :allGameList="allGameList"
           :recentServerList="recentServerList" :allServerList="allServerList"></pay-form>
+        <!-- check pay information -->
+        <div class="form-check" v-show="warnContent">
+          <el-alert
+            :title="warnContent"
+            type="error"
+            show-icon
+            :closable="false">
+          </el-alert>
+        </div>
+        <!-- charge  -->
+        <div class="charge-btn-wrapper">
+          <div class="charge-btn" @click="checkForm">立即充值</div>
+        </div>
       </div>
     </div>
   </div>
@@ -49,6 +62,7 @@
 <script type="text/ecmascript-6">
   import PayForm from 'components/pay/pay-form/pay-form'
   import animations from 'create-keyframe-animation'
+  import * as payTypes from 'common/js/pay-types'
   export default {
     created() {
 
@@ -66,35 +80,39 @@
         closeWindow: 0,
         // 支付类型当前索引
         paytypeCurrentIndex: 0,
+        // 表单的账户boolean参数
+        checkAccount: true,
+        // 检查表单的错误信息
+        warnContent: '',
         // 表单参数配置
         formData: {
-          payType: 'alipay',
+          payType: payTypes.ALIPAY,
           account: 'Greentea',
           gid: 0,
           sid: 0,
           money: 10,
-          unionpay: ''
+          unionpayId: ''
         },
         // 支付类型列表
         payTypeList: [{
           text: '支付宝',
-          type: 'alipay'
+          type: payTypes.ALIPAY
         },
         {
           text: '微信',
-          type: 'wechat'
+          type: payTypes.WECHAT
         },
         {
           text: '银联',
-          type: 'unionpay'
+          type: payTypes.UNIONPAY
         },
         {
           text: '游戏卡',
-          type: 'game-card'
+          type: payTypes.GAMECARD
         },
         {
           text: '手机卡',
-          type: 'phone-card'
+          type: payTypes.PHONECARD
         }],
         /*
            接口数据
@@ -190,12 +208,100 @@
           console.log('----------------------')
         }
       },
+      // 充值表单检查
+      checkForm() {
+        let flag = true
+        let formData = this.formData
+        // account
+        // 添加判断一下如果是本账号则不再需要验证
+
+        if (!this.checkAccount) {
+          flag = false
+          this.warnContent = '账号不正确,请检查您的输入'
+        }
+        // gid
+        if (!formData.gid) {
+          flag = false
+          this.warnContent = '请选择游戏'
+        }
+        // sid
+        if (!formData.sid) {
+          flag = false
+          this.warnContent = '请选择游戏区服'
+        }
+        // money
+        if (!formData.money) {
+          flag = false
+          this.warnContent = '请输入金额'
+        } else if (formData.money % 1 !== 0) {
+          flag = false
+          this.warnContent = '充值金额必须为0-10000的整数'
+        }
+        // unionpay
+        if (formData.type === payTypes.UNIONPAY) {
+          if (typeof (formData.unionpayId) !== 'string' || !formData.unionpayId) {
+            flag = false
+            this.warnContent = '请选择银行'
+          }
+        }
+        // game-card
+        if (formData.type === payTypes.GAMECARD) {
+          let gameCardList = [60, 61, 62, 63]
+          let hasCard = gameCardList.find((value) => {
+            return value === 1
+          })
+          if (hasCard !== 1) {
+            flag = false
+            this.warnContent = '请选择游戏卡'
+          }
+        }
+        // phone-card
+        if (formData.type === payTypes.PHONECARD) {
+          let phoneCardList = [75, 76, 77]
+          let hasCard = phoneCardList.find((value) => {
+            return value === 1
+          })
+          if (hasCard !== 1) {
+            flag = false
+            this.warnContent = '请选择手机卡'
+          }
+        }
+        // fanily
+        if (flag) {
+          console.log('all formData is true')
+          this.warnContent = ''
+        }
+      },
       // 选择支付类型
       selectPayType(type, index) {
         this.formData.payType = type
         this.paytypeCurrentIndex = index
         // 调用数据测试
         this.testFormData()
+        this.selectPayTypeAlert(this.formData.payType)
+      },
+      // 切换支付类型提示
+      selectPayTypeAlert(type) {
+        let message = ''
+        if (type === payTypes.WECHAT) {
+          message = '切换到微信支付'
+        }
+        if (type === payTypes.ALIPAY) {
+          message = '切换到支付宝支付'
+        }
+        if (type === payTypes.UNIONPAY) {
+          message = '切换到银联支付'
+        }
+        if (type === payTypes.GAMECARD) {
+          message = '切换到游戏卡支付'
+        }
+        if (type === payTypes.PHONECARD) {
+          message = '切换到手机卡支付'
+        }
+        this.$message({
+          showClose: true,
+          message
+        })
       },
       // 安全动画宽度
       widthMove() {
@@ -223,8 +329,13 @@
         this.closeWindow += 1
       },
       // 更新account
-      getAccount(account) {
-        // 调用接口
+      getAccount(account, isCorrect) {
+        // 调用接口(pay-form已调用)
+        if (isCorrect === 0) {
+          this.checkAccount = true
+        } else {
+          this.checkAccount = false
+        }
         this.formData.account = account
         // 调用数据测试
         this.testFormData()
@@ -248,8 +359,8 @@
         this.testFormData()
       },
       // 更新unionpay
-      getUnionpay(unionpay) {
-        this.formData.unionpay = unionpay
+      getUnionpayId(unionpayId) {
+        this.formData.unionpayId = unionpayId
         // 调用数据测试
         this.testFormData()
       }
@@ -390,5 +501,15 @@
         width 888px
         border-left 1px solid $color-border
         min-height 660px
-
+        .form-check
+          padding 10px 60px 0
+        .charge-btn-wrapper
+          padding 30px
+          .charge-btn
+            btn(125px,44px,,#fff,$font-size-large,$color-new)
+            border($color-new)
+            margin 0 auto
+            &:hover
+              background-color $color-new
+              color #fff
 </style>
