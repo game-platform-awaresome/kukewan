@@ -42,8 +42,15 @@
   import Recommend from 'components/index/recommend/recommend'
   import Boutique from 'components/index/boutique/boutique'
   import IndexBottom from 'components/index/index-bottom/index-bottom'
+  import axios from 'axios'
 
   export default {
+    created() {
+      axios.get('/apitest/index-slider')
+      .then((res) => {
+        console.log(res)
+      })
+    },
     data () {
       return {
         /*

@@ -7,6 +7,11 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+/*
+  mock
+*/
+const appData = require('../data.json');
+const slider = appData.slider
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -20,6 +25,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
+    before(app) {
+      app.get('/apitest/index-slider', function(req, res) {
+        res.json({
+          errno: 0,
+          data: slider
+        })
+      })
+    },
     clientLogLevel: 'warning',
     historyApiFallback: true,
     hot: true,
