@@ -1,6 +1,6 @@
 <template>
-  <div class="login-block">
-    <div class="title">
+  <div class="login-block" :class="{ loginIntergralCls: loginCls === 1}">
+    <div class="title" v-show="loginCls !== 1">
       <span>酷客玩通行证</span>
       <a href="" class="register">注册>></a>
     </div>
@@ -28,6 +28,12 @@
 
 <script type="text/ecmascript-6">
   export default {
+    props: {
+      loginCls: {
+        type: Number,
+        default: 0  // 0 index 1 intergral 2
+      }
+    },
     methods: {
       onFocus(focus) {
         this[focus] = true
@@ -59,6 +65,12 @@
     box-sizing border-box
     background-color rgba(255,255,255,.8)
     padding 30px 25px
+    &.loginIntergralCls
+      border()
+      border-top 1px solid $color-theme
+      .input-wrapper
+        &.user
+          margin-top 0
     .title
       font-size $font-size-large
       color $color-theme

@@ -46,7 +46,7 @@
           },
           {
             title: '积分',
-            link: 'integral-mall'
+            link: 'intergral-mall'
           },
           {
             title: '客服',

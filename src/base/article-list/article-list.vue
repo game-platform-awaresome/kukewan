@@ -1,6 +1,6 @@
 <template>
   <div class="article-list">
-    <public-title :title="news.title"></public-title>
+    <public-title :title="title"></public-title>
     <div class="list-wrapper">
       <ul>
         <li v-for="(list,index) in news.lists" :key="index" class="list-item">
@@ -23,7 +23,8 @@
 
   export default {
     props: {
-      news: Object
+      news: Object,
+      title: String
     },
     data () {
       return {

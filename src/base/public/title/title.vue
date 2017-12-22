@@ -40,7 +40,7 @@
     font-size $font-size-large
     color $color-title
     span
-      font-weight 700
+      font-weight 650
     .border
       position absolute
       top -1px

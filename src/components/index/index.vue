@@ -20,7 +20,7 @@
         <!-- gift -->
         <gift :gifts="gifts"></gift>
         <!-- article-list -->
-        <article-list :news="news"></article-list>
+        <article-list :news="news" title="新闻公告"></article-list>
       </div>
       <div class="index-right top">
         <!-- recommend -->

@@ -25,11 +25,14 @@
     props: {
       rank: {
         type: Array
+      },
+      title: {
+        type: String
       }
     },
     data () {
       return {
-        title: '热游排行'
+
       }
     },
     components: {
@@ -45,6 +48,7 @@
   .rank
     border()
     box-sizing border-box
+    height 472px
     .rank-list-wrapper
       padding 0 24px
       .list-item

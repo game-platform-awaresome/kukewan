@@ -11,7 +11,7 @@
       </el-carousel>
       <div class="game-hall-left">
         <!-- rank -->
-        <rank :rank="rank"></rank>
+        <rank :rank="rank" title="热游排行"></rank>
         <!-- game-server -->
         <game-server :server="server"></game-server>
       </div>
@@ -26,7 +26,7 @@
 <script type="text/ecmascript-6">
   import GameServer from 'base/game-server/game-server'
   import GameList from 'base/game-list/game-list'
-  import Rank from 'components/game-hall/rank/rank'
+  import Rank from 'base/rank/rank'
   import Search from 'components/game-hall/search/search'
 
   export default {
@@ -229,7 +229,7 @@
         wrapper-left()
         .game-server
           border()
-          height 727px
+          height 622px
           margin-top $height-block-top
       .game-hall-right
         wrapper-right()
