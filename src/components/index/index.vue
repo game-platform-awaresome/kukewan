@@ -43,13 +43,20 @@
   import Boutique from 'components/index/boutique/boutique'
   import IndexBottom from 'components/index/index-bottom/index-bottom'
   import axios from 'axios'
-
+  import qs from 'qs'
   export default {
     created() {
-      axios.get('/apitest/index-slider')
-      .then((res) => {
-        console.log(res)
+      console.log(qs.stringify({account: 'admin110',
+        password: 123456,
+        rememberMe: true
+      }))
+      axios.post('/public/login', {account: 'admin110',
+        password: 123456,
+        rememberMe: true
       })
+        .then((res) => {
+          console.log(res)
+        })
     },
     data () {
       return {

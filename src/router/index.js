@@ -5,6 +5,7 @@ import GameHall from 'components/game-hall/game-hall'
 import Pay from 'components/pay/pay'
 import User from 'components/user/user'
 import IntergralMall from 'components/intergral-mall/intergral-mall'
+import IntergralList from 'components/intergral-mall/intergral-list'
 import CustomerService from 'components/customer-service/customer-service'
 
 Vue.use(Router)
@@ -34,6 +35,10 @@ export default new Router({
     {
       path: '/intergral-mall',
       component: IntergralMall
+    },
+    {
+      path: '/intergral-list',
+      component: IntergralList
     },
     {
       path: '/customer-service',

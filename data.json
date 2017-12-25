@@ -1,11 +1,11 @@
 {
   "slider": [{
-    "img": "images"
+    "img": "/src/common/image/test/index/banner.png"
   },
   {
-    "img": "images"
+    "img": "/src/common/image/test/index/banner.png"
   },
   {
-    "img": "images"
-  }]
+    "img": "/src/common/image/test/index/banner.png"
+  }],
 }
