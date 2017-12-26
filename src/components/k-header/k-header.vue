@@ -42,15 +42,15 @@
           },
           {
             title: '用户',
-            link: 'user'
+            link: '/user'
           },
           {
             title: '积分',
-            link: 'intergral-mall'
+            link: '/intergral-mall'
           },
           {
             title: '客服',
-            link: 'customer-service'
+            link: '/customer-service'
           }
         ]
       }

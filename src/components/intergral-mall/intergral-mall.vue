@@ -35,7 +35,7 @@
         <goods-list title="积分礼包" :goodsList="interGralGoods" :practical="false"></goods-list>
         <!-- new hand card -->
         <div class="new-hand-card">
-          <public-title title="新手卡" :show="false"></public-title>
+          <public-title title="新手卡"></public-title>
           <div class="new-hand-card-list-wrapper">
             <ul>
               <li v-for="(item,index) in newHandCardList" :key="index" class="new-hand-card-item">

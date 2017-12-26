@@ -42,18 +42,11 @@
   import Recommend from 'components/index/recommend/recommend'
   import Boutique from 'components/index/boutique/boutique'
   import IndexBottom from 'components/index/index-bottom/index-bottom'
-  import axios from 'axios'
-  import qs from 'qs'
+  import axios from 'api/http'
+
   export default {
     created() {
-      console.log(qs.stringify({account: 'admin110',
-        password: 123456,
-        rememberMe: true
-      }))
-      axios.post('/public/login', {account: 'admin110',
-        password: 123456,
-        rememberMe: true
-      })
+      axios.get('/user')
         .then((res) => {
           console.log(res)
         })

@@ -1,6 +1,6 @@
 <template>
   <div class="goods-list">
-    <public-title :title="title" :show="false"></public-title>
+    <public-title :title="title"></public-title>
     <div class="goods-list-wrapper">
       <ul>
         <li v-for="(item, index) in goodsList" :key="index" class="list-item" :class="{intergral: !practical}">

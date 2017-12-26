@@ -63,6 +63,10 @@
   import PayForm from 'components/pay/pay-form/pay-form'
   import animations from 'create-keyframe-animation'
   import * as payTypes from 'common/js/pay-types'
+
+  // 是否开启debug模式
+  const debug = process.env.NODE_ENV !== 'production'
+
   export default {
     created() {
 
@@ -75,7 +79,7 @@
     data () {
       return {
         // 是否开启debug formData
-        debug: true,
+        debug: debug,
         // 关闭窗口参数
         closeWindow: 0,
         // 支付类型当前索引
