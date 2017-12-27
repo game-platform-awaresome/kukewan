@@ -284,13 +284,15 @@
             .server-list-item
               float left
               margin 0 0 15px 12px
-              &:nth-of-type(3n-2)
-                margin-left 0
               box-sizing border-box
               btn(268px,46px,5px,#f7fafe,$font-size-medium-x,$color-text)
               border()
               height 46px
               width 268px
+              &:nth-of-type(3n-2)
+                margin-left 0
+              &:hover
+                background-color #e7f0fc
               .icon
                 icon()
               .server-name,.server-time
