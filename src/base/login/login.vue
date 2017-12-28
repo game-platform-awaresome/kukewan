@@ -1,17 +1,21 @@
 <template>
   <div class="login-block" :class="{ loginIntergralCls: loginCls === 1}">
     <div class="title" v-show="loginCls !== 1">
-      <span>酷客玩通行证</span>
+      <span>{{title}}</span>
       <a href="" class="register">注册>></a>
     </div>
     <div class="input-wrapper user" :class="{'borderInput': userFocus}">
       <i class="icon-user"></i>
-      <input type="text" placeholder="用户名" @focus="onFocus('userFocus')" @blur="onBlur('userFocus')">
+      <input type="text" placeholder="用户名" @focus="onFocus('userFocus')" v-model="username" @blur="onBlur('userFocus',username)">
     </div>
+    <!-- username error info -->
+    <p class="error-info user">{{formFlag.userError}}</p>
     <div class="input-wrapper password" :class="{'borderInput': psdFocus}">
       <i class="icon-key"></i>
-      <input type="password" placeholder="密码" @focus="onFocus('psdFocus')" @blur="onBlur('psdFocus')">
+      <input type="password" placeholder="密码" @focus="onFocus('psdFocus')" v-model="password" @blur="onBlur('psdFocus',password)">
     </div>
+    <!-- password error info -->
+    <p class="error-info password">{{formFlag.psdError}}</p>
     <div class="remember-forget">
       <el-checkbox :checked="false">记住密码</el-checkbox>
       <span class="forget">忘记密码</span>
@@ -27,8 +31,14 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import * as validate from 'common/js/validate'
+
   export default {
     props: {
+      title: {
+        type: String,
+        default: '酷客玩通行证'
+      },
       loginCls: {
         type: Number,
         default: 0  // 0 index 1 intergral 2
@@ -38,8 +48,28 @@
       onFocus(focus) {
         this[focus] = true
       },
-      onBlur(blur) {
+      onBlur(blur, param) {
         this[blur] = false
+        // validate
+        if (blur === 'userFocus') {
+          // username
+          if (validate.username(param)) {
+            this.formFlag.userFlag = true
+            this.formFlag.userError = ''
+          } else {
+            this.formFlag.userFlag = false
+            this.formFlag.userError = '请输入正确的用户名'
+          }
+        } else {
+          // password
+          if (validate.password(param)) {
+            this.formFlag.psdFlag = true
+            this.formFlag.psdError = ''
+          } else {
+            this.formFlag.psdFlag = false
+            this.formFlag.psdError = '密码输入错误!'
+          }
+        }
       }
     },
     computed: {
@@ -48,7 +78,16 @@
     data () {
       return {
         userFocus: false,
-        psdFocus: false
+        psdFocus: false,
+        // form
+        username: '',
+        password: '',
+        formFlag: {
+          userFlag: '',  // 判断用户名
+          psdFlag: '',    // 判断密码
+          userError: '',
+          psdError: ''
+        }
       }
     },
     components: {
@@ -89,17 +128,21 @@
       color $color-description
       transition all .3s
       &.user
-        margin-top $height-block-top
-      &.password
-        margin-top 15px
+        margin-top 20px
       &.borderInput
         border-color $color-theme
       input
         margin-left 6px
         height $font-size-medium-x
         font-size $font-size-medium
+    .error-info
+      box-sizing border-box
+      padding 5px
+      height 24px
+      line-height 14px
+      color $color-hot
     .remember-forget
-      padding 15px 10px
+      padding 0 10px 7px
       font-size $font-size-medium
       .forget
         display inline-block
@@ -109,12 +152,15 @@
         color $color-description
     .login-btn
       margin-top 5px
-      btn(,50px,5px,$color-theme,$font-size-medium-x,#fff)
-      background $color-theme
+      btn(,50px,5px,rgb(35,114,244),$font-size-medium-x,#fff)
+      &:hover
+        background-color rgba(35,114,244,.8)
+
     .other-login
       padding 20px 35px 0
       color $color-description
       font-size 0
+      text-align center
       .other-login-text
         vertical-align middle
         font-size $font-size-small

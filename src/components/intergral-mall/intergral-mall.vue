@@ -260,6 +260,8 @@
       wrapper()
       .intergral-mall-left
         wrapper-left()
+        .login-block
+          padding 25px
         .rank
           margin-top $height-block-top
         .article-list

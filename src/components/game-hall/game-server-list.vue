@@ -3,7 +3,7 @@
     <div class="game-server-list-wrapper">
       <div class="game-server-list-left">
         <!-- login -->
-        <login></login>
+        <login-block :loginCls="1"></login-block>
         <!-- server -->
         <game-server :server="server"></game-server>
       </div>
@@ -63,7 +63,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Login from 'base/login/login'
+  import LoginBlock from 'base/login/login'
   import GameServer from 'base/game-server/game-server'
 
   export default {
@@ -182,7 +182,7 @@
       }
     },
     components: {
-      Login,
+      LoginBlock,
       GameServer
     }
   }
@@ -205,8 +205,6 @@
       background-color $color-new
     &.maintain
       background-color #cdde64
-
-
   .game-server-list
     .game-server-list-wrapper
       wrapper()
@@ -220,10 +218,12 @@
           background-color #f7fafe
           padding-top 17px
           padding-bottom 17px
+          .input-wrapper
+            padding 14px
           .input-wrapper.user
-            margin-top 18px
+            margin-top 15px
           .remember-forget
-            padding 8px 10px
+            padding 0 10px 8px
           .login-btn
             margin-top 0
           .other-login
