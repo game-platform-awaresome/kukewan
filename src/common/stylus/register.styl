@@ -1,0 +1,70 @@
+/* 注册表单样式
+
+single-wrapper
+  -- title
+    -- must
+  -- input-wrapper
+    -- input-form
+errror-wrapper
+ */
+
+// single form  wrapper
+  .account-register,
+  .phone-register
+    margin-top 88px
+    .register-main-form-wrapper
+      width 580px
+      margin 0 auto
+      .register-single-form-wrapper
+        font-size 0
+        .form-title
+          display inline-block
+          vertical-align middle
+          text-align right
+          margin-right 25px
+          width 120px
+          font-size 16px
+          color #615f5d
+          .must
+            color $color-hot
+            padding-right 5px
+            font-style normal
+        .input-form-wrapper
+          box-sizing border-box
+          display inline-block
+          vertical-align middle
+          box-sizing border-box
+          width 348px
+          height 50px
+          border()
+          border-radius 5px
+          padding 16px 20px
+          text-align left
+          transition all .3s
+          &.border-focus
+            border($color-theme)
+          .input-form
+            font-size 16px
+            width 348px - 20px *2
+        // 协议
+        .register-agreement-checkbox
+          padding-left 130px
+        .aggreement-content
+          font-size $font-size-medium
+          color $color-theme
+          &:hover
+            text-decoration underline
+            cursor pointer
+      .error-info
+        box-sizing border-box
+        height 24px
+        padding 6px 0 6px 150px
+        font-size $font-size-small
+        color $color-hot
+      .register-btn
+        margin-top 10px
+        btn(348px,50px,,$color-theme,$font-size-large,#fff)
+        display inline-block
+        margin-left 130px
+        &:hover
+          background-color rgba(35,114,244,.8)

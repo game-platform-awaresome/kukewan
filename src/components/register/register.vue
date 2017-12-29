@@ -36,6 +36,33 @@
   @import "~common/stylus/variable.styl"
 
   .register
+    box-sizing border-box
     margin-top 71px
+    min-height 754px
+    padding-bottom 20px
+    bg('./register-bg.png')
+    padding-top 23px
+    .register-wrapper
+      clear-fix()
+      position relative
+      box-sizing border-box
+      width 910px
+      min-height 708px
+      padding-bottom 20px
+      margin 0 auto
+      border()
+      .register-nav
+        position absolute
+        left 0
+        top -1px
+        width 100%
+        .nav-item
+          float left
+          width 50%
+          border-top 2px solid transparent
+          btn(50%,88px,0,,30px,#615f5d)
+          &.active
+            color $color-theme
+            border-top 2px solid $color-theme
 
 </style>

@@ -4,11 +4,11 @@ export let username = (username) => {
 }
 
 export let password = (password) => {
-  let reg = /^\w{8,16}$/
+  let reg = /^.{8,16}$/
   return validate(reg, password)
 }
 
-export let trueName = (trueName) => {
+export let truename = (trueName) => {
   let reg = /^[\u4e00-\u9fa5]{2,5}$/
   return validate(reg, trueName)
 }
@@ -18,13 +18,21 @@ export let id = (id) => {
   return validate(reg, id)
 }
 
+// export let passwordRepeat = (passwordrepeat, password) => {
+//   if (passwordrepeat === password) {
+//     return true
+//   } else {
+//     return false
+//   }
+// }
+
 export let email = (email) => {
   let reg = /^\w+@\w+.[a-zA-Z]{2,3}(.[a-zA-Z]{2,3})?$/
   return validate(reg, email)
 }
 
 let validate = (reg, param) => {
-  console.log('validate' + reg.test(param))
+  // console.log('validate' + reg.test(param))
   if (reg.test(param)) {
     return true
   } else {
