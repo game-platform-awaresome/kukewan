@@ -38,7 +38,7 @@
   .register
     box-sizing border-box
     margin-top 71px
-    min-height 754px
+    min-height 7px
     padding-bottom 20px
     bg('./register-bg.png')
     padding-top 23px

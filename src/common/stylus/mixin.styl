@@ -46,7 +46,7 @@ $fontColor = $color-text)
   transition all .3s
 // 背景图
 bg($theurl)
-  background url($theurl) center center no-repeat
+  background url($theurl) center 0 no-repeat
 // 边框
 border($color = $color-border,$px = 1px)
   border $px solid $color
@@ -58,16 +58,19 @@ wrapper()
   width $width-base
   margin 0 auto
   clear-fix()
+  box-sizing border-box
 
 wrapper-left()
   clear-fix()
   width $width-left
   float left
+  box-sizing borderbox
 
 wrapper-right()
   clear-fix()
   width $width-right
   float right
+  box-sizing border-box
 
 
 

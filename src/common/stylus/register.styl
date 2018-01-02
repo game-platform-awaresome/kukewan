@@ -30,6 +30,7 @@ errror-wrapper
             padding-right 5px
             font-style normal
         .input-form-wrapper
+          position: relative
           box-sizing border-box
           display inline-block
           vertical-align middle
@@ -46,6 +47,29 @@ errror-wrapper
           .input-form
             font-size 16px
             width 348px - 20px *2
+          .verification-code-img
+            position absolute
+            width 63px
+            height 25px
+            right 16px
+            top 12px
+          .send-message-code-btn
+            position absolute
+            width 130px
+            top -1px
+            bottom -1px
+            right -1px
+            background-color $color-new
+            color #fff
+            border-top-right-radius 5px
+            border-bottom-right-radius 5px
+            line-height 50px
+            text-align center
+            font-size $font-size-small
+            cursor pointer
+            &.send
+              background-color #cecece
+              color #fff
         // 协议
         .register-agreement-checkbox
           padding-left 130px

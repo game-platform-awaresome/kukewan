@@ -13,6 +13,8 @@ import Login from 'components/login/login'
 import Register from 'components/register/register'
 import AccountRegister from 'components/register/account-register'
 import PhoneRegister from 'components/register/phone-register'
+import newsList from 'components/news-list/news-list'
+import newsDetail from 'components/news-detail/news-detail'
 
 Vue.use(Router)
 
@@ -76,6 +78,14 @@ export default new Router({
           component: PhoneRegister
         }
       ]
+    },
+    {
+      path: '/news-list',
+      component: newsList
+    },
+    {
+      path: '/news-detail/:article_id',
+      component: newsDetail
     }
   ],
   linkActiveClass: 'active',

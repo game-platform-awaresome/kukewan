@@ -68,6 +68,7 @@
           <input type="text" class="input-form" placeholder="请输入验证码"
           v-model="formData.verification_code" @focus="onFocus('verification_code')"
           @blur="onBlur('verification_code')">
+          <img class="verification-code-img" src="" alt="">
         </div>
       </div>
       <div class="error-info">{{errorInfo.verification_code}}</div>
