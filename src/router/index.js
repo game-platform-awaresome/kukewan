@@ -17,6 +17,15 @@ import NewsList from 'components/news-list/news-list'
 import NewsDetail from 'components/news-detail/news-detail'
 import Forgot from 'components/forgot/forgot'
 
+import MyAccount from 'components/user/user-page/my-account'
+import Edit from 'components/user/user-page/edit'
+import ModifyPassword from 'components/user/user-page/modify-password'
+import AccountSecurity from 'components/user/user-page/account-security'
+import RealName from 'components/user/user-page/real-name'
+import PayHistory from 'components/user/user-page/pay-history'
+import IntergralHistory from 'components/user/user-page/intergral-history'
+import NewHandHistory from 'components/user/user-page/new-hand-history'
+
 Vue.use(Router)
 
 export default new Router({
@@ -40,10 +49,6 @@ export default new Router({
     {
       path: '/pay',
       component: Pay
-    },
-    {
-      path: '/user',
-      component: User
     },
     {
       path: '/intergral-mall',
@@ -91,6 +96,43 @@ export default new Router({
     {
       path: '/forgot',
       component: Forgot
+    },
+    {
+      path: '/user',
+      component: User,
+      redirect: '/user/my-account',
+      children: [{
+        path: 'my-account',
+        component: MyAccount
+      },
+      {
+        path: 'edit',
+        component: Edit
+      },
+      {
+        path: 'modify-password',
+        component: ModifyPassword
+      },
+      {
+        path: 'account-security',
+        component: AccountSecurity
+      },
+      {
+        path: 'real-name',
+        component: RealName
+      },
+      {
+        path: 'pay-history',
+        component: PayHistory
+      },
+      {
+        path: 'intergral-history',
+        component: IntergralHistory
+      },
+      {
+        path: 'new-hand-history',
+        component: NewHandHistory
+      }]
     }
   ],
   linkActiveClass: 'active',

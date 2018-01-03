@@ -273,6 +273,7 @@
     .forgot-wrapper
       wrapper()
       border()
+      background-color #fff
       height 630px
       padding-top 120px
       .step-form-wrapper
