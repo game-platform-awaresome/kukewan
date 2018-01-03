@@ -23,6 +23,10 @@
             <pre>{{article.detail}}</pre>
           </div>
         </div>
+        <div class="next-prev">
+          <p>上篇: <span>{{article.next.title}}</span></p>
+          <p>下篇: <span>{{article.prev.title}}</span></p>
+        </div>
       </div>
       <div class="news-detail-right">
         <game-server :server="server"></game-server>
@@ -125,7 +129,15 @@
           author: '酷客玩',
           time: '2017-1-1',
           read_num: 10,
-          detail: '亲爱的\n亲爱的\n亲爱的\n亲爱的\n'
+          detail: '亲爱的\n亲爱的\n亲爱的\n亲爱的\n',
+          next: {
+            title: '绝世唐门秋意浓活动',
+            article_id: 1
+          },
+          prev: {
+            title: '绝世唐门秋意浓活动',
+            article_id: 2
+          }
         }
       }
     },
@@ -178,6 +190,17 @@
             min-height 530px
             line-height 24px
             font-size $font-size-medium
+        .next-prev
+          position absolute
+          bottom 0
+          width 100%
+          padding 0 14px 20px
+          font-size $font-size-medium
+          line-height 28px
+          p
+            &:hover
+              cursor pointer
+              color $color-theme
       .news-detail-right
         wrapper-right()
         width 310px

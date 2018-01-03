@@ -18,13 +18,10 @@ export let id = (id) => {
   return validate(reg, id)
 }
 
-// export let passwordRepeat = (passwordrepeat, password) => {
-//   if (passwordrepeat === password) {
-//     return true
-//   } else {
-//     return false
-//   }
-// }
+export let phone = (phone) => {
+  let reg = /^\d{11}$/
+  return validate(reg, phone)
+}
 
 export let email = (email) => {
   let reg = /^\w+@\w+.[a-zA-Z]{2,3}(.[a-zA-Z]{2,3})?$/
