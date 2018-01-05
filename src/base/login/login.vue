@@ -141,6 +141,8 @@
       height 24px
       line-height 14px
       color $color-hot
+      &.user
+        margin-top 0
     .remember-forget
       padding 0 10px 7px
       font-size $font-size-medium

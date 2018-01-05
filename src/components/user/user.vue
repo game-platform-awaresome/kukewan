@@ -135,5 +135,6 @@
             font-size 18px
       .user-right-wrapper
         wrapper-right()
-
+        width 890px - 3px
+        padding 35px 30px
 </style>
