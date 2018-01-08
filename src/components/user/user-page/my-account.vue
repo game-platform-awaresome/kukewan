@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="user-info-public-wrapper">
+    <div class="user-info-public-wrapper top">
       <span class="title">上次登录时间 :</span>
       <span class="content"></span>
     </div>
@@ -77,6 +77,7 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/mixin.styl"
   @import "~common/stylus/variable.styl"
+  @import "~common/stylus/user.styl"
 
   .my-account
     .user-info-wrapper
@@ -105,4 +106,17 @@
             line-height 100px
             font-size 60px
             text-align center
+        .recent-play-wrapper li
+          color $color-description
+          line-height 26px
+          cursor pointer
+          &:hover
+            text-decoration underline
+    .user-info-public-wrapper
+      userPublicInput()
+      margin-top 25px
+      &.top
+        margin-top 35px
+
+
 </style>

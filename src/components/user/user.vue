@@ -35,18 +35,18 @@
           name: '我的账号',
           router: 'my-account'
         },
-        {
-          name: '编辑信息',
-          router: 'edit'
-        },
+        // {
+        //   name: '编辑信息',
+        //   router: 'edit'
+        // },
         {
           name: '修改密码',
           router: 'modify-password'
         },
-        {
-          name: '账户安全',
-          router: 'account-security'
-        },
+        // {
+        //   name: '账户安全',
+        //   router: 'account-security'
+        // },
         {
           name: '实名认证',
           router: 'real-name'
@@ -83,6 +83,8 @@
       border-right 1px solid $color-border
       .user-left-wrapper
         wrapper-left()
+        min-height 700px
+        background-color #f7fafe
         border-right 1px solid $color-border
         .user-info
           background-color #f7fafe
@@ -100,6 +102,8 @@
             background-color #fff
           &:first-of-type
             border-top none
+          &:last-of-type
+            border-bottom 1px solid $color-border
           &.active
             background-color #fff
           // &:last-of-type

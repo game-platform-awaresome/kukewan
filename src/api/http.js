@@ -2,7 +2,7 @@
  * @Author: Greentea
  * @Date: 2017-12-26 10:34:37
  * @Last Modified by: Greentea
- * @Last Modified time: 2017-12-26 16:00:49
+ * @Last Modified time: 2018-01-08 17:41:26
  */
 import axios from 'axios'
 import qs from 'qs'
@@ -10,7 +10,8 @@ import router from 'vue-router'
 
 // axios 配置
 axios.defaults.timeout = 5000
-axios.defaults.baseURL = 'http://api.yii.com:88'
+const debug = process.env.NODE_ENV !== 'production'
+axios.defaults.baseURL = debug ? 'http://api.yii.com:88' : 'api.kukewan.com'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
 const token = 'c07760cd9e2b8d1eab28c5420734d8f0'
