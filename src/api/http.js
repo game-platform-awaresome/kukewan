@@ -2,11 +2,11 @@
  * @Author: Greentea
  * @Date: 2017-12-26 10:34:37
  * @Last Modified by: Greentea
- * @Last Modified time: 2018-01-08 17:41:26
+ * @Last Modified time: 2018-01-09 14:18:23
  */
 import axios from 'axios'
 import qs from 'qs'
-import router from 'vue-router'
+// import router from 'vue-router'
 
 // axios 配置
 axios.defaults.timeout = 5000
@@ -14,7 +14,8 @@ const debug = process.env.NODE_ENV !== 'production'
 axios.defaults.baseURL = debug ? 'http://api.yii.com:88' : 'api.kukewan.com'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
-const token = 'c07760cd9e2b8d1eab28c5420734d8f0'
+// let refreshToken = localStorage.refresh_token ? localStorage.refresh_token : ''
+let accessToken = localStorage.access_token ? localStorage.access_token : ''
 
 axios.interceptors.request.use((config) => {
   // POST传参序列化
@@ -22,8 +23,8 @@ axios.interceptors.request.use((config) => {
     config.data = qs.stringify(config.data)
   }
   // token
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`
   }
   return config
 }, (error) => {
@@ -38,16 +39,8 @@ axios.interceptors.response.use(
   },
   error => {
     if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          // 401 清除token信息并跳转到登录页面
-          router.replace({
-            path: 'login',
-            query: {redirect: router.currentRoute.fullPath}
-          })
-      }
+      // if (error.response.)
     }
-    // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
     return Promise.reject(error.response)
   })
 

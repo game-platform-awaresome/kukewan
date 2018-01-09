@@ -6,3 +6,9 @@ export let transformStr = (str, symbol) => {
 
   return strArr.join('')
 }
+
+export let monthDayHourMinutes = (seconds) => {
+  const date = new Date(seconds)
+  let dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+  return dateStr
+}

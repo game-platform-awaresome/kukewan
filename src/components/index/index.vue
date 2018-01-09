@@ -16,7 +16,7 @@
         <!-- login -->
         <login></login>
         <!-- game-server -->
-        <game-server :server="server"></game-server>
+        <game-server></game-server>
         <!-- gift -->
         <gift :gifts="gifts"></gift>
         <!-- article-list -->
@@ -42,13 +42,22 @@
   import Recommend from 'components/index/recommend/recommend'
   import Boutique from 'components/index/boutique/boutique'
   import IndexBottom from 'components/index/index-bottom/index-bottom'
-  import axios from 'api/http'
+
+  import * as game from 'api/game.js'
 
   export default {
     created() {
-      axios.get('/user')
+      game.recommend()
         .then((res) => {
-          console.log(res)
+          this.recommends = res
+        })
+      game.boutique()
+        .then((res) => {
+          this.boutiques = res
+        })
+      game.gameCenter()
+        .then((res) => {
+          this.gameCenter = res
         })
     },
     data () {
@@ -66,63 +75,6 @@
         {
           img: require('common/image/test/index/banner.png')
         }],
-        // 服
-        server: [
-          [
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服20区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            },
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服20区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            }
-          ],
-          [
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服30区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            },
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服30区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            }
-          ],
-          [
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服10区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            },
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服10区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            }
-          ]
-        ],
         // 礼包
         gifts: {
           title: '游戏礼包',
@@ -183,166 +135,14 @@
           }]
         },
         // 推荐
-        // type: 0: H  1: N
-        recommends: [{
-          img: require('common/image/test/index/recommend.png'),
-          logo: require('common/image/test/index/recommend-logo2.png'),
-          name: '大战神',
-          type: 0,
-          url: ''
-        },
-        {
-          img: require('common/image/test/index/recommend.png'),
-          logo: require('common/image/test/index/recommend-logo2.png'),
-          name: '大战神',
-          type: 1,
-          url: ''
-        },
-        {
-          img: require('common/image/test/index/recommend.png'),
-          logo: require('common/image/test/index/recommend-logo2.png'),
-          name: '大战神',
-          type: 0,
-          url: ''
-        }],
+        // type: 1: H  0: N
+        recommends: [],
         // 精品游戏
-        boutiques: [{
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 1
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 1
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        }],
+        boutiques: [],
         // 广告
         ad: require('common/image/test/index/ad.png'),
         // 游戏中心
-        gameCenter: [{
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 1
-        },
-        {
-          name: '九阴九阳',
-          type: 1
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        },
-        {
-          name: '九阴九阳',
-          type: 0
-        }],
+        gameCenter: [],
         friendlyLink: [{
           name: '四季游戏',
           url: ''

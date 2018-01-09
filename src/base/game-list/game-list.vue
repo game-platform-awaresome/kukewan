@@ -5,7 +5,9 @@
         <li v-for="(list,index) in gameList" :key="index" class="list-item"
         @mouseenter="overIndex(index)" @mouseleave="outIndex()">
           <div class="img-wrapper">
-            <img :src="list.img" alt="" class="game-img">
+            <router-link :to="list.url">
+              <img :src="list.pic.base" alt="" class="game-img">
+            </router-link>
           </div>
           <div class="content title">
             <span class="name">{{list.name}}</span>

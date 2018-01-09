@@ -13,7 +13,13 @@
           </ul>
         </div>
         <div class="login-register-wrapper">
-          <a href="/login">登录</a> | <a href="/register">注册</a>
+          <router-link to="/login">
+            <a>登录</a>
+          </router-link>
+           |
+          <router-link to="/register">
+            <a>注册</a>
+          </router-link>
         </div>
       </div>
       <div class="other-nav">

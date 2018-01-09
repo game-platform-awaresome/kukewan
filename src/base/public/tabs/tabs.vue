@@ -10,39 +10,37 @@
     </div>
     <div class="tab-content">
       <ul>
-        <!-- <transition-group tag="ul" name="hover" mode="out-in"> -->
           <li v-for="(tabContent,index) in tabsContent" :key="index" class="tab-content-item"
           v-show="currentIndex === index">
             <ul>
               <li v-for="(content,index2) in tabContent" :key="index2"
               class="tab-content-item-content" @mouseover="changeHover(index2)" @mouseout="changeOut()">
-
                   <div class="content-wrapper" v-show="currentIndex2 !== index2">
-                    <span class="time">{{content.time}}</span>
-                    <span class="name">{{content.name}}</span>
-                    <span class="server">{{content.server}}</span>
+                    <span class="time">{{fixTime(content.startTime)}}</span>
+                    <span class="name">{{content.gameName}}</span>
+                    <span class="server">{{content.serverName}}</span>
                   </div>
-
                   <div class="content-wrapper-hover" v-show="currentIndex2 === index2">
                     <div class="img">
-                      <img :src="content.image" alt="">
+                      <img :src="content.server_img.server_list" alt="">
                     </div>
                     <div class="content">
-                      <p class="name">{{content.name}}</p>
+                      <p class="name">{{content.gameName}}</p>
                       <p class="type">{{content.type}}</p>
                     </div>
-                    <div class="start-game">进入</div>
+                    <a href="#" target="_blank" class="start-game">进入</a>
                   </div>
               </li>
             </ul>
           </li>
-        <!-- </transition-group> -->
       </ul>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import {monthDayHourMinutes} from 'common/js/tool'
+
   export default {
     props: {
       tabsContent: {
@@ -67,6 +65,9 @@
       },
       changeOut() {
         this.currentIndex2 = -1
+      },
+      fixTime(time) {
+        return monthDayHourMinutes(time)
       }
     },
     components: {

@@ -1,7 +1,7 @@
 <template>
   <div class="type-icon">
-    <span class="type hot" v-show="typeIcon === 0">H</span>
-    <span class="type new" v-show="typeIcon === 1">N</span>
+    <span class="type hot" v-show="typeIcon === 1">H</span>
+    <span class="type new" v-show="typeIcon === 0">N</span>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 import axios from './http'
 
 export function login(formData) {
-  const url = '/users'
+  const url = '/user-token'
 
   return axios.post(url, formData)
     .then((res) => {

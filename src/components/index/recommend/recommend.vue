@@ -2,9 +2,8 @@
   <div class="recommend">
     <public-title :title="title"></public-title>
     <div class="list-wrapper">
-      <!-- <transition-group name="fade" tag="ul"> -->
       <ul>
-        <li v-for="(recommend,index) in recommends" :key="index"
+        <router-link :to="recommend.url" tag="li"  v-for="(recommend,index) in recommends" :key="index"
         @mouseover="overIndex(index)" @mouseout="outIndex" class="list-item">
           <div class="game-image-wrapper">
               <img :src="recommend.img" alt="">
@@ -22,9 +21,8 @@
             <type-icon :typeIcon="recommend.type"></type-icon>
             <span class="btn" data-url="recommend.url">开始游戏</span>
           </div>
-        </li>
+        </router-link>
       </ul>
-      <!-- </transition-group> -->
     </div>
   </div>
 </template>
