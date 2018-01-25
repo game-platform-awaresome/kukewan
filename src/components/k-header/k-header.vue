@@ -7,7 +7,7 @@
       <div class="common-nav">
         <div class="nav">
           <ul>
-            <router-link v-for="(nav, index) in navs" class="nav-item" tag="li" :key="index" :to="nav.link">
+            <router-link v-for="(nav, index) in navs" class="nav-item" tag="li" :key="index" :to="nav.route">
               {{nav.title}}
             </router-link>
           </ul>
@@ -30,35 +30,18 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import * as nav from 'api/common'
+
   export default {
+    created() {
+      nav.getNav()
+      .then((res) => {
+        this.navs = res
+      })
+    },
     data () {
       return {
-        navs: [
-          {
-            title: '首页',
-            link: '/index'
-          },
-          {
-            title: '游戏',
-            link: '/game-hall'
-          },
-          {
-            title: '充值',
-            link: '/pay'
-          },
-          {
-            title: '用户',
-            link: '/user'
-          },
-          {
-            title: '积分',
-            link: '/intergral-mall'
-          },
-          {
-            title: '客服',
-            link: '/customer-service'
-          }
-        ]
+        navs: []
       }
     },
     components: {

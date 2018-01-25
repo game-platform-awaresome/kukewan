@@ -5,7 +5,7 @@
       <el-carousel :interval="4000" type="card" height="300px">
         <el-carousel-item v-for="(item,index) in slider" :key="index">
           <div class="slider-item-wrapper">
-            <img :src="item.img" alt="">
+            <img :src="item.image" alt="">
           </div>
         </el-carousel-item>
       </el-carousel>
@@ -29,25 +29,19 @@
   import Rank from 'base/rank/rank'
   import Search from 'components/game-hall/search/search'
 
+  import * as ad from 'api/ad'
+
   export default {
+    created () {
+      ad.gameHallSlide()
+        .then(res => {
+          this.slider = res
+        })
+    },
     data () {
       return {
         // 轮播
-        slider: [{
-          img: require('common/image/test/game-hall/slider.png'),
-          name: '热血传奇',
-          url: ''
-        },
-        {
-          img: require('common/image/test/game-hall/slider.png'),
-          name: '热血传奇',
-          url: ''
-        },
-        {
-          img: require('common/image/test/game-hall/slider.png'),
-          name: '热血传奇',
-          url: ''
-        }],
+        slider: [],
         // 排行
         rank: [{
           gid: 100,

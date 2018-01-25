@@ -1,15 +1,18 @@
 <template>
   <div class="index-bottom">
     <div class="ad">
-      <img :src="ad" alt="">
+      <a :href="ad.url">
+        <img :src="ad.image" alt="">
+      </a>
+
     </div>
     <div class="index-left">
       <div class="quickly">
         <ul>
-          <li v-for="(quickly,index) in quicklies" :key="index" class="quickly-item">
+          <router-link :to="quickly.route" v-for="(quickly,index) in quicklies" :key="index" class="quickly-item">
             <p class="icon"><i :class="quickly.icon"></i></p>
             <p class="title">{{quickly.title}}</p>
-          </li>
+          </router-link>
         </ul>
       </div>
     </div>
@@ -37,7 +40,7 @@
         <div class="friendly-link-list">
           <ul>
             <li v-for="(link,index) in friendlyLink" :key="index" class="list-item">
-              <span>{{link.name}}</span>
+              <a :href="link.url">{{link.title}}</a>
             </li>
           </ul>
         </div>
@@ -53,7 +56,7 @@
   export default {
     props: {
       ad: {
-        type: String
+        type: Object
       },
       gameCenter: {
         type: Array
@@ -66,27 +69,33 @@
       return {
         quicklies: [{
           icon: 'icon-user-plus',
-          title: '免费注册'
+          title: '免费注册',
+          route: '/register'
         },
         {
           icon: 'icon-credit-card',
-          title: '游戏充值'
+          title: '游戏充值',
+          route: '/pay'
         },
         {
           icon: 'icon-key',
-          title: '修改密码'
+          title: '修改密码',
+          route: '/user/modify-password'
         },
         {
           icon: 'icon-enter',
-          title: '找回密码'
+          title: '找回密码',
+          route: '/forgot'
         },
         {
           icon: 'icon-envelop',
-          title: '绑定邮箱'
+          title: '绑定邮箱',
+          route: '/user'
         },
         {
           icon: 'icon-phone',
-          title: '在线客服'
+          title: '在线客服',
+          route: '/customer-service'
         }],
         title: '友情链接',
         showTitle: false

@@ -3,7 +3,7 @@
     <div class="title" v-show="loginCls !== 1">
       <span>{{title}}</span>
       <router-link to="/register">
-        <a class="register">注册>></a>
+        <a class="register-btn">注册>></a>
       </router-link>
 
     </div>
@@ -136,7 +136,7 @@
       font-weight bolder
       height 18px
       line-height 18px
-      .register
+      .register-btn
         link-a()
         float right
         font-size $font-size-medium

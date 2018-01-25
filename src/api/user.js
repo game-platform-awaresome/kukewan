@@ -1,4 +1,4 @@
-import axios from './http'
+import axios from './config-axios'
 
 export function login(formData) {
   const url = '/user-token'

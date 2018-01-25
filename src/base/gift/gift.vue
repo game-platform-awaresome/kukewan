@@ -3,15 +3,16 @@
     <public-title :title="gifts.title"></public-title>
     <div class="gift-list-wrapper">
       <ul>
-        <li v-for="(gift,index) in gifts.gifts" :key="index" class="gift-list">
+        <li v-for="(gift,index) in gifts" :key="index" class="gift-list">
           <div class="gift-img-wrapper">
-            <img :src="gift.img" alt="">
+            <img :src="gift.card_image" alt="">
           </div>
           <div class="gift-content">
             <p class="name">{{gift.name}}</p>
-            <p class="number">还剩 : <span class="account">{{gift.num}}</span>个</p>
+            <p class="number">还剩 : <span class="account">{{gift.card_num}}</span>个</p>
           </div>
-          <div class="btn">领取</div>
+          <router-link tag="li" class="btn" :to="{path: `/intergral-mall/list/${gift.id}`}">领取</router-link>
+          <!-- <div class="btn">领取</div> -->
         </li>
       </ul>
     </div>
@@ -20,16 +21,18 @@
 
 <script type="text/ecmascript-6">
   import PublicTitle from 'public/title/title'
+  import * as gift from 'api/gift.js'
 
   export default {
-    props: {
-      gifts: {
-        type: Object
-      }
+    created () {
+      gift.giftList()
+        .then((res) => {
+          this.gifts = res
+        })
     },
     data () {
       return {
-
+        gifts: []
       }
     },
     components: {

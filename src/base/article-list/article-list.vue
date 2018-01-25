@@ -3,7 +3,7 @@
     <public-title :title="title"></public-title>
     <div class="list-wrapper">
       <ul>
-        <li v-for="(list,index) in news.lists" :key="index" class="list-item">
+        <li v-for="(list,index) in news" :key="index" class="list-item">
           <span class="title">
             <span class="dot">•</span>
             {{list.title}}
@@ -11,7 +11,7 @@
         </li>
       </ul>
     </div>
-    <p class="notice" v-show="news.notice">
+    <p class="notice" v-show="newsNotice">
       <i class="icon-bullhorn"></i>
       {{news.notice}}
     </p>
@@ -23,7 +23,8 @@
 
   export default {
     props: {
-      news: Object,
+      newsNotice: Array,
+      news: Array,
       title: String
     },
     data () {

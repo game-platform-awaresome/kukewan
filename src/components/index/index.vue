@@ -5,7 +5,9 @@
       <slider animation="fade" height="1000px" :interval="4000" indicators="right" :auto="false">
         <slider-item v-for="(item, index) in slider" :key="index">
           <div class="slider-item-wrapper">
-            <img :src="item.img" alt="">
+            <a :href="item.url">
+              <img :src="item.image" alt="">
+            </a>
           </div>
         </slider-item>
       </slider>
@@ -18,9 +20,9 @@
         <!-- game-server -->
         <game-server></game-server>
         <!-- gift -->
-        <gift :gifts="gifts"></gift>
+        <gift></gift>
         <!-- article-list -->
-        <article-list :news="news" title="新闻公告"></article-list>
+        <article-list :news="newsList" title="新闻公告"></article-list>
       </div>
       <div class="index-right top">
         <!-- recommend -->
@@ -44,20 +46,38 @@
   import IndexBottom from 'components/index/index-bottom/index-bottom'
 
   import * as game from 'api/game.js'
+  import * as article from 'api/article.js'
+  import * as ad from 'api/ad.js'
 
   export default {
     created() {
       game.recommend()
-        .then((res) => {
+        .then(res => {
           this.recommends = res
         })
       game.boutique()
-        .then((res) => {
+        .then(res => {
           this.boutiques = res
         })
       game.gameCenter()
-        .then((res) => {
+        .then(res => {
           this.gameCenter = res
+        })
+      article.newsList()
+        .then(res => {
+          this.newsList = res
+        })
+      ad.indexSlide()
+      .then(res => {
+        this.slider = res
+      })
+      ad.friendlyLink()
+        .then(res => {
+          this.friendlyLink = res
+        })
+      ad.midAd()
+        .then(res => {
+          this.ad = res[0]
         })
     },
     data () {
@@ -66,99 +86,19 @@
           接口数据
         */
         // 轮播
-        slider: [{
-          img: require('common/image/test/index/banner.png')
-        },
-        {
-          img: require('common/image/test/index/banner.png')
-        },
-        {
-          img: require('common/image/test/index/banner.png')
-        }],
-        // 礼包
-        gifts: {
-          title: '游戏礼包',
-          gifts: [{
-            img: require('common/image/test/index/gift.png'),
-            name: '烈焰传奇礼包',
-            num: '1314',
-            url: ''
-          },
-          {
-            img: require('common/image/test/index/gift.png'),
-            name: '烈焰传奇礼包',
-            num: '1314',
-            url: ''
-          },
-          {
-            img: require('common/image/test/index/gift.png'),
-            name: '烈焰传奇礼包',
-            num: '1314',
-            url: ''
-          },
-          {
-            img: require('common/image/test/index/gift.png'),
-            name: '烈焰传奇礼包',
-            num: '1314',
-            url: ''
-          },
-          {
-            img: require('common/image/test/index/gift.png'),
-            name: '烈焰传奇礼包',
-            num: '1314',
-            url: ''
-          }]
-        },
+        slider: [],
         // 新闻
-        news: {
-          title: '新闻公告',
-          notice: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-          lists: [{
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          },
-          {
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          },
-          {
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          },
-          {
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          },
-          {
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          }]
-        },
+        newsList: [],
         // 推荐
         // type: 1: H  0: N
         recommends: [],
         // 精品游戏
         boutiques: [],
         // 广告
-        ad: require('common/image/test/index/ad.png'),
+        ad: {},
         // 游戏中心
         gameCenter: [],
-        friendlyLink: [{
-          name: '四季游戏',
-          url: ''
-        },
-        {
-          name: '四季游戏',
-          url: ''
-        },
-        {
-          name: '四季游戏',
-          url: ''
-        },
-        {
-          name: '四季游戏',
-          url: ''
-        }]
+        friendlyLink: []
       }
     },
     components: {
