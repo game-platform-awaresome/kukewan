@@ -59,6 +59,7 @@
 
   .game-list
     .list-wrapper
+      height 794px;
       clear-fix()
       .list-item
         &:hover

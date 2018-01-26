@@ -43,7 +43,7 @@ export default new Router({
       component: GameHall
     },
     {
-      path: '/game-hall/list',
+      path: '/game-hall/list/:gid',
       component: GameServerList
     },
     {

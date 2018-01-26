@@ -9,9 +9,8 @@
             <img src="" alt="">
           </span>
           <span class="name">{{item.name}}</span>
-          <span class="type">{{item.type}}</span>
-
-          <span class="start">开始游戏</span>
+          <!-- <span class="type">{{item.type}}</span> -->
+          <span class="start" @click="selectGame(item.id)">开始游戏</span>
         </li>
       </ul>
     </div>
@@ -33,6 +32,13 @@
     data () {
       return {
 
+      }
+    },
+    methods: {
+      selectGame(id) {
+        this.$router.push({
+          path: `/game-hall/list/${id}`
+        })
       }
     },
     components: {

@@ -17,7 +17,7 @@
       </div>
       <div class="game-hall-right">
         <!-- search -->
-        <search :gameList="gameList"></search>
+        <search></search>
       </div>
     </div>
   </div>
@@ -30,6 +30,7 @@
   import Search from 'components/game-hall/search/search'
 
   import * as ad from 'api/ad'
+  import * as game from 'api/game'
 
   export default {
     created () {
@@ -37,42 +38,17 @@
         .then(res => {
           this.slider = res
         })
+      game.hotGame()
+        .then(res => {
+          this.rank = res
+        })
     },
     data () {
       return {
         // 轮播
         slider: [],
         // 排行
-        rank: [{
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        }],
+        rank: [],
         // 服
         server: [
           [
@@ -129,62 +105,7 @@
               url: ''
             }
           ]
-        ],
-        // 全部游戏
-        gameList: [{
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 1
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 1
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        },
-        {
-          img: require('common/image/test/index/boutique.png'),
-          name: '武极天下',
-          officialWebsite: '',
-          type: 0
-        }]
+        ]
       }
     },
     components: {
