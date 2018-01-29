@@ -20,7 +20,7 @@
         <!-- game-server -->
         <game-server></game-server>
         <!-- gift -->
-        <gift></gift>
+        <gift title="礼包列表"></gift>
         <!-- article-list -->
         <article-list :news="newsList" title="新闻公告"></article-list>
       </div>

@@ -13,7 +13,8 @@ errror-wrapper
   .phone-register
     margin-top 88px
     .register-main-form-wrapper
-      width 580px
+      // width 580px
+      padding 0 0 20px 150px
       margin 0 auto
       .register-single-form-wrapper
         font-size 0
@@ -70,6 +71,21 @@ errror-wrapper
             &.send
               background-color #cecece
               color #fff
+        .true-logo
+          vertical-align middle
+          display inline-block
+          font-size 20px
+          color #00BB29
+          margin-left 15px
+          font-weight bold
+        .error-info
+          display inline-block
+          vertical-align middle
+          box-sizing border-box
+          height 24px
+          padding 6px 0 6px 15px
+          font-size $font-size-small
+          color $color-hot
         // 协议
         .register-agreement-checkbox
           padding-left 130px
@@ -79,12 +95,7 @@ errror-wrapper
           &:hover
             text-decoration underline
             cursor pointer
-      .error-info
-        box-sizing border-box
-        height 24px
-        padding 6px 0 6px 150px
-        font-size $font-size-small
-        color $color-hot
+
       .register-btn
         margin-top 10px
         btn(348px,50px,,$color-theme,$font-size-large,#fff)

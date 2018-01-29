@@ -89,8 +89,8 @@ export function searchGame(name) {
 }
 
 // 选择页数
-export function choicePagination(val) {
+export function choicePagination(page) {
   const url = '/game'
-  const params = Object.assign(allParams, {name})
+  const params = Object.assign(allParams, {page})
   return axios.axiosGet(url, params)
 }

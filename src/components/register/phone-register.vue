@@ -9,8 +9,9 @@
            v-model="formData.username" @focus="onFocus('username')"
            @blur="onBlur('username')">
         </div>
+        <i class="el-icon-check true-logo" v-if="!errorInfo.username && formFlag.username"></i>
+        <div class="error-info">{{errorInfo.username}}</div>
       </div>
-      <div class="error-info">{{errorInfo.username}}</div>
     </div>
     <!-- password -->
     <div class="register-main-form-wrapper">
@@ -21,8 +22,9 @@
            v-model="formData.password" @focus="onFocus('password')"
            @blur="onBlur('password')">
         </div>
+        <i class="el-icon-check true-logo" v-if="!errorInfo.password && formFlag.password"></i>
+        <div class="error-info">{{errorInfo.password}}</div>
       </div>
-      <div class="error-info">{{errorInfo.password}}</div>
     </div>
     <!-- repeat-password -->
     <div class="register-main-form-wrapper">
@@ -33,8 +35,9 @@
           v-model="formData.password_repeat" @focus="onFocus('password_repeat')"
           @blur="onBlur('password_repeat')">
         </div>
+        <i class="el-icon-check true-logo" v-if="!errorInfo.password_repeat && formFlag.password_repeat"></i>
+        <div class="error-info">{{errorInfo.password_repeat}}</div>
       </div>
-      <div class="error-info">{{errorInfo.password_repeat}}</div>
     </div>
     <!-- message code -->
     <div class="register-main-form-wrapper">
@@ -48,8 +51,9 @@
            :class="{send: typeof(currentNumber) === 'number'}"
             @click="sendMessageCode">{{messageCodeText}}</div>
         </div>
+        <i class="el-icon-check true-logo" v-if="!errorInfo.message_code && formFlag.message_code"></i>
+        <div class="error-info">{{errorInfo.message_code}}</div>
       </div>
-      <div class="error-info">{{errorInfo.message_code}}</div>
     </div>
     <!-- truename -->
     <div class="register-main-form-wrapper">
@@ -60,6 +64,8 @@
           v-model="formData.truename" @focus="onFocus('truename')"
           @blur="onBlur('truename')">
         </div>
+        <i class="el-icon-check true-logo" v-if="!errorInfo.truename && formFlag.truename"></i>
+        <div class="error-info">{{errorInfo.truename}}</div>
       </div>
       <div class="error-info">{{errorInfo.truename}}</div>
     </div>
@@ -72,8 +78,9 @@
           v-model="formData.id" @focus="onFocus('id')"
           @blur="onBlur('id')">
         </div>
+        <i class="el-icon-check true-logo" v-if="!errorInfo.id && formFlag.id"></i>
+        <div class="error-info">{{errorInfo.id}}</div>
       </div>
-      <div class="error-info">{{errorInfo.id}}</div>
     </div>
     <!-- verification-code -->
     <div class="register-main-form-wrapper">
@@ -84,8 +91,9 @@
           v-model="formData.verification_code" @focus="onFocus('verification_code')"
           @blur="onBlur('verification_code')">
         </div>
+        <i class="el-icon-check true-logo" v-if="!errorInfo.verification_code && formFlag.verification_code"></i>
+        <div class="error-info">{{errorInfo.verification_code}}</div>
       </div>
-      <div class="error-info">{{errorInfo.verification_code}}</div>
     </div>
     <!-- agreement -->
     <div class="register-main-form-wrapper">

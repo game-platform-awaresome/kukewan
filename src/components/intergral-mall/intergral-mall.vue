@@ -56,43 +56,16 @@
   import ArticleList from 'base/article-list/article-list'
   import GoodsList from 'components/intergral-mall/goods-list/goods-list'
 
+  import * as gift from 'api/gift'
+
   export default {
+    created () {
+      this.getGift()
+    },
     data () {
       return {
-        /*
-          接口数据
-        */
         // 礼包排行
-        rank: [{
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        },
-        {
-          gid: 100,
-          name: '烈焰传奇',
-          type: '角色扮演'
-        }],
+        rank: [],
         // FAQ
         news: {
           title: '新闻公告',
@@ -237,6 +210,14 @@
           id: 100,
           type: 'hot'
         }]
+      }
+    },
+    methods: {
+      getGift() {
+        gift.giftList()
+          .then(res => {
+            this.rank = res
+          })
       }
     },
     components: {

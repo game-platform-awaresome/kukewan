@@ -1,6 +1,6 @@
 <template>
   <div class="gift">
-    <public-title :title="gifts.title"></public-title>
+    <public-title :title="title"></public-title>
     <div class="gift-list-wrapper">
       <ul>
         <li v-for="(gift,index) in gifts" :key="index" class="gift-list">
@@ -24,6 +24,11 @@
   import * as gift from 'api/gift.js'
 
   export default {
+    props: {
+      title: {
+        type: String
+      }
+    },
     created () {
       gift.giftList()
         .then((res) => {

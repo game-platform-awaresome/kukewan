@@ -50,62 +50,7 @@
         // 排行
         rank: [],
         // 服
-        server: [
-          [
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服20区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            },
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服20区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            }
-          ],
-          [
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服30区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            },
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服30区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            }
-          ],
-          [
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服10区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            },
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服10区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            }
-          ]
-        ]
+        server: []
       }
     },
     components: {

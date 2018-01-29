@@ -32,3 +32,11 @@ export function gameHallSlide() {
   }
   return axios.axiosGet(url, params)
 }
+// 游戏大厅-游戏页轮播
+export function gameHallSingleSlide() {
+  const url = '/ad'
+  const params = {
+    type: 4
+  }
+  return axios.axiosGet(url, params)
+}

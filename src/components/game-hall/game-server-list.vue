@@ -5,7 +5,7 @@
         <!-- login -->
         <login-block :loginCls="1"></login-block>
         <!-- server -->
-        <game-server :server="server"></game-server>
+        <game-server></game-server>
       </div>
       <div class="game-server-list-right">
         <!-- slider -->
@@ -13,13 +13,13 @@
           <el-carousel height="304px">
             <el-carousel-item v-for="(item,index) in slider" :key="index">
               <div class="slider-img-wrapper">
-                <img :src="item.img" alt="">
+                <img :src="item.image" alt="">
               </div>
             </el-carousel-item>
           </el-carousel>
         </div>
         <!-- select-server -->
-        <div class="select-server">
+        <div class="select-server" v-loading="servers.length === 0">
           <div class="select-server-nav">
             <div class="desc-wrapper">
               <i class="icon unimpeded"></i>
@@ -34,7 +34,7 @@
             <div class="search-server-input-wrapper">
               快速进入 :
               <div class="search-input-wrapper">
-                <input type="text">
+                <input type="text" v-model="searchData" @keyup.13="searchServer">
               </div>
               区
               <div class="search-server-btn">搜索</div>
@@ -42,10 +42,10 @@
           </div>
           <div class="select-server-list-wrapper">
             <ul>
-              <li v-for="(item,index) in selectServerList" :key="index" class="server-list-item">
-                <span class="icon" :class="item.type"></span>
-                <span class="server-name">{{item.name}}</span>
-                <span class="server-time">{{item.time}}</span>
+              <li v-for="(item,index) in servers" :key="index" class="server-list-item">
+                <span class="icon" :class="item.isRecommend"></span>
+                <span class="server-name">{{item.serverName}}</span>
+                <span class="server-time">{{item.startTime}}</span>
               </li>
             </ul>
           </div>
@@ -53,7 +53,10 @@
             <el-pagination
               background
               layout="prev, pager, next"
-              :total="1000">
+              :total="headers.totalCount"
+              :page-size="15"
+              :current-page="headers.currentPage"
+              @current-change="controlChange">
             </el-pagination>
           </div>
         </div>
@@ -65,125 +68,75 @@
 <script type="text/ecmascript-6">
   import LoginBlock from 'base/login/login'
   import GameServer from 'base/game-server/game-server'
+  import { Loading } from 'element-ui'
+
+  import * as ad from 'api/ad'
+  import * as server from 'api/server'
 
   export default {
+    created() {
+      this.getSlider()
+      this.getServerList()
+    },
     data () {
       return {
-        /*
-          接口数据
-        */
-        // 服
-        server: [
-          [
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服20区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            },
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服20区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            }
-          ],
-          [
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服30区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            },
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服30区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            }
-          ],
-          [
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服10区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            },
-            {
-              time: '09/27 15:30',
-              name: '烈焰传奇',
-              server: '新服10区',
-              image: require('common/image/test/index/server.png'),
-              type: '角色扮演',
-              url: ''
-            }
-          ]
-        ],
-        // 大轮播
-        slider: [{
-          img: require('common/image/test/game-hall/banner.png')
-        },
-        {
-          img: require('common/image/test/game-hall/banner.png')
-        },
-        {
-          img: require('common/image/test/game-hall/banner.png')
-        }],
-        selectServerList: [{
-          name: '双线12区',
-          time: '10:12',
-          type: 'unimpeded'
-        },
-        {
-          name: '双线12区',
-          time: '10:12',
-          type: 'unimpeded'
-        },
-        {
-          name: '双线12区',
-          time: '10:12',
-          type: 'full'
-        },
-        {
-          name: '双线12区',
-          time: '10:12',
-          type: 'maintain'
-        },
-        {
-          name: '双线12区',
-          time: '10:12',
-          type: 'full'
-        },
-        {
-          name: '双线12区',
-          time: '10:12',
-          type: 'crowd'
-        },
-        {
-          name: '双线12区',
-          time: '10:12',
-          type: 'crowd'
-        },
-        {
-          name: '双线12区',
-          time: '10:12',
-          type: 'maintain'
-        }]
+        headers: {},
+        slider: [],
+        servers: [],
+        searchData: ''
+      }
+    },
+    methods: {
+      getSlider() {
+        ad.gameHallSingleSlide()
+          .then(res => {
+            this.slider = res
+          })
+      },
+      getServerList() {
+        let gid = this.$route.params.gid
+        server.gameServerList(gid)
+          .then(({data, headers}) => {
+            this.servers = data
+            this._pagination(headers)
+          })
+      },
+      _pagination(headers) {
+        this.headers.currentPage = parseInt(headers['x-pagination-current-page'])
+        this.headers.pageCount = parseInt(headers['x-pagination-page-count'])
+        // this.headers.perPage = parseInt(headers['x-pagination-per-page'])
+        this.headers.totalCount = parseInt(headers['x-pagination-total-count'])
+      },
+      controlChange(val) {
+        let gid = this.$route.params.gid
+        let loadingInstance = Loading.service({target: '.select-server'})
+        server.choicePagination(gid, val)
+          .then(res => {
+            this.servers = res
+            this.$nextTick(() => {
+              loadingInstance.close()
+            })
+          })
+      },
+      searchServer() {
+        let serverName = this.searchData
+        let gid = this.$route.params.gid
+        let loadingInstance = Loading.service({target: '.select-server'})
+        server.searchServer(gid, serverName)
+          .then(res => {
+            this.servers = res
+            this.$nextTick(() => {
+              loadingInstance.close()
+            })
+          })
       }
     },
     components: {
       LoginBlock,
       GameServer
+    },
+    watch: {
+      '$route': 'getServerList'
     }
   }
 </script>
