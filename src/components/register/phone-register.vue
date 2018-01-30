@@ -1,16 +1,16 @@
 <template>
   <div class="phone-register">
-    <!-- username -->
+    <!-- phone -->
     <div class="register-main-form-wrapper">
       <div class="register-single-form-wrapper">
-        <span class="form-title"><i class="must">*</i>账户 : </span>
-        <div class="input-form-wrapper" :class="{'border-focus': borderFocus.username}">
+        <span class="form-title"><i class="must">*</i>手机号 : </span>
+        <div class="input-form-wrapper" :class="{'border-focus': borderFocus.phone}">
           <input type="text" class="input-form" placeholder="账号由8-22位字母和数字组成"
-           v-model="formData.username" @focus="onFocus('username')"
-           @blur="onBlur('username')">
+           v-model="formData.phone" @focus="onFocus('phone')"
+           @blur="onBlur('phone')">
         </div>
-        <i class="el-icon-check true-logo" v-if="!errorInfo.username && formFlag.username"></i>
-        <div class="error-info">{{errorInfo.username}}</div>
+        <i class="el-icon-check true-logo" v-if="!errorInfo.phone && formFlag.phone"></i>
+        <div class="error-info">{{errorInfo.phone}}</div>
       </div>
     </div>
     <!-- password -->
@@ -37,6 +37,20 @@
         </div>
         <i class="el-icon-check true-logo" v-if="!errorInfo.password_repeat && formFlag.password_repeat"></i>
         <div class="error-info">{{errorInfo.password_repeat}}</div>
+      </div>
+    </div>
+    <!-- verification-code -->
+    <div class="register-main-form-wrapper">
+      <div class="register-single-form-wrapper">
+        <span class="form-title"><i class="must">*</i>验证码 : </span>
+        <div class="input-form-wrapper" :class="{'border-focus': borderFocus.verification_code}">
+          <input type="text" class="input-form" placeholder="请输入验证码"
+          v-model="formData.verification_code" @focus="onFocus('verification_code')"
+          @blur="onBlur('verification_code')">
+          <img class="verification-code-img" :src="verificationImgUrl" alt="" @click="changeVerificationImg">
+        </div>
+        <i class="el-icon-check true-logo" v-if="!errorInfo.verification_code && formFlag.verification_code"></i>
+        <div class="error-info">{{errorInfo.verification_code}}</div>
       </div>
     </div>
     <!-- message code -->
@@ -67,7 +81,6 @@
         <i class="el-icon-check true-logo" v-if="!errorInfo.truename && formFlag.truename"></i>
         <div class="error-info">{{errorInfo.truename}}</div>
       </div>
-      <div class="error-info">{{errorInfo.truename}}</div>
     </div>
     <!-- id -->
     <div class="register-main-form-wrapper">
@@ -80,19 +93,6 @@
         </div>
         <i class="el-icon-check true-logo" v-if="!errorInfo.id && formFlag.id"></i>
         <div class="error-info">{{errorInfo.id}}</div>
-      </div>
-    </div>
-    <!-- verification-code -->
-    <div class="register-main-form-wrapper">
-      <div class="register-single-form-wrapper">
-        <span class="form-title"><i class="must">*</i>验证码 : </span>
-        <div class="input-form-wrapper" :class="{'border-focus': borderFocus.verification_code}">
-          <input type="text" class="input-form" placeholder="请输入验证码"
-          v-model="formData.verification_code" @focus="onFocus('verification_code')"
-          @blur="onBlur('verification_code')">
-        </div>
-        <i class="el-icon-check true-logo" v-if="!errorInfo.verification_code && formFlag.verification_code"></i>
-        <div class="error-info">{{errorInfo.verification_code}}</div>
       </div>
     </div>
     <!-- agreement -->
@@ -113,13 +113,15 @@
 <script type="text/ecmascript-6">
   import * as validate from 'common/js/validate'
   // import * as tool from 'common/js/tool'
+  import * as user from 'api/user'
+  import * as variable from 'common/js/variable'
 
   export default {
     data () {
       return {
         // 边框
         borderFocus: {
-          username: false,
+          phone: false,
           password: false,
           password_repeat: false,
           message_code: false,
@@ -129,7 +131,7 @@
         },
         // 提交的表单
         formData: {
-          username: '',
+          phone: '',
           password: '',
           password_repeat: '',
           message_code: '',
@@ -139,7 +141,7 @@
         },
         // 错误信息
         errorInfo: {
-          username: '',
+          phone: '',
           password: '',
           password_repeat: '',
           message_code: '',
@@ -149,7 +151,7 @@
         },
         // 表单权限参数
         formFlag: {
-          username: '',
+          phone: '',
           password: '',
           password_repeat: '',
           message_code: '',
@@ -158,6 +160,8 @@
           verification_code: '',
           agreement: true
         },
+        // 图片url
+        verificationImgUrl: 'http://api.kukewan.com/site/captcha',
         // message_code 参数
         messageCodeText: '发送短信验证码',   // 按钮的文本
         currentNumber: ''   // 初始的倒计时时间
@@ -175,11 +179,18 @@
         // 过滤参数问题
         // let _inputType = tool.transformStr(inputType, '_')
         // 表单验证
-
+        // phone
+        if (inputType === 'mobile') {
+          this.hasPhone(inputType)
+        }
+        // truename
+        if (inputType === 'truename') {
+          this.isRealname(inputType)
+        }
         // verification_code
         if (inputType === 'verification_code') {
           // 执行接口
-          if (inputType) {
+          if (this.formData.verification_code !== '') {
             this._success(inputType)
           } else {
             this._fail(inputType)
@@ -198,7 +209,7 @@
         // message_code
         if (inputType === 'message_code') {
           // 执行接口
-          if (inputType) {
+          if (this.formData.message_code !== '') {
             this._success(inputType)
           } else {
             this._fail(inputType)
@@ -209,6 +220,7 @@
         if (validate[inputType](this.formData[inputType])) {
           // sucess
           this._success(inputType)
+          // console.log(this.errorInfo[inputType])
         } else {
           // fail
           this._fail(inputType)
@@ -225,17 +237,14 @@
         this.errorInfo[inputType] = this._errorInfo(inputType)
       },
       _errorInfo(inputType) {
-        if (inputType === 'username') {
-          return '账号输入错误!'
+        if (inputType === 'phone') {
+          return '手机号输入错误!'
         }
         if (inputType === 'password') {
           return '密码输入错误!'
         }
         if (inputType === 'password_repeat') {
           return '两次密码输入不一致!'
-        }
-        if (inputType === 'message_code') {
-          return '短信验证码输入有误'
         }
         if (inputType === 'truename') {
           return '请输入正确的真实姓名'
@@ -246,6 +255,33 @@
         if (inputType === 'verification_code') {
           return '验证码错误!'
         }
+        if (inputType === 'message_code') {
+          return '短信验证码错误!'
+        }
+      },
+      hasPhone(inputType) {
+        user.hasPhone(this.formData.phone)
+          .then(res => {
+            if (res.code === 1) {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+          })
+      },
+      isRealname(inputType) {
+        user.isRealname(this.formData.truename)
+          .then(res => {
+            if (res.code === 1) {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+          })
+      },
+      changeVerificationImg() {
+        let randNum = Math.random().toString().substr(0, 10)
+        this.verificationImgUrl = `${this.verificationImgUrl}?v=${randNum}`
       },
       submit() {
         let flag = true
@@ -266,7 +302,33 @@
         if (flag) {
           // 提交表单到接口
           console.log('All params is true!!!')
+          this.register()
         }
+      },
+      // 提交
+      register() {
+        user.register(this.registerParams())
+          .then(res => {
+            if (res.status === variable.REGISTER_OK) {
+              console.log(res)
+              // 将获取到的token加入到本地
+              localStorage.access_token = res.data.usertoken.access_token
+              localStorage.refresh_token = res.data.usertoken.refresh_token
+            }
+          })
+      },
+      // 提交注册参数过滤
+      registerParams() {
+        let params = {
+          regType: 1,
+          mobile: this.formData.phone,
+          password: this.formData.password,
+          password2: this.formData.password_repeat,
+          idcard: this.formData.id,
+          true_name: this.formData.truename,
+          captcha: this.formData.verification_code
+        }
+        return params
       },
       // 发送验证码
       sendMessageCode() {

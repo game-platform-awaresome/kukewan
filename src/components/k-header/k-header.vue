@@ -21,6 +21,11 @@
             <a>注册</a>
           </router-link>
         </div>
+        <div class="logined-wrapper">
+          <span class="username"></span>
+          |
+          <span class="quit">退出</span>
+        </div>
       </div>
       <div class="other-nav">
 

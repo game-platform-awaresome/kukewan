@@ -18,7 +18,7 @@
       <div class="register-single-form-wrapper">
         <span class="form-title"><i class="must">*</i>密码 : </span>
         <div class="input-form-wrapper" :class="{'border-focus': borderFocus.password}">
-          <input type="text" class="input-form" placeholder="6-16位密码,区分大小写"
+          <input type="password" class="input-form" placeholder="6-16位密码,区分大小写"
            v-model="formData.password" @focus="onFocus('password')"
            @blur="onBlur('password')">
         </div>
@@ -31,7 +31,7 @@
       <div class="register-single-form-wrapper">
         <span class="form-title"><i class="must">*</i>确认密码 : </span>
         <div class="input-form-wrapper" :class="{'border-focus': borderFocus.password_repeat}">
-          <input type="text" class="input-form" placeholder="再次输入密码"
+          <input type="password" class="input-form" placeholder="再次输入密码"
           v-model="formData.password_repeat" @focus="onFocus('password_repeat')"
           @blur="onBlur('password_repeat')">
         </div>
@@ -73,7 +73,7 @@
           <input type="text" class="input-form" placeholder="请输入验证码"
           v-model="formData.verification_code" @focus="onFocus('verification_code')"
           @blur="onBlur('verification_code')">
-          <img class="verification-code-img" src="" alt="">
+          <img class="verification-code-img" :src="verificationImgUrl" alt="" @click="changeVerificationImg">
         </div>
         <i class="el-icon-check true-logo" v-if="!errorInfo.verification_code && formFlag.verification_code"></i>
         <div class="error-info">{{errorInfo.verification_code}}</div>
@@ -97,6 +97,8 @@
 <script type="text/ecmascript-6">
   import * as validate from 'common/js/validate'
   // import * as tool from 'common/js/tool'
+  import * as user from 'api/user'
+  import * as variable from 'common/js/variable'
 
   export default {
     data () {
@@ -111,13 +113,22 @@
           verification_code: false
         },
         // 提交的表单
+        // formData: {
+        //   username: '',
+        //   password: '',
+        //   password_repeat: '',
+        //   truename: '',
+        //   id: '',
+        //   verification_code: ''
+        // },
         formData: {
-          username: '',
-          password: '',
-          password_repeat: '',
-          truename: '',
-          id: '',
-          verification_code: ''
+          username: 'sldkjfloiw2',
+          password: '123456789',
+          password_repeat: '123456789',
+          truename: '王磊',
+          id: '120104199311207615',
+          verification_code: 'testme',
+          agreement: true
         },
         // 错误信息
         errorInfo: {
@@ -137,7 +148,9 @@
           id: '',
           verification_code: '',
           agreement: true
-        }
+        },
+        // 图片url
+        verificationImgUrl: 'http://api.kukewan.com/site/captcha'
       }
     },
     methods: {
@@ -151,11 +164,17 @@
         // 过滤参数问题
         // let _inputType = tool.transformStr(inputType, '_')
         // 表单验证
-
+        // username
+        if (inputType === 'username') {
+          this.hasUsername(inputType)
+        }
+        // truename
+        if (inputType === 'truename') {
+          this.isRealname(inputType)
+        }
         // verification_code
         if (inputType === 'verification_code') {
-          // 执行接口
-          if (inputType) {
+          if (this.formData.verification_code !== '') {
             this._success(inputType)
           } else {
             this._fail(inputType)
@@ -175,7 +194,7 @@
         if (validate[inputType](this.formData[inputType])) {
           // sucess
           this._success(inputType)
-          console.log(this.errorInfo[inputType])
+          // console.log(this.errorInfo[inputType])
         } else {
           // fail
           this._fail(inputType)
@@ -211,6 +230,30 @@
           return '验证码错误!'
         }
       },
+      hasUsername(inputType) {
+        user.hasUsername(this.formData.username)
+          .then(res => {
+            if (res.code === 1) {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+          })
+      },
+      isRealname(inputType) {
+        user.isRealname(this.formData.truename)
+          .then(res => {
+            if (res.code === 1) {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+          })
+      },
+      changeVerificationImg() {
+        let randNum = Math.random().toString().substr(0, 10)
+        this.verificationImgUrl = `${this.verificationImgUrl}?v=${randNum}`
+      },
       submit() {
         let flag = true
         // 判断所有参数
@@ -230,7 +273,34 @@
         if (flag) {
           // 提交表单到接口
           console.log('All params is true!!!')
+          this.register()
         }
+      },
+      // 提交
+      register() {
+        user.register(this.registerParams())
+          .then(res => {
+            if (res.status === variable.REGISTER_OK) {
+              console.log(res)
+              // 将获取到的token加入到本地
+              localStorage.access_token = res.data.usertoken.access_token
+              localStorage.refresh_token = res.data.usertoken.refresh_token
+              location.href = '/index'
+            }
+          })
+      },
+      // 提交注册参数过滤
+      registerParams() {
+        let params = {
+          regType: 1,
+          username: this.formData.username,
+          password: this.formData.password,
+          password2: this.formData.password_repeat,
+          idcard: this.formData.id,
+          true_name: this.formData.truename,
+          captcha: this.formData.verification_code
+        }
+        return params
       }
     },
     components: {
