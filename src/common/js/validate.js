@@ -1,5 +1,5 @@
 export let username = (username) => {
-  let reg = /^\w{8,22}$/
+  let reg = /^\w{6,11}$/
   return validate(reg, username)
 }
 
@@ -13,10 +13,10 @@ export let truename = (trueName) => {
   return validate(reg, trueName)
 }
 
-export let id = (id) => {
-  let reg = /^\d{17}[0-9x]$/
-  return validate(reg, id)
-}
+// export let id = (id) => {
+//   let reg = /^\d{17}[0-9x]$/
+//   return validate(reg, id)
+// }
 
 export let phone = (phone) => {
   let reg = /^\d{11}$/

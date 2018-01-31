@@ -1,11 +1,11 @@
 <template>
-  <div class="account-register">
+  <div class="account-register" v-loading="logining">
     <!-- username -->
     <div class="register-main-form-wrapper">
       <div class="register-single-form-wrapper">
         <span class="form-title"><i class="must">*</i>账户 : </span>
         <div class="input-form-wrapper" :class="{'border-focus': borderFocus.username}">
-          <input type="text" class="input-form" placeholder="账号由8-22位字母和数字组成"
+          <input type="text" class="input-form" placeholder="以字母开头6-11字母、数字、下划线的组合"
            v-model="formData.username" @focus="onFocus('username')"
            @blur="onBlur('username')">
         </div>
@@ -18,7 +18,7 @@
       <div class="register-single-form-wrapper">
         <span class="form-title"><i class="must">*</i>密码 : </span>
         <div class="input-form-wrapper" :class="{'border-focus': borderFocus.password}">
-          <input type="password" class="input-form" placeholder="6-16位密码,区分大小写"
+          <input type="password" class="input-form" placeholder="6-18位密码,区分大小写"
            v-model="formData.password" @focus="onFocus('password')"
            @blur="onBlur('password')">
         </div>
@@ -122,12 +122,12 @@
         //   verification_code: ''
         // },
         formData: {
-          username: 'sldkjfloiw2',
-          password: '123456789',
-          password_repeat: '123456789',
-          truename: '王磊',
-          id: '120104199311207615',
-          verification_code: 'testme',
+          username: '',
+          password: '',
+          password_repeat: '',
+          truename: '',
+          id: '',
+          verification_code: '',
           agreement: true
         },
         // 错误信息
@@ -150,7 +150,8 @@
           agreement: true
         },
         // 图片url
-        verificationImgUrl: 'http://api.kukewan.com/site/captcha'
+        verificationImgUrl: 'http://api.kukewan.com/site/captcha',
+        logining: false
       }
     },
     methods: {
@@ -165,39 +166,40 @@
         // let _inputType = tool.transformStr(inputType, '_')
         // 表单验证
         // username
-        if (inputType === 'username') {
-          this.hasUsername(inputType)
-        }
-        // truename
-        if (inputType === 'truename') {
-          this.isRealname(inputType)
-        }
-        // verification_code
-        if (inputType === 'verification_code') {
-          if (this.formData.verification_code !== '') {
-            this._success(inputType)
-          } else {
-            this._fail(inputType)
-          }
-          return
-        }
-        // password_repeat
-        if (inputType === 'password_repeat') {
-          if (this.formData.password === this.formData.password_repeat) {
-            this._success(inputType)
-          } else {
-            this._fail(inputType)
-          }
-          return
-        }
-        // 其他参数
-        if (validate[inputType](this.formData[inputType])) {
-          // sucess
-          this._success(inputType)
-          // console.log(this.errorInfo[inputType])
-        } else {
-          // fail
-          this._fail(inputType)
+        switch (inputType) {
+          case 'username' :
+            this.hasUsername(inputType)
+            break
+          case 'truename' :
+            this.isRealname(inputType)
+            break
+          case 'id' :
+            this.judgeId(inputType)
+            break
+          case 'verification_code' :
+            if (this.formData.verification_code !== '') {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+            break
+          case 'password_repeat' :
+            if (this.formData.password === this.formData.password_repeat) {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+            break
+          default :
+            console.log('default')
+            if (validate[inputType](this.formData[inputType])) {
+              // sucess
+              this._success(inputType)
+              // console.log(this.errorInfo[inputType])
+            } else {
+              // fail
+              this._fail(inputType)
+            }
         }
       },
       _success(inputType) {
@@ -205,17 +207,17 @@
         // 错误信息清除
         this.errorInfo[inputType] = ''
       },
-      _fail(inputType) {
+      _fail(inputType, msg) {
         this.formFlag[inputType] = false
         // 填入错误信息
-        this.errorInfo[inputType] = this._errorInfo(inputType)
+        this.errorInfo[inputType] = this._errorInfo(inputType, msg)
       },
-      _errorInfo(inputType) {
+      _errorInfo(inputType, msg) {
         if (inputType === 'username') {
-          return '账号输入错误!'
+          return msg
         }
         if (inputType === 'password') {
-          return '密码输入错误!'
+          return '6-18位密码,区分大小写!'
         }
         if (inputType === 'password_repeat') {
           return '两次密码输入不一致!'
@@ -236,12 +238,22 @@
             if (res.code === 1) {
               this._success(inputType)
             } else {
-              this._fail(inputType)
+              this._fail(inputType, res.msg)
             }
           })
       },
       isRealname(inputType) {
         user.isRealname(this.formData.truename)
+          .then(res => {
+            if (res.code === 1) {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+          })
+      },
+      judgeId(inputType) {
+        user.judgeId(this.formData.id)
           .then(res => {
             if (res.code === 1) {
               this._success(inputType)
@@ -273,6 +285,7 @@
         if (flag) {
           // 提交表单到接口
           console.log('All params is true!!!')
+          this.logining = true
           this.register()
         }
       },

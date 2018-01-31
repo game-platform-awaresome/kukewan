@@ -1,11 +1,11 @@
 <template>
-  <div class="phone-register">
+  <div class="phone-register" v-loading="logining">
     <!-- phone -->
     <div class="register-main-form-wrapper">
       <div class="register-single-form-wrapper">
         <span class="form-title"><i class="must">*</i>手机号 : </span>
         <div class="input-form-wrapper" :class="{'border-focus': borderFocus.phone}">
-          <input type="text" class="input-form" placeholder="账号由8-22位字母和数字组成"
+          <input type="text" class="input-form" placeholder="请输入11位手机号码"
            v-model="formData.phone" @focus="onFocus('phone')"
            @blur="onBlur('phone')">
         </div>
@@ -18,7 +18,7 @@
       <div class="register-single-form-wrapper">
         <span class="form-title"><i class="must">*</i>密码 : </span>
         <div class="input-form-wrapper" :class="{'border-focus': borderFocus.password}">
-          <input type="text" class="input-form" placeholder="6-16位密码,区分大小写"
+          <input type="password" class="input-form" placeholder="6-16位密码,区分大小写"
            v-model="formData.password" @focus="onFocus('password')"
            @blur="onBlur('password')">
         </div>
@@ -31,7 +31,7 @@
       <div class="register-single-form-wrapper">
         <span class="form-title"><i class="must">*</i>确认密码 : </span>
         <div class="input-form-wrapper" :class="{'border-focus': borderFocus.password_repeat}">
-          <input type="text" class="input-form" placeholder="再次输入密码"
+          <input type="password" class="input-form" placeholder="再次输入密码"
           v-model="formData.password_repeat" @focus="onFocus('password_repeat')"
           @blur="onBlur('password_repeat')">
         </div>
@@ -61,9 +61,11 @@
           <input type="text" class="input-form" placeholder="请输入短信验证码"
           v-model="formData.message_code" @focus="onFocus('message_code')"
           @blur="onBlur('message_code')">
-          <div class="send-message-code-btn"
+          <div class="send-message-code-btn" v-show="formFlag.phone && formFlag.verification_code"
            :class="{send: typeof(currentNumber) === 'number'}"
             @click="sendMessageCode">{{messageCodeText}}</div>
+          <div class="send-message-code-btn disabled-send" v-show="!formFlag.phone || !formFlag.verification_code"
+           >{{messageCodeText}}</div>
         </div>
         <i class="el-icon-check true-logo" v-if="!errorInfo.message_code && formFlag.message_code"></i>
         <div class="error-info">{{errorInfo.message_code}}</div>
@@ -160,6 +162,7 @@
           verification_code: '',
           agreement: true
         },
+        logining: false,
         // 图片url
         verificationImgUrl: 'http://api.kukewan.com/site/captcha',
         // message_code 参数
@@ -178,52 +181,59 @@
         this.borderFocus[inputType] = false
         // 过滤参数问题
         // let _inputType = tool.transformStr(inputType, '_')
+
         // 表单验证
-        // phone
-        if (inputType === 'mobile') {
-          this.hasPhone(inputType)
-        }
-        // truename
-        if (inputType === 'truename') {
-          this.isRealname(inputType)
-        }
-        // verification_code
-        if (inputType === 'verification_code') {
-          // 执行接口
-          if (this.formData.verification_code !== '') {
-            this._success(inputType)
-          } else {
-            this._fail(inputType)
-          }
-          return
-        }
-        // password_repeat
-        if (inputType === 'password_repeat') {
-          if (this.formData.password === this.formData.password_repeat) {
-            this._success(inputType)
-          } else {
-            this._fail(inputType)
-          }
-          return
-        }
-        // message_code
-        if (inputType === 'message_code') {
-          // 执行接口
-          if (this.formData.message_code !== '') {
-            this._success(inputType)
-          } else {
-            this._fail(inputType)
-          }
-          return
-        }
-        // 其他参数
-        if (validate[inputType](this.formData[inputType])) {
-          // sucess
-          this._success(inputType)
-          // console.log(this.errorInfo[inputType])
-        } else {
-          // fail
-          this._fail(inputType)
+        switch (inputType) {
+          case 'phone' :
+            this.hasPhone(inputType)
+            break
+          case 'truename' :
+            this.isRealname(inputType)
+            break
+          case 'id' :
+            this.judgeId(inputType)
+            break
+          case 'verification_code' :
+            if (this.formData.verification_code !== '') {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+            break
+          case 'message_code' :
+            // 执行接口
+            // user.checkMessage({
+            //   phone: this.formData.phone,
+            //   captcha: this.formData.verification_code
+            // })
+            //   .then(res => {
+            //     if (res.status === 1) {
+            //       this.formFlag.message_code = true
+            //     }
+            //   })
+            if (this.formData.message_code !== '') {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+            break
+          case 'password_repeat' :
+            if (this.formData.password === this.formData.password_repeat) {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+            break
+          default :
+            console.log('default')
+            if (validate[inputType](this.formData[inputType])) {
+              // sucess
+              this._success(inputType)
+              // console.log(this.errorInfo[inputType])
+            } else {
+              // fail
+              this._fail(inputType)
+            }
         }
       },
       _success(inputType) {
@@ -231,14 +241,14 @@
         // 错误信息清除
         this.errorInfo[inputType] = ''
       },
-      _fail(inputType) {
+      _fail(inputType, msg) {
         this.formFlag[inputType] = false
         // 填入错误信息
-        this.errorInfo[inputType] = this._errorInfo(inputType)
+        this.errorInfo[inputType] = this._errorInfo(inputType, msg)
       },
-      _errorInfo(inputType) {
+      _errorInfo(inputType, msg) {
         if (inputType === 'phone') {
-          return '手机号输入错误!'
+          return msg
         }
         if (inputType === 'password') {
           return '密码输入错误!'
@@ -265,12 +275,22 @@
             if (res.code === 1) {
               this._success(inputType)
             } else {
-              this._fail(inputType)
+              this._fail(inputType, res.msg)
             }
           })
       },
       isRealname(inputType) {
         user.isRealname(this.formData.truename)
+          .then(res => {
+            if (res.code === 1) {
+              this._success(inputType)
+            } else {
+              this._fail(inputType)
+            }
+          })
+      },
+      judgeId(inputType) {
+        user.judgeId(this.formData.id)
           .then(res => {
             if (res.code === 1) {
               this._success(inputType)
@@ -302,6 +322,7 @@
         if (flag) {
           // 提交表单到接口
           console.log('All params is true!!!')
+          this.logining = true
           this.register()
         }
       },
@@ -314,13 +335,14 @@
               // 将获取到的token加入到本地
               localStorage.access_token = res.data.usertoken.access_token
               localStorage.refresh_token = res.data.usertoken.refresh_token
+              location.href = '/index'
             }
           })
       },
       // 提交注册参数过滤
       registerParams() {
         let params = {
-          regType: 1,
+          regType: 2,
           mobile: this.formData.phone,
           password: this.formData.password,
           password2: this.formData.password_repeat,

@@ -5,7 +5,6 @@
       <router-link to="/register">
         <a class="register-btn">注册>></a>
       </router-link>
-
     </div>
     <div class="input-wrapper user" :class="{'borderInput': userFocus}">
       <i class="icon-user"></i>
@@ -38,6 +37,7 @@
 <script type="text/ecmascript-6">
   import * as validate from 'common/js/validate'
   import * as user from 'api/user.js'
+  import {getUrlParam} from 'common/js/tool'
 
   export default {
     props: {
@@ -82,13 +82,40 @@
           account: this.username,
           password: this.password
         }
-        user.login(form)
-        .then(res => {
-          if (res.refresh_token) {
-            localStorage.refresh_token = res.refresh_token
-            localStorage.access_token = res.access_token
-          }
+        this.$message({
+          message: '登录中...',
+          center: true
         })
+        user.login(form)
+          .then(res => {
+            if (res.refresh_token && res.access_token) {
+              localStorage.refresh_token = res.refresh_token
+              localStorage.access_token = res.access_token
+              this.locationUrl()
+            }
+          })
+          .catch(error => {
+            if (error.status === 422) {
+              this.$message({
+                message: '账号或密码输入有误请重新输入',
+                type: 'warning',
+                center: true
+              })
+            }
+          })
+      },
+      locationUrl() {
+        // 有跳转参数
+        let url = getUrlParam('redirect')
+        if (url) {
+          this.$message({
+            message: '登录成功,正在跳转',
+            type: 'success'
+          })
+          location.replace = decodeURIComponent(url)
+        } else {
+          location.reload()
+        }
       }
     },
     computed: {

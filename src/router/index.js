@@ -27,114 +27,136 @@ import IntergralHistory from 'components/user/user-page/intergral-history'
 import NewHandHistory from 'components/user/user-page/new-hand-history'
 
 Vue.use(Router)
-
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      redirect: '/index'
-    },
-    {
-      path: '/index',
-      component: Index
-    },
-    {
-      path: '/game-hall',
-      component: GameHall
-    },
-    {
-      path: '/game-hall/:gid',
-      component: GameServerList
-    },
-    {
-      path: '/pay',
-      component: Pay
-    },
-    {
-      path: '/intergral-mall',
-      component: IntergralMall
-    },
-    {
-      path: '/intergral-mall/list',
-      component: IntergralList
-    },
-    {
-      path: '/intergral-mall/list/:gift_id',
-      component: IntergralDetail
-    },
-    {
-      path: '/customer-service',
-      component: CustomerService
-    },
-    {
-      path: '/login',
-      component: Login
-    },
-    {
-      path: '/register',
-      component: Register,
-      redirect: '/register/account-register',
-      children: [
-        {
-          path: '/register/account-register',
-          component: AccountRegister
-        },
-        {
-          path: '/register/phone-register',
-          component: PhoneRegister
-        }
-      ]
-    },
-    {
-      path: '/news-list',
-      component: NewsList
-    },
-    {
-      path: '/news-detail/:article_id',
-      component: NewsDetail
-    },
-    {
-      path: '/forgot',
-      component: Forgot
-    },
-    {
-      path: '/user',
-      component: User,
-      redirect: '/user/my-account',
-      children: [{
-        path: 'my-account',
-        component: MyAccount
+let routes = [
+  {
+    path: '/',
+    redirect: '/index'
+  },
+  {
+    path: '/index',
+    component: Index
+  },
+  {
+    path: '/game-hall',
+    component: GameHall
+  },
+  {
+    path: '/game-hall/:gid',
+    component: GameServerList
+  },
+  {
+    path: '/pay',
+    component: Pay
+  },
+  {
+    path: '/intergral-mall',
+    component: IntergralMall
+  },
+  {
+    path: '/intergral-mall/list',
+    component: IntergralList
+  },
+  {
+    path: '/intergral-mall/list/:gift_id',
+    component: IntergralDetail
+  },
+  {
+    path: '/customer-service',
+    component: CustomerService
+  },
+  {
+    path: '/login',
+    component: Login
+  },
+  {
+    path: '/register',
+    component: Register,
+    redirect: '/register/account-register',
+    children: [
+      {
+        path: '/register/account-register',
+        component: AccountRegister
       },
       {
-        path: 'edit',
-        component: Edit
-      },
-      {
-        path: 'modify-password',
-        component: ModifyPassword
-      },
-      {
-        path: 'account-security',
-        component: AccountSecurity
-      },
-      {
-        path: 'real-name',
-        component: RealName
-      },
-      {
-        path: 'pay-history',
-        component: PayHistory
-      },
-      {
-        path: 'intergral-history',
-        component: IntergralHistory
-      },
-      {
-        path: 'new-hand-history',
-        component: NewHandHistory
-      }]
-    }
-  ],
+        path: '/register/phone-register',
+        component: PhoneRegister
+      }
+    ]
+  },
+  {
+    path: '/news-list',
+    component: NewsList
+  },
+  {
+    path: '/news-detail/:article_id',
+    component: NewsDetail
+  },
+  {
+    path: '/forgot',
+    component: Forgot
+  },
+  {
+    path: '/user',
+    component: User,
+    redirect: '/user/my-account',
+    meta: {
+      requiresAuth: true
+    },
+    children: [{
+      path: 'my-account',
+      component: MyAccount
+    },
+    {
+      path: 'edit',
+      component: Edit
+    },
+    {
+      path: 'modify-password',
+      component: ModifyPassword
+    },
+    {
+      path: 'account-security',
+      component: AccountSecurity
+    },
+    {
+      path: 'real-name',
+      component: RealName
+    },
+    {
+      path: 'pay-history',
+      component: PayHistory
+    },
+    {
+      path: 'intergral-history',
+      component: IntergralHistory
+    },
+    {
+      path: 'new-hand-history',
+      component: NewHandHistory
+    }]
+  }
+]
+let router = new Router({
+  routes,
   linkActiveClass: 'active',
   linkExactActiveClass: 'exact-active'
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!localStorage.access_token) {
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

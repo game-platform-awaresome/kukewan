@@ -3,7 +3,6 @@ import axios from './config-axios'
 // 登录
 export function login(formData) {
   const url = '/user-token'
-
   return axios.post(url, formData)
     .then((res) => {
       return Promise.resolve(res.data)
@@ -28,6 +27,19 @@ export function hasPhone(phone) {
   const params = {
     type: 'phone',
     string: phone
+  }
+  return axios.get(url, {params})
+    .then(res => {
+      return Promise.resolve(res.data)
+    })
+}
+
+// 判断身份证号
+export function judgeId(id) {
+  const url = '/public/check'
+  const params = {
+    type: 'idcard',
+    string: id
   }
   return axios.get(url, {params})
     .then(res => {
@@ -77,7 +89,17 @@ export function getUserInfo(data) {
     .then(res => {
       return Promise.resolve(res.data)
     })
-    .catch(error => {
-      return Promise.reject(error)
+}
+// 短信
+export function checkMessage(data) {
+  const url = '/send-phone-captcha'
+  return axios.post(url, data)
+    .then(res => {
+      return Promise.resolve(res.data)
     })
+}
+// 退出登录
+export function quit() {
+  const url = `/user-token/${localStorage.refresh_token}`
+  return axios.delete(url)
 }

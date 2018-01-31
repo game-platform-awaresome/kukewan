@@ -12,3 +12,9 @@ export let monthDayHourMinutes = (seconds) => {
   let dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
   return dateStr
 }
+
+export let getUrlParam = name => {
+  let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+  let result = window.location.search.substr(1).match(reg)
+  return result ? decodeURIComponent(result[2]) : null
+}

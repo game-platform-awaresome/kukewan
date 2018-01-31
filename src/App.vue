@@ -11,27 +11,19 @@
 <script type="text/ecmascript-6">
 import KHeader from 'components/k-header/k-header'
 import KFooter from 'components/k-footer/k-footer'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapActions} from 'vuex'
 
 export default {
   created () {
-    // this.$nextTick(() => {
-    //   this.setUser()
-    // })
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.setUser({a: 1})
-    })
+    if (localStorage.access_token) {
+      this.setUser()
+    }
   },
   computed: {
-    ...mapGetters(['user'])
+
   },
   methods: {
-    // ...mapActions(['setUser']),
-    ...mapMutations({
-      setUser: 'SET_USER'
-    })
+    ...mapActions(['setUser'])
   },
   data() {
     return {}

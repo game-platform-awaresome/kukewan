@@ -12,7 +12,7 @@
             </router-link>
           </ul>
         </div>
-        <div class="login-register-wrapper">
+        <div class="login-register-wrapper" v-if="!user.username">
           <router-link to="/login">
             <a>登录</a>
           </router-link>
@@ -21,10 +21,11 @@
             <a>注册</a>
           </router-link>
         </div>
-        <div class="logined-wrapper">
-          <span class="username"></span>
-          |
-          <span class="quit">退出</span>
+        <div class="logined-wrapper" v-if="user.username">
+          Hello!
+          <router-link class="username" to="/user">{{user.username}}</router-link>
+          <span>|</span>
+          <a href="javascript:;" class="quit" @click="quit">退出登录</a>
         </div>
       </div>
       <div class="other-nav">
@@ -36,6 +37,8 @@
 
 <script type="text/ecmascript-6">
   import * as nav from 'api/common'
+  import {mapGetters} from 'vuex'
+  import * as user from 'api/user'
 
   export default {
     created() {
@@ -44,9 +47,24 @@
         this.navs = res
       })
     },
+    computed: {
+      ...mapGetters(['user'])
+    },
     data () {
       return {
         navs: []
+      }
+    },
+    methods: {
+      quit() {
+        user.quit()
+          .then(res => {
+            if (res.status === 204) {
+              localStorage.removeItem('access_token')
+              localStorage.removeItem('refresh_token')
+              location.reload()
+            }
+          })
       }
     },
     components: {
@@ -100,11 +118,17 @@
             &.active
               border-bottom 2px solid $color-theme
               color $color-theme
-        .login-register-wrapper
+        .login-register-wrapper,
+        .logined-wrapper
           float right
           height 100%
           color $color-text
           line-height 70px
           a
             link-a()
+          .username
+            color $color-hot
+            padding 0 5px
+          .quit
+            padding-left 5px
 </style>
