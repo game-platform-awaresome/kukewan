@@ -12,7 +12,7 @@
             </router-link>
           </ul>
         </div>
-        <div class="login-register-wrapper" v-if="!user.username">
+        <div class="login-register-wrapper" v-if="!isLogin">
           <router-link to="/login">
             <a>登录</a>
           </router-link>
@@ -21,7 +21,7 @@
             <a>注册</a>
           </router-link>
         </div>
-        <div class="logined-wrapper" v-if="user.username">
+        <div class="logined-wrapper" v-if="isLogin">
           Hello!
           <router-link class="username" to="/user">{{user.username}}</router-link>
           <span>|</span>
@@ -52,19 +52,13 @@
     },
     data () {
       return {
-        navs: []
+        navs: [],
+        isLogin: localStorage.access_token
       }
     },
     methods: {
       quit() {
         user.quit()
-          .then(res => {
-            if (res.status === 204) {
-              localStorage.removeItem('access_token')
-              localStorage.removeItem('refresh_token')
-              location.reload()
-            }
-          })
       }
     },
     components: {

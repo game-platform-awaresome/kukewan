@@ -94,3 +94,12 @@ export function choicePagination(page) {
   const params = Object.assign(allParams, {page})
   return axios.axiosGet(url, params)
 }
+
+// 最近在玩
+export function recentGame() {
+  const url = '/game-login'
+  let params = {
+    'per-page': 3
+  }
+  return axios.axiosGet(url, params)
+}

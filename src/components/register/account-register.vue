@@ -72,7 +72,7 @@
         <div class="input-form-wrapper" :class="{'border-focus': borderFocus.verification_code}">
           <input type="text" class="input-form" placeholder="请输入验证码"
           v-model="formData.verification_code" @focus="onFocus('verification_code')"
-          @blur="onBlur('verification_code')">
+          @blur="onBlur('verification_code')" @keyup.13="submit">
           <img class="verification-code-img" :src="verificationImgUrl" alt="" @click="changeVerificationImg">
         </div>
         <i class="el-icon-check true-logo" v-if="!errorInfo.verification_code && formFlag.verification_code"></i>
@@ -150,7 +150,7 @@
           agreement: true
         },
         // 图片url
-        verificationImgUrl: 'http://api.kukewan.com/site/captcha',
+        verificationImgUrl: variable.VERIFICATIONIMGURL,
         logining: false
       }
     },
@@ -177,11 +177,8 @@
             this.judgeId(inputType)
             break
           case 'verification_code' :
-            if (this.formData.verification_code !== '') {
-              this._success(inputType)
-            } else {
-              this._fail(inputType)
-            }
+            console.log(this.formData.verification_code.length)
+            // this.judgeVerificationCode(inputType)
             break
           case 'password_repeat' :
             if (this.formData.password === this.formData.password_repeat) {
@@ -262,6 +259,22 @@
             }
           })
       },
+      judgeVerificationCode() {
+        user.trueVerification(this.formData.verification_code)
+          .then(res => {
+            if (res.status === 1) {
+              this._success('verification_code')
+            } else {
+              this._fail('verification_code')
+            }
+          })
+      },
+      sendVerificationCode() {
+        console.log(this.formData.verification_code.length)
+        if (this.formData.verification_code.length === variable.VERIFICATIONCODENUM) {
+          this.judgeVerificationCode()
+        }
+      },
       changeVerificationImg() {
         let randNum = Math.random().toString().substr(0, 10)
         this.verificationImgUrl = `${this.verificationImgUrl}?v=${randNum}`
@@ -301,6 +314,20 @@
               location.href = '/index'
             }
           })
+          .catch(error => {
+            this.logining = false
+            if (error.status === variable.REGISTER_ERROR) {
+              let errStr = ''
+              error.data.forEach(element => {
+                errStr += element.message
+              })
+              this.$message({
+                message: errStr,
+                type: 'warning',
+                center: true
+              })
+            }
+          })
       },
       // 提交注册参数过滤
       registerParams() {
@@ -318,6 +345,9 @@
     },
     components: {
 
+    },
+    watch: {
+      'formData.verification_code': 'sendVerificationCode'
     }
   }
 </script>

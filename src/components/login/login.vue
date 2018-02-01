@@ -2,7 +2,7 @@
   <div class="login">
     <div class="login-wrapper">
       <div class="image" ref="image"></div>
-      <login-block title="登录" ref="login"></login-block>
+      <login-block title="登录" ref="login" :isMain="true"></login-block>
     </div>
   </div>
 </template>

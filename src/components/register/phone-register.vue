@@ -91,7 +91,7 @@
         <div class="input-form-wrapper" :class="{'border-focus': borderFocus.id}">
           <input type="text" class="input-form" placeholder="请输入有效的18位身份证号码"
           v-model="formData.id" @focus="onFocus('id')"
-          @blur="onBlur('id')">
+          @blur="onBlur('id')" @keyup.13="submit">
         </div>
         <i class="el-icon-check true-logo" v-if="!errorInfo.id && formFlag.id"></i>
         <div class="error-info">{{errorInfo.id}}</div>
@@ -164,7 +164,7 @@
         },
         logining: false,
         // 图片url
-        verificationImgUrl: 'http://api.kukewan.com/site/captcha',
+        verificationImgUrl: variable.VERIFICATIONIMGURL,
         // message_code 参数
         messageCodeText: '发送短信验证码',   // 按钮的文本
         currentNumber: ''   // 初始的倒计时时间
@@ -194,11 +194,7 @@
             this.judgeId(inputType)
             break
           case 'verification_code' :
-            if (this.formData.verification_code !== '') {
-              this._success(inputType)
-            } else {
-              this._fail(inputType)
-            }
+            // this.judgeVerificationCode(inputType)
             break
           case 'message_code' :
             // 执行接口
@@ -251,7 +247,7 @@
           return msg
         }
         if (inputType === 'password') {
-          return '密码输入错误!'
+          return '6-18位密码,区分大小写!!'
         }
         if (inputType === 'password_repeat') {
           return '两次密码输入不一致!'
@@ -299,6 +295,22 @@
             }
           })
       },
+      judgeVerificationCode(inputType) {
+        user.trueVerification(this.formData.verification_code)
+          .then(res => {
+            if (res.status === 1) {
+              this._success('verification_code')
+            } else {
+              this._fail('verification_code')
+            }
+          })
+      },
+      sendVerificationCode() {
+        console.log(this.formData.verification_code.length)
+        if (this.formData.verification_code.length === variable.VERIFICATIONCODENUM) {
+          this.judgeVerificationCode()
+        }
+      },
       changeVerificationImg() {
         let randNum = Math.random().toString().substr(0, 10)
         this.verificationImgUrl = `${this.verificationImgUrl}?v=${randNum}`
@@ -338,6 +350,20 @@
               location.href = '/index'
             }
           })
+          .catch(error => {
+            this.logining = false
+            if (error.status === variable.REGISTER_ERROR) {
+              let errStr = ''
+              error.data.forEach(element => {
+                errStr += element.message
+              })
+              this.$message({
+                message: errStr,
+                type: 'warning',
+                center: true
+              })
+            }
+          })
       },
       // 提交注册参数过滤
       registerParams() {
@@ -370,9 +396,11 @@
         }, 1000)
       }
     },
-
     components: {
 
+    },
+    watch: {
+      'formData.verification_code': 'sendVerificationCode'
     }
   }
 </script>

@@ -358,6 +358,8 @@
             border-bottom 1px solid $color-border
             cursor pointer
             background-color #f7fafe
+            &:first-of-type
+              border-top 1px solid $color-border
             &:hover
               background-color #fff
             &.active

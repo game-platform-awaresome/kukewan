@@ -101,7 +101,7 @@
           &:hover
             background-color #fff
           &:first-of-type
-            border-top none
+            border-top 1px solid $color-border
           &:last-of-type
             border-bottom 1px solid $color-border
           &.active

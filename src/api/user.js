@@ -60,17 +60,17 @@ export function isRealname(realname) {
     })
 }
 // 判断验证码
-// export function trueVerification(realname) {
-//   const url = '/public/check'
-//   const params = {
-//     type: 'realname',
-//     string: realname
-//   }
-//   return axios.get(url, {params})
-//     .then(res => {
-//       return Promise.resolve(res.data)
-//     })
-// }
+export function trueVerification(verificationCode) {
+  const url = '/public/check'
+  const params = {
+    type: 'captcha',
+    string: verificationCode
+  }
+  return axios.get(url, {params})
+    .then(res => {
+      return Promise.resolve(res.data)
+    })
+}
 
 // 注册
 export function register(data) {
@@ -101,5 +101,12 @@ export function checkMessage(data) {
 // 退出登录
 export function quit() {
   const url = `/user-token/${localStorage.refresh_token}`
-  return axios.delete(url)
+  axios.delete(url)
+    .then(res => {
+      if (res.status === 204) {
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+        location.reload()
+      }
+    })
 }

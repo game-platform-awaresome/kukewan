@@ -5,12 +5,12 @@
         <span class="sign-text" v-show="user.sign">已签到<i class="el-icon-check"></i></span>
         <span class="sign-text" v-show="!user.sign">未签到</span>
       </div>
-      <div class="logout">注销</div>
+      <div class="logout" @click="quit">退出</div>
       <div class="avatar">
-        <img :src="user.avatar" alt="">
+        <img :src="avatar" alt="">
       </div>
       <div class="account">
-        <span class="account-text">{{user.nickname}}</span>
+        <span class="account-text">{{user.username}}</span>
         <span class="account-vip"></span>
       </div>
       <div class="security">
@@ -25,21 +25,28 @@
 
 <script type="text/ecmascript-6">
   import animations from 'create-keyframe-animation'
+  import { mapGetters } from 'vuex'
+
+  import * as user from 'api/user'
 
   export default {
     mounted() {
-      this.$nextTick(() => {
+      if (this.user.security_level) {
         this.widthMove()
-      })
+      }
     },
     data () {
       return {
-        // 用户信息
-        user: {
-          sign: true,
-          avatar: require('common/image/test/pay/avatar.png'),
-          nickname: 'Greentea',
-          securityLevel: 0.6
+        localUser: this.$store.state.user
+      }
+    },
+    computed: {
+      ...mapGetters(['user']),
+      avatar() {
+        if (!this.user.avatar) {
+          return require('../../common/image/test/user-info/avatar.png')
+        } else {
+          return this.user.avatar
         }
       }
     },
@@ -54,7 +61,7 @@
             width: 0
           },
           100: {
-            width: `${this.user.securityLevel * 100}%`
+            width: `${this.user.security_level}%`
           }
         }
         animations.registerAnimation({
@@ -67,7 +74,13 @@
           }
         })
         animations.runAnimation(this.$refs.range, 'move')
+      },
+      quit() {
+        user.quit()
       }
+    },
+    watch: {
+      '$store.state.user': 'widthMove'
     }
   }
 </script>
@@ -79,7 +92,7 @@
   .user-info
     position relative
     height 188px
-    border-bottom 1px solid $color-border
+    // border-bottom 1px solid $color-border
     .sign
       position absolute
       left 0
@@ -138,6 +151,7 @@
         border($color-hot)
         border-radius 5px
         .range
+          width 0
           height 100%
           background-color $color-hot
 
