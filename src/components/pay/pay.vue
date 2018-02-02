@@ -20,8 +20,7 @@
         <!-- common-input -->
         <pay-form :closeWindow="closeWindow"
          @getAccount="getAccount" @getGid="getGid" @getSid="getSid" @getMoney="getMoney" @getUnionpayId="getUnionpayId"
-        :formData="formData" :recentPlayList="recentPlayList" :allGameList="allGameList"
-          :recentServerList="recentServerList" :allServerList="allServerList"></pay-form>
+        :formData="formData"></pay-form>
         <!-- check pay information -->
         <div class="form-check" v-show="warnContent">
           <el-alert
@@ -44,13 +43,14 @@
   import PayForm from 'components/pay/pay-form/pay-form'
   import UserInfo from 'base/user-info/user-info'
   import * as payTypes from 'common/js/pay-types'
+  import {mapGetters} from 'vuex'
 
   // 是否开启debug模式
   const debug = process.env.NODE_ENV !== 'production'
 
   export default {
-    created() {
-
+    created () {
+      this.getUsername()
     },
     data () {
       return {
@@ -67,11 +67,12 @@
         // 表单参数配置
         formData: {
           payType: payTypes.ALIPAY,
-          account: 'Greentea',
+          account: '',
           gid: 0,
           sid: 0,
           money: 10,
-          unionpayId: ''
+          unionpayId: '',
+          payto: 0
         },
         // 支付类型列表
         payTypeList: [{
@@ -93,79 +94,11 @@
         {
           text: '手机卡',
           type: payTypes.PHONECARD
-        }],
-        /*
-           接口数据
-        */
-        // 最近在玩游戏列表
-        recentPlayList: [{
-          name: '大美人',
-          gid: '1'
-        },
-        {
-          name: '大美人',
-          gid: '1'
-        },
-        {
-          name: '大美人',
-          gid: '1'
-        }],
-        // 所有游戏列表
-        allGameList: [{
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        },
-        {
-          name: '大战神',
-          gid: '2'
-        }],
-        // 最近在玩的服务器列表
-        recentServerList: [{
-          name: '双线123区',
-          sid: 22
-        }],
-        // 所有服务器列表
-        allServerList: [{
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
-        },
-        {
-          name: '双线123区',
-          sid: 22
         }]
       }
+    },
+    computed: {
+      ...mapGetters(['user'])
     },
     components: {
       PayForm,
@@ -296,8 +229,9 @@
         this.testFormData()
       },
       // 更新gid
-      getGid(gid) {
+      getGid(gid, payto) {
         this.formData.gid = gid
+        this.formData.payto = payto
         // 调用数据测试
         this.testFormData()
       },
@@ -318,7 +252,15 @@
         this.formData.unionpayId = unionpayId
         // 调用数据测试
         this.testFormData()
+      },
+      getUsername() {
+        if (this.user) {
+          this.formData.account = this.user.username
+        }
       }
+    },
+    watch: {
+      '$store.state.user': 'getUsername'
     }
   }
 </script>
@@ -399,10 +341,10 @@
         .charge-btn-wrapper
           padding 30px
           .charge-btn
-            btn(125px,44px,,#fff,$font-size-large,$color-new)
-            border($color-new)
+            btn(125px,44px,,$color-new,$font-size-large,#fff)
+            // border($color-new)
             margin 0 auto
             &:hover
-              background-color $color-new
+              background-color rgba(255,175,0,.7)
               color #fff
 </style>

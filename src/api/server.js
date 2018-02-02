@@ -56,3 +56,22 @@ export function searchServer(gid, serverName) {
   const newParams = Object.assign(params, {gid, server_name: serverName})
   return axios.axiosGet(url, newParams)
 }
+
+// 获取当前游戏区服
+export function currentGameOfServer(gid) {
+  const url = '/server?fields=sid,serverName'
+  const params = {
+    gid,
+    fields: 'sid,serverName'
+  }
+  return axios.axiosGet(url, params)
+}
+
+// 获取当前游戏最近在玩的区服
+export function currentGameRecentServer(gid) {
+  const url = '/game-login'
+  const params = {
+    gid
+  }
+  return axios.axiosGet(url, params)
+}

@@ -8,9 +8,13 @@
           <input type="text" placeholder="请输入账号" v-model.trim="formData.account"
            @focus="accountFocus" @blur="accountBlur">
         </div>
-        <p v-show="isCorrectAccount === 0" class="form-msg"><span class="icon correct"></span></p>
+        <p v-show="isCorrectAccount === 0" class="form-msg">
+          <i class="el-icon-check icon"></i>
+          <!-- <span class="icon correct"></span> -->
+        </p>
         <p v-show="isCorrectAccount === 1" class="form-msg">
-          <span class="icon error"></span>
+          <i class="el-icon-close icon"></i>
+          <!-- <span class="icon error"></span> -->
           <span class="text">账户不存在</span>
         </p>
       </div>
@@ -49,7 +53,6 @@
             <li class="money-list-item input-money-list-item" :class="{active: currentOtherMoneyCls}">
               <input type="number" v-model.number="otherMoney" class="input-money" placeholder="其他金额"
               @focus="otherMoneyFocus" @blur="otherMoneyBlur">
-
             </li>
           </ul>
         </div>
@@ -70,29 +73,50 @@
   import SelectWindow from 'components/pay/select-window/select-window'
   import PayList from 'components/pay/pay-list/pay-list'
   import * as payTypes from 'common/js/pay-types'
+  import * as game from 'api/game'
+  import * as server from 'api/server'
+  import * as user from 'api/user'
+
   export default {
+    created () {
+      this.allGame()
+      this.recentGame()
+      this.currentGameOfServer()
+
+      if (localStorage.access_token) {
+        this.isCorrectAccount = 0
+      }
+    },
     props: {
       closeWindow: {
         type: Number
       },
       formData: {
         type: Object
-      },
-      recentPlayList: {
-        type: Array
-      },
-      allGameList: {
-        type: Array
-      },
-      recentServerList: {
-        type: Array
-      },
-      allServerList: {
-        type: Array
       }
     },
-    mounted() {
-
+    data () {
+      return {
+        // 选择游戏 & 选择区服显示
+        showGid: '选择游戏',
+        showSid: '选择区服',
+        // 表单错误提示
+        isCorrectAccount: 2,   // 0 填写正确,1 填写错误
+        accountCls: {
+          focus: false,
+          warn: false
+        },
+        showGameList: false,
+        showGameServerList: false,
+        moneyList: [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
+        otherMoney: '',
+        currentMoneyIndex: 0,
+        currentOtherMoneyCls: false,    // 当前其他金额Cls
+        recentPlayList: [],
+        allGameList: [],
+        recentServerList: [],
+        allServerList: []
+      }
     },
     watch: {
       closeWindow() {
@@ -122,44 +146,30 @@
         }
       }
     },
-    data () {
-      return {
-        // 选择游戏 & 选择区服显示
-        showGid: '选择游戏',
-        showSid: '选择区服',
-        // 表单错误提示
-        isCorrectAccount: 2,   // 0 填写正确,1 填写错误
-        accountCls: {
-          focus: false,
-          warn: false
-        },
-        showGameList: false,
-        showGameServerList: false,
-        moneyList: [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
-        otherMoney: '',
-        currentMoneyIndex: 0,
-        currentOtherMoneyCls: false    // 当前其他金额Cls
-      }
-    },
     components: {
       SelectWindow,
       PayList
     },
     methods: {
       accountFocus() {
+        this.isCorrectAccount = 2
         this.accountCls.warn = false
         this.accountCls.focus = !this.accountCls.warn
       },
       accountBlur() {
         /* 接口调用 */
-        // 失败
-        // this.accountCls.focus = false
-        // this.accountCls.warn = !this.accountCls.focus
-        // this.isCorrectAccount = 1
-        // 正确
-        this.accountCls.focus = false
-        this.isCorrectAccount = 0
-        this.backAccount(this.isCorrectAccount)
+        user.hasUsername(this.formData.account)
+          .then(res => {
+            if (res.code !== 1) {
+              this.accountCls.focus = false
+              this.isCorrectAccount = 0
+              this.backAccount(this.isCorrectAccount)
+            } else {
+              this.accountCls.focus = false
+              this.accountCls.warn = !this.accountCls.focus
+              this.isCorrectAccount = 1
+            }
+          })
       },
       closeTheWindow(isGameList) {
         if (isGameList) {
@@ -196,14 +206,17 @@
        */
       // 通过子窗口获取gid 或 sid
       selectId(obj) {
-        if (obj.gid) {
-          this.$emit('getGid', obj.gid)
+        if (obj.dataType === 'gameData') {
+          this.$emit('getGid', obj.id, obj.payTo)
           this.showGid = obj.name
           // 关闭选择游戏窗口 开启选择区服窗口
           this.showGameList = false
           this.showGameServerList = true
+          // ************ 获取到gid,调用接口 ************
+          this.currentGameOfServer(obj.id)
+          this.currentGameRecentServer(obj.id)
         } else {
-          this.$emit('getSid', obj.sid)
+          this.$emit('getSid', obj.id)
           this.showSid = obj.name
           // 关闭选择区服窗口
           this.showGameServerList = false
@@ -228,6 +241,73 @@
       // 返回unionpayId
       selectUnionpayId(unionpayId) {
         this.$emit('getUnionpayId', unionpayId)
+      },
+      // 获取所有游戏
+      allGame() {
+        game.allGame()
+          .then(res => {
+            let arr = []
+            res.forEach(ele => {
+              let obj = Object.assign(ele, {dataType: 'gameData'})
+              arr.push(obj)
+            })
+            this.allGameList = arr
+            // console.log(this.allGameList)
+          })
+      },
+      recentGame() {
+        if (localStorage.access_token) {
+          game.allRecentGame()
+            .then(res => {
+              let arr = []
+              for (let key in res) {
+                let obj = res[key]
+                let recentObj = {
+                  name: obj.gameName,
+                  id: obj.gameid,
+                  dataType: 'gameData',
+                  payto: obj.payto
+                }
+                arr.push(recentObj)
+              }
+              this.recentPlayList = arr
+              // console.log(this.recentPlayList)
+            })
+        }
+      },
+      currentGameRecentServer(gid) {
+        if (localStorage.access_token) {
+          server.currentGameRecentServer(gid)
+            .then(res => {
+              let arr = []
+              res.forEach(element => {
+                let obj = {
+                  name: element.serverName,
+                  id: element.sid,
+                  dataType: 'serverData'
+                }
+                arr.push(obj)
+              })
+              this.recentServerList = arr
+              // console.log(this.recentServerList)
+            })
+        }
+      },
+      currentGameOfServer(gid) {
+        server.currentGameOfServer(gid)
+          .then(res => {
+            let arr = []
+            res.forEach(element => {
+              let obj = {
+                name: element.serverName,
+                id: element.sid,
+                dataType: 'serverData'
+              }
+              arr.push(obj)
+            })
+            this.allServerList = arr
+            // console.log(this.allServerList)
+          })
       }
     }
   }
@@ -281,16 +361,22 @@
           display inline-block
           margin-left 20px
           .icon
+            font-size 20px
             display inline-block
             vertical-align middle
-            width 18px
-            height 18px
+            font-weight blod
+            color $color-hot
+            // width 18px
+            // height 18px
             &.correct
-              bg('../image/correct.png')
+              color $color-hot
+            //   bg('../image/correct.png')
             &.error
-              bg('../image/error.png')
+              color $color-hot
+            //   bg('../image/error.png')
           .text
             display inline-block
+            margin-left 5px
             vertical-align middle
             font-size $font-size-medium
             color $color-hot

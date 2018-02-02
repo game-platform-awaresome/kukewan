@@ -15,7 +15,7 @@ import {mapActions} from 'vuex'
 
 export default {
   created () {
-    console.log(localStorage.access_token)
+    // console.log(localStorage.access_token)
     if (localStorage.access_token) {
       this.setUser()
     }

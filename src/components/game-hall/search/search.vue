@@ -255,7 +255,7 @@
       allGame() {
         let gameList = this.$refs.gameList.$el
         let loadingInstance = Loading.service({target: gameList})
-        game.allGame()
+        game.allGame9()
         .then(({data, headers}) => {
           this.$nextTick(() => {
             loadingInstance.close()
@@ -265,7 +265,7 @@
         })
       },
       initGame() {
-        game.allGame()
+        game.allGame9()
           .then(({data, headers}) => {
             this._pagination(headers)
             this.gameList = data

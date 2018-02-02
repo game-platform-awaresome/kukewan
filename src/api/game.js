@@ -3,11 +3,18 @@ import * as axios from './config'
 // 全部游戏
 export function allGame() {
   const url = '/game'
+  return axios.axiosGet(url)
+}
+
+// 全部游戏---9
+export function allGame9() {
+  const url = '/game'
   const params = {
     'per-page': 9
   }
   return axios.axiosHeaderGet(url, params)
 }
+
 // 推荐游戏
 export function recommend() {
   const url = '/game/recommend'
@@ -102,4 +109,10 @@ export function recentGame() {
     'per-page': 3
   }
   return axios.axiosGet(url, params)
+}
+
+// 所有最近在玩
+export function allRecentGame() {
+  const url = '/game-login/game'
+  return axios.axiosGet(url)
 }
