@@ -26,14 +26,14 @@
         <transition name="mode">
           <div class="game-select-window select-window-wrapper" v-show="showGameList">
             <select-window :isGameList="true" :recentLists="recentPlayList"
-            :allLists="allGameList" @close="closeTheWindow" @selectId="selectId"></select-window>
+            :allLists="allGameList" @close="closeTheWindow" @selectId="selectId" :loading="loadingGame"></select-window>
           </div>
         </transition>
         <!-- server-select-window -->
         <transition name="mode">
           <div class="server-select-window select-window-wrapper" v-show="showGameServerList">
             <select-window :isGameList="false" :recentLists="recentServerList"
-            :allLists="allServerList" @close="closeTheWindow" @selectId="selectId"></select-window>
+            :allLists="allServerList" @close="closeTheWindow" @selectId="selectId" :loading="loadingServer"></select-window>
           </div>
         </transition>
       </div>
@@ -115,7 +115,15 @@
         recentPlayList: [],
         allGameList: [],
         recentServerList: [],
-        allServerList: []
+        allServerList: [],
+        loadingGame: {
+          recent: false,
+          all: false
+        },
+        loadingServer: {
+          recent: false,
+          all: false
+        }
       }
     },
     watch: {
@@ -207,7 +215,7 @@
       // 通过子窗口获取gid 或 sid
       selectId(obj) {
         if (obj.dataType === 'gameData') {
-          this.$emit('getGid', obj.id, obj.payTo)
+          this.$emit('getGid', obj.id, obj.payto)
           this.showGid = obj.name
           // 关闭选择游戏窗口 开启选择区服窗口
           this.showGameList = false
@@ -244,6 +252,7 @@
       },
       // 获取所有游戏
       allGame() {
+        this.loadingGame.all = true
         game.allGame()
           .then(res => {
             let arr = []
@@ -252,11 +261,13 @@
               arr.push(obj)
             })
             this.allGameList = arr
+            this.loadingGame.all = false
             // console.log(this.allGameList)
           })
       },
       recentGame() {
         if (localStorage.access_token) {
+          this.loadingGame.recent = true
           game.allRecentGame()
             .then(res => {
               let arr = []
@@ -271,12 +282,14 @@
                 arr.push(recentObj)
               }
               this.recentPlayList = arr
+              this.loadingGame.recent = false
               // console.log(this.recentPlayList)
             })
         }
       },
       currentGameRecentServer(gid) {
         if (localStorage.access_token) {
+          this.loadingServer.recent = true
           server.currentGameRecentServer(gid)
             .then(res => {
               let arr = []
@@ -289,11 +302,12 @@
                 arr.push(obj)
               })
               this.recentServerList = arr
-              // console.log(this.recentServerList)
+              this.loadingServer.recent = false
             })
         }
       },
       currentGameOfServer(gid) {
+        this.loadingServer.all = true
         server.currentGameOfServer(gid)
           .then(res => {
             let arr = []
@@ -306,6 +320,7 @@
               arr.push(obj)
             })
             this.allServerList = arr
+            this.loadingServer.all = false
             // console.log(this.allServerList)
           })
       }

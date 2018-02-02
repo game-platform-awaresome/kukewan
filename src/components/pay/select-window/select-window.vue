@@ -18,14 +18,14 @@
         <i class="el-icon-close" @click.stop="closeTheWindow"></i>
       </div>
     </div>
-    <div class="window-list-wrapper" v-show="showCurrentList === 0">
+    <div class="window-list-wrapper" v-show="showCurrentList === 0" v-loading="loading.recent">
       <ul>
         <li v-for="(list,index) in recentLists" :key="index" class="window-list-item" @click.stop="selectId(list)">
           <span class="recent-play-item">{{list.name}}</span>
         </li>
       </ul>
     </div>
-    <div class="window-list-wrapper" v-show="showCurrentList === 1">
+    <div class="window-list-wrapper" v-show="showCurrentList === 1" v-loading="loading.all">
       <ul>
         <li v-for="(list,index) in allLists" :key="index" class="window-list-item" @click.stop="selectId(list)">
           <span class="recent-play-item">{{list.name}}</span>
@@ -47,6 +47,9 @@
       },
       allLists: {
         type: Array
+      },
+      loading: {
+        type: Object
       }
     },
     data () {
@@ -109,6 +112,7 @@
         right -11px
         cursor pointer
     .window-list-wrapper
+      min-height 100px
       clear-fix()
       .window-list-item
         float left

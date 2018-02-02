@@ -72,7 +72,8 @@
           sid: 0,
           money: 10,
           unionpayId: '',
-          payto: 0
+          payto: 0,
+          role_name: ''
         },
         // 支付类型列表
         payTypeList: [{
