@@ -21,6 +21,20 @@ export function hasUsername(username) {
       return Promise.resolve(res.data)
     })
 }
+
+// 支付-账号是否存在
+export function hasAccount(username) {
+  const url = '/public/check'
+  const params = {
+    type: 'account',
+    string: username
+  }
+  return axios.get(url, {params})
+    .then(res => {
+      return Promise.resolve(res.data)
+    })
+}
+
 // 判断手机号是否存在
 export function hasPhone(phone) {
   const url = '/public/check'

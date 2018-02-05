@@ -72,11 +72,7 @@
         this.$emit('close', this.isGameList)
       },
       selectId(list) {
-        if (this.isGameList) {
-          this.$emit('selectId', list)
-        } else {
-          this.$emit('selectId', list)
-        }
+        this.$emit('selectId', list)
       }
     }
   }

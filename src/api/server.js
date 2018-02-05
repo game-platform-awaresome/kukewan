@@ -75,3 +75,12 @@ export function currentGameRecentServer(gid) {
   }
   return axios.axiosGet(url, params)
 }
+
+// 按区服查询角色
+export function serverSearchRole(id) {
+  const url = '/game-role/server'
+  const params = {
+    id
+  }
+  return axios.axiosGet(url, params)
+}

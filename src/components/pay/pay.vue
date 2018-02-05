@@ -20,7 +20,7 @@
         <!-- common-input -->
         <pay-form :closeWindow="closeWindow"
          @getAccount="getAccount" @getGid="getGid" @getSid="getSid" @getMoney="getMoney" @getUnionpayId="getUnionpayId"
-        :formData="formData"></pay-form>
+        :formData="formData" @getRoleName="getRoleName"></pay-form>
         <!-- check pay information -->
         <div class="form-check" v-show="warnContent">
           <el-alert
@@ -126,30 +126,42 @@
         if (!this.checkAccount) {
           flag = false
           this.warnContent = '账号不正确,请检查您的输入'
+          return
         }
         // gid
         if (!formData.gid) {
           flag = false
           this.warnContent = '请选择游戏'
+          return
         }
         // sid
         if (!formData.sid) {
           flag = false
           this.warnContent = '请选择游戏区服'
+          return
+        }
+        // role_name
+        if (!formData.role_name) {
+          flag = false
+          this.warnContent = '请选择角色'
+          return
         }
         // money
         if (!formData.money) {
           flag = false
           this.warnContent = '请输入金额'
+          return
         } else if (formData.money % 1 !== 0) {
           flag = false
           this.warnContent = '充值金额必须为0-10000的整数'
+          return
         }
         // unionpay
         if (formData.type === payTypes.UNIONPAY) {
           if (typeof (formData.unionpayId) !== 'string' || !formData.unionpayId) {
             flag = false
             this.warnContent = '请选择银行'
+            return
           }
         }
         // game-card
@@ -161,6 +173,7 @@
           if (hasCard !== 1) {
             flag = false
             this.warnContent = '请选择游戏卡'
+            return
           }
         }
         // phone-card
@@ -172,6 +185,7 @@
           if (hasCard !== 1) {
             flag = false
             this.warnContent = '请选择手机卡'
+            return
           }
         }
         // fanily
@@ -258,6 +272,10 @@
         if (this.user) {
           this.formData.account = this.user.username
         }
+      },
+      getRoleName(roleName) {
+        this.formData.role_name = roleName
+        this.testFormData()
       }
     },
     watch: {

@@ -36,6 +36,14 @@
             :allLists="allServerList" @close="closeTheWindow" @selectId="selectId" :loading="loadingServer"></select-window>
           </div>
         </transition>
+        <!-- role -->
+        <el-select v-model="roleName" :disabled="false" v-show="true">
+          <el-option
+            v-for="item in roles"
+            :key="item.role"
+            :value="item.role">
+          </el-option>
+        </el-select>
       </div>
       <!-- money -->
       <div class="single-form-wrapper">
@@ -97,9 +105,13 @@
     },
     data () {
       return {
-        // 选择游戏 & 选择区服显示
+        // 选择游戏 & 选择区服显示 & 角色
         showGid: '选择游戏',
         showSid: '选择区服',
+        roles: [],
+        roleName: '',
+        roleIsDisable: false,
+        roleIsShow: false,
         // 表单错误提示
         isCorrectAccount: 2,   // 0 填写正确,1 填写错误
         accountCls: {
@@ -166,7 +178,7 @@
       },
       accountBlur() {
         /* 接口调用 */
-        user.hasUsername(this.formData.account)
+        user.hasAccount(this.formData.account)
           .then(res => {
             if (res.code !== 1) {
               this.accountCls.focus = false
@@ -214,6 +226,7 @@
        */
       // 通过子窗口获取gid 或 sid
       selectId(obj) {
+        this.roleName = ''
         if (obj.dataType === 'gameData') {
           this.$emit('getGid', obj.id, obj.payto)
           this.showGid = obj.name
@@ -228,6 +241,8 @@
           this.showSid = obj.name
           // 关闭选择区服窗口
           this.showGameServerList = false
+          // ************ 获取到sid,调用接口 ************
+          this.getRole(obj.id)
         }
       },
       // 返回账户名
@@ -321,7 +336,20 @@
             })
             this.allServerList = arr
             this.loadingServer.all = false
-            // console.log(this.allServerList)
+            console.log(this.allServerList)
+          })
+      },
+      getRole(sid) {
+        server.serverSearchRole(sid)
+          .then(res => {
+            console.log(res)
+            this.roles = res
+            if (this.roles.length === 1) {
+              // this.roleIsShow = true
+              // this.roleIsDisable = true
+              this.roleName = res[0].role
+              this.$emit('getRoleName', this.roleName)
+            }
           })
       }
     }
@@ -372,6 +400,17 @@
             left 96px
           &.server-select-window
             left 96px + 180px + 30px
+        .el-select
+          display inline-block
+          vertical-align top
+          margin-left 30px
+          input
+            border-radius 0
+            width 180px
+            height 46px
+            border()
+            &:hover
+              border($color-theme)
         .form-msg
           display inline-block
           margin-left 20px
