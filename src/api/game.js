@@ -112,7 +112,16 @@ export function recentGame() {
 }
 
 // 所有最近在玩
-export function allRecentGame() {
+export function allRecentGame(account) {
   const url = '/game-login/game'
+  let params = {
+    account
+  }
+  return axios.axiosGet(url, params)
+}
+
+// 通过游戏id获取游戏信息
+export function getGameInfoByGid(id) {
+  const url = `/game/${id}`
   return axios.axiosGet(url)
 }

@@ -37,7 +37,7 @@
           </div>
         </transition>
         <!-- role -->
-        <el-select v-model="roleName" :disabled="false" v-show="true">
+        <el-select v-model="roleName" :disabled="false" v-show="formData.roleName">
           <el-option
             v-for="item in roles"
             :key="item.role"
@@ -88,9 +88,7 @@
   export default {
     created () {
       this.allGame()
-      this.recentGame()
-      this.currentGameOfServer()
-
+      this.getUnitUrlParams()
       if (localStorage.access_token) {
         this.isCorrectAccount = 0
       }
@@ -180,10 +178,13 @@
         /* 接口调用 */
         user.hasAccount(this.formData.account)
           .then(res => {
-            if (res.code !== 1) {
+            // 账号存在
+            if (res.code === -2) {
               this.accountCls.focus = false
               this.isCorrectAccount = 0
               this.backAccount(this.isCorrectAccount)
+              // 调用接口
+              this.recentGame(this.formData.account)
             } else {
               this.accountCls.focus = false
               this.accountCls.warn = !this.accountCls.focus
@@ -235,14 +236,16 @@
           this.showGameServerList = true
           // ************ 获取到gid,调用接口 ************
           this.currentGameOfServer(obj.id)
-          this.currentGameRecentServer(obj.id)
+          this.currentGameRecentServer(obj.id, this.formData.account)
         } else {
           this.$emit('getSid', obj.id)
           this.showSid = obj.name
           // 关闭选择区服窗口
           this.showGameServerList = false
           // ************ 获取到sid,调用接口 ************
-          this.getRole(obj.id)
+          if (this.formData.account) {
+            this.getRole(obj.id, this.formData.account)
+          }
         }
       },
       // 返回账户名
@@ -280,46 +283,43 @@
             // console.log(this.allGameList)
           })
       },
-      recentGame() {
-        if (localStorage.access_token) {
-          this.loadingGame.recent = true
-          game.allRecentGame()
-            .then(res => {
-              let arr = []
-              for (let key in res) {
-                let obj = res[key]
-                let recentObj = {
-                  name: obj.gameName,
-                  id: obj.gameid,
-                  dataType: 'gameData',
-                  payto: obj.payto
-                }
-                arr.push(recentObj)
+      // 最近的游戏
+      recentGame(account) {
+        this.loadingGame.recent = true
+        game.allRecentGame(account)
+          .then(res => {
+            let arr = []
+            for (let key in res) {
+              let obj = res[key]
+              let recentObj = {
+                name: obj.gameName,
+                id: obj.gameid,
+                dataType: 'gameData',
+                payto: obj.payto
               }
-              this.recentPlayList = arr
-              this.loadingGame.recent = false
-              // console.log(this.recentPlayList)
-            })
-        }
+              arr.push(recentObj)
+            }
+            this.recentPlayList = arr
+            this.loadingGame.recent = false
+            // console.log(this.recentPlayList)
+          })
       },
-      currentGameRecentServer(gid) {
-        if (localStorage.access_token) {
-          this.loadingServer.recent = true
-          server.currentGameRecentServer(gid)
-            .then(res => {
-              let arr = []
-              res.forEach(element => {
-                let obj = {
-                  name: element.serverName,
-                  id: element.sid,
-                  dataType: 'serverData'
-                }
-                arr.push(obj)
-              })
-              this.recentServerList = arr
-              this.loadingServer.recent = false
+      currentGameRecentServer(gid, account) {
+        this.loadingServer.recent = true
+        server.currentGameRecentServer(gid, account)
+          .then(res => {
+            let arr = []
+            res.forEach(element => {
+              let obj = {
+                name: element.serverName,
+                id: element.sid,
+                dataType: 'serverData'
+              }
+              arr.push(obj)
             })
-        }
+            this.recentServerList = arr
+            this.loadingServer.recent = false
+          })
       },
       currentGameOfServer(gid) {
         this.loadingServer.all = true
@@ -336,11 +336,11 @@
             })
             this.allServerList = arr
             this.loadingServer.all = false
-            console.log(this.allServerList)
+            // console.log(this.allServerList)
           })
       },
-      getRole(sid) {
-        server.serverSearchRole(sid)
+      getRole(sid, account) {
+        server.serverSearchRole(sid, account)
           .then(res => {
             console.log(res)
             this.roles = res
@@ -350,6 +350,52 @@
               this.roleName = res[0].role
               this.$emit('getRoleName', this.roleName)
             }
+          })
+      },
+      // 获取初始url
+      getUnitUrlParams() {
+        let gid = this.$route.query.game
+        let sid = this.$route.query.server_id
+        let uid = this.$route.query.user
+        if (gid && sid) {
+          game.getGameInfoByGid(gid)
+            .then(res => {
+              let gameInfo = Object.assign(res, {dataType: 'gameData'})
+              this.$emit('getGid', gameInfo.id, gameInfo.payto)
+              this.showGid = gameInfo.name
+            })
+          server.getServerInfoBySid(gid, sid)
+            .then(res => {
+              let serverObj = Object.assign(res, {dataType: 'serverType'})
+              this.$emit('getSid', serverObj.sid)
+              this.showSid = serverObj.serverName
+              // 关闭选择区服窗口
+              this.showGameServerList = false
+              // ************ 获取到sid,调用接口 ************
+              if (uid) {
+                //  user.getUserInfoByUid(uid)
+                // .then(res => {
+                //   this.formData.account = res.data.username
+                //   this.getRole(serverObj.sid, this.formData.account)
+                // })
+
+                this.getUserInfoByUid(uid)
+                  .then(res => {
+                    this.getRole(serverObj.sid, res.data.username)
+                  })
+              }
+            })
+        }
+        if (uid && !this.formData.account) {
+          this.getUserInfoByUid(uid)
+        }
+      },
+      // 通过uid获取用户信息
+      getUserInfoByUid(uid) {
+        user.getUserInfoByUid(uid)
+          .then(res => {
+            this.formData.account = res.data.username
+            return Promise.resolve(res)
           })
       }
     }

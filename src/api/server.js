@@ -68,19 +68,31 @@ export function currentGameOfServer(gid) {
 }
 
 // 获取当前游戏最近在玩的区服
-export function currentGameRecentServer(gid) {
+export function currentGameRecentServer(gid, account) {
   const url = '/game-login'
   const params = {
-    gid
+    gid,
+    account
   }
   return axios.axiosGet(url, params)
 }
 
 // 按区服查询角色
-export function serverSearchRole(id) {
+export function serverSearchRole(id, account) {
   const url = '/game-role/server'
   const params = {
-    id
+    id,
+    account
+  }
+  return axios.axiosGet(url, params)
+}
+
+// 通过区服id获取区服信息
+export function getServerInfoBySid(game, serverId) {
+  const url = '/server/get-server-by-serverid'
+  const params = {
+    game,
+    'server_id': serverId
   }
   return axios.axiosGet(url, params)
 }

@@ -8,9 +8,9 @@
         <div class="pay-type">
           <ul>
             <li v-for="(item,index) in payTypeList" :key="index"
-             @click="selectPayType(item.type,index)" class="pay-type-item" :class="{active: paytypeCurrentIndex === index}">
-              <i class="icon" :class="item.type"></i>
-              <span class="pay-type-text">{{item.text}}</span>
+             @click="selectPayType(item,index)" class="pay-type-item" :class="{active: paytypeCurrentIndex === index}">
+              <i class="icon" :class="item.payType"></i>
+              <span class="pay-type-text">{{item.name}}</span>
               <i class="el-icon-arrow-right"></i>
             </li>
           </ul>
@@ -19,7 +19,7 @@
       <div class="pay-right">
         <!-- common-input -->
         <pay-form :closeWindow="closeWindow"
-         @getAccount="getAccount" @getGid="getGid" @getSid="getSid" @getMoney="getMoney" @getUnionpayId="getUnionpayId"
+         @getAccount="getAccount" @getGid="getGid" @getSid="getSid" @getMoney="getMoney" @getUnionpayId="getTwoChannel"
         :formData="formData" @getRoleName="getRoleName"></pay-form>
         <!-- check pay information -->
         <div class="form-check" v-show="warnContent">
@@ -43,6 +43,7 @@
   import PayForm from 'components/pay/pay-form/pay-form'
   import UserInfo from 'base/user-info/user-info'
   import * as payTypes from 'common/js/pay-types'
+  import * as user from 'api/user'
   import {mapGetters} from 'vuex'
 
   // 是否开启debug模式
@@ -51,6 +52,7 @@
   export default {
     created () {
       this.getUsername()
+      this.getPayType()
     },
     data () {
       return {
@@ -66,36 +68,17 @@
         warnContent: '',
         // 表单参数配置
         formData: {
-          payType: payTypes.ALIPAY,
+          payType: '',
           account: '',
           gid: 0,
           sid: 0,
           money: 10,
-          unionpayId: '',
+          twoChannel: '',
           payto: 0,
-          role_name: ''
+          roleName: '',
+          oneChannel: ''
         },
-        // 支付类型列表
-        payTypeList: [{
-          text: '支付宝',
-          type: payTypes.ALIPAY
-        },
-        {
-          text: '微信',
-          type: payTypes.WECHAT
-        },
-        {
-          text: '银联',
-          type: payTypes.UNIONPAY
-        },
-        {
-          text: '游戏卡',
-          type: payTypes.GAMECARD
-        },
-        {
-          text: '手机卡',
-          type: payTypes.PHONECARD
-        }]
+        payTypeList: []
       }
     },
     computed: {
@@ -140,8 +123,8 @@
           this.warnContent = '请选择游戏区服'
           return
         }
-        // role_name
-        if (!formData.role_name) {
+        // roleName
+        if (!formData.roleName) {
           flag = false
           this.warnContent = '请选择角色'
           return
@@ -157,15 +140,15 @@
           return
         }
         // unionpay
-        if (formData.type === payTypes.UNIONPAY) {
-          if (typeof (formData.unionpayId) !== 'string' || !formData.unionpayId) {
+        if (formData.payType === payTypes.UNIONPAY) {
+          if (typeof (formData.twoChannel) !== 'string' || !formData.twoChannel) {
             flag = false
             this.warnContent = '请选择银行'
             return
           }
         }
         // game-card
-        if (formData.type === payTypes.GAMECARD) {
+        if (formData.payType === payTypes.GAMECARD) {
           let gameCardList = [60, 61, 62, 63]
           let hasCard = gameCardList.find((value) => {
             return value === 1
@@ -177,7 +160,7 @@
           }
         }
         // phone-card
-        if (formData.type === payTypes.PHONECARD) {
+        if (formData.payType === payTypes.PHONECARD) {
           let phoneCardList = [75, 76, 77]
           let hasCard = phoneCardList.find((value) => {
             return value === 1
@@ -195,8 +178,14 @@
         }
       },
       // 选择支付类型
-      selectPayType(type, index) {
-        this.formData.payType = type
+      selectPayType(item, index) {
+        this.formData.payType = item.payType
+        this.formData.oneChannel = item.oneChannel
+        if (item.twoChannel.length === 1) {
+          this.formData.twoChannel = item.twoChannel[0]
+        } else if (item.twoChannel.length > 1) {
+          this.formData.twoChannel = ''
+        }
         this.paytypeCurrentIndex = index
         // 调用数据测试
         this.testFormData()
@@ -263,19 +252,34 @@
         this.testFormData()
       },
       // 更新unionpay
-      getUnionpayId(unionpayId) {
-        this.formData.unionpayId = unionpayId
+      getTwoChannel(twoChannel) {
+        this.formData.twoChannel = twoChannel
         // 调用数据测试
         this.testFormData()
       },
+      // 获取用户名
       getUsername() {
         if (this.user) {
           this.formData.account = this.user.username
         }
       },
+      // 获取角色名
       getRoleName(roleName) {
-        this.formData.role_name = roleName
+        this.formData.roleName = roleName
         this.testFormData()
+      },
+      // 获取充值方式
+      getPayType() {
+        user.getPayType()
+          .then(res => {
+            this.payTypeList = res
+            this.formData.payType = res[0].payType
+            this.formData.oneChannel = res[0].oneChannel
+            if (res[0].twoChannel.length === 1) {
+              this.formData.twoChannel = res[0].twoChannel[0]
+            }
+            // console.log(this.payTypeList)
+          })
       }
     },
     watch: {
