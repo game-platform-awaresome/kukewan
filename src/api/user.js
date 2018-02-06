@@ -125,15 +125,6 @@ export function quit() {
     })
 }
 
-// 获取充值方式
-export function getPayType() {
-  const url = '/pay/channel1'
-  return axios.get(url)
-    .then(res => {
-      return Promise.resolve(res.data)
-    })
-}
-
 // 通过uid获取用户信息
 export function getUserInfoByUid(uid) {
   const url = `/user/${uid}`

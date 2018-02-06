@@ -84,10 +84,12 @@
   import * as game from 'api/game'
   import * as server from 'api/server'
   import * as user from 'api/user'
+  import * as pay from 'api/pay'
 
   export default {
     created () {
       this.allGame()
+      this.getOrderId()
       this.getUnitUrlParams()
       if (localStorage.access_token) {
         this.isCorrectAccount = 0
@@ -229,7 +231,7 @@
       selectId(obj) {
         this.roleName = ''
         if (obj.dataType === 'gameData') {
-          this.$emit('getGid', obj.id, obj.payto)
+          this.$emit('getGid', obj.id, obj.payto, obj.name)
           this.showGid = obj.name
           // 关闭选择游戏窗口 开启选择区服窗口
           this.showGameList = false
@@ -238,7 +240,7 @@
           this.currentGameOfServer(obj.id)
           this.currentGameRecentServer(obj.id, this.formData.account)
         } else {
-          this.$emit('getSid', obj.id)
+          this.$emit('getSid', obj.id, obj.name)
           this.showSid = obj.name
           // 关闭选择区服窗口
           this.showGameServerList = false
@@ -342,7 +344,6 @@
       getRole(sid, account) {
         server.serverSearchRole(sid, account)
           .then(res => {
-            console.log(res)
             this.roles = res
             if (this.roles.length === 1) {
               // this.roleIsShow = true
@@ -361,41 +362,59 @@
           game.getGameInfoByGid(gid)
             .then(res => {
               let gameInfo = Object.assign(res, {dataType: 'gameData'})
-              this.$emit('getGid', gameInfo.id, gameInfo.payto)
+              this.$emit('getGid', gameInfo.id, gameInfo.payto, gameInfo.name)
               this.showGid = gameInfo.name
             })
           server.getServerInfoBySid(gid, sid)
             .then(res => {
               let serverObj = Object.assign(res, {dataType: 'serverType'})
-              this.$emit('getSid', serverObj.sid)
+              this.$emit('getSid', serverObj.sid, serverObj.serverName)
               this.showSid = serverObj.serverName
               // 关闭选择区服窗口
               this.showGameServerList = false
               // ************ 获取到sid,调用接口 ************
               if (uid) {
-                //  user.getUserInfoByUid(uid)
-                // .then(res => {
-                //   this.formData.account = res.data.username
-                //   this.getRole(serverObj.sid, this.formData.account)
-                // })
-
-                this.getUserInfoByUid(uid)
-                  .then(res => {
-                    this.getRole(serverObj.sid, res.data.username)
-                  })
+                let reg = /^\d+$/
+                if (reg.test(uid)) {
+                  this.getUserInfoByUid(uid)
+                    .then(res => {
+                      this.getRole(serverObj.sid, res.data.username)
+                      this.recentGame(res.data.username)
+                    })
+                } else {
+                  this.formData.account = uid
+                }
               }
             })
         }
-        if (uid && !this.formData.account) {
-          this.getUserInfoByUid(uid)
+        if (uid && !gid) {
+          let reg = /^\d+$/
+          if (reg.test(uid)) {
+            this.getUserInfoByUid(uid)
+              .then(res => {
+                this.recentGame(res.data.username)
+              })
+          } else {
+            this.formData.account = uid
+            this.recentGame(uid)
+          }
         }
       },
-      // 通过uid获取用户信息
+      // 通过uid获取用户信息 &&& 获取角色
       getUserInfoByUid(uid) {
-        user.getUserInfoByUid(uid)
+        return user.getUserInfoByUid(uid)
           .then(res => {
             this.formData.account = res.data.username
+            this.accountCls.focus = false
+            this.isCorrectAccount = 0
+            this.backAccount(this.isCorrectAccount)
             return Promise.resolve(res)
+          })
+      },
+      getOrderId() {
+        pay.getOrderId()
+          .then(res => {
+            this.formData.order_sn = res.orderSn
           })
       }
     }

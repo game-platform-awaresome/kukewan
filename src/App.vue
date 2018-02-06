@@ -11,7 +11,6 @@
 <script type="text/ecmascript-6">
 import KHeader from 'components/k-header/k-header'
 import KFooter from 'components/k-footer/k-footer'
-import {mapActions} from 'vuex'
 
 export default {
   created () {
@@ -19,12 +18,6 @@ export default {
     if (localStorage.access_token) {
       this.setUser()
     }
-  },
-  computed: {
-
-  },
-  methods: {
-    ...mapActions(['setUser'])
   },
   data() {
     return {}

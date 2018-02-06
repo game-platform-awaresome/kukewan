@@ -32,18 +32,20 @@
         </div>
         <!-- charge  -->
         <div class="charge-btn-wrapper">
-          <div class="charge-btn" @click="checkForm">立即充值</div>
+          <div class="charge-btn" @click="submit">立即充值</div>
         </div>
       </div>
+      <pay-window v-show='windowIsOpen' :formData="formData" @cancelWindow='cancelWindow'></pay-window>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import PayForm from 'components/pay/pay-form/pay-form'
+  import PayWindow from 'components/pay/pay-window/pay-window'
   import UserInfo from 'base/user-info/user-info'
   import * as payTypes from 'common/js/pay-types'
-  import * as user from 'api/user'
+  import * as pay from 'api/pay'
   import {mapGetters} from 'vuex'
 
   // 是否开启debug模式
@@ -71,14 +73,18 @@
           payType: '',
           account: '',
           gid: 0,
+          gameName: '',
           sid: 0,
+          serverName: '',
           money: 10,
           twoChannel: '',
           payto: 0,
           roleName: '',
-          oneChannel: ''
+          oneChannel: '',
+          order_sn: ''
         },
-        payTypeList: []
+        payTypeList: [],
+        windowIsOpen: false
       }
     },
     computed: {
@@ -86,7 +92,8 @@
     },
     components: {
       PayForm,
-      UserInfo
+      UserInfo,
+      PayWindow
     },
     methods: {
       // 数据测试
@@ -103,6 +110,7 @@
       checkForm() {
         let flag = true
         let formData = this.formData
+        let that = this
         // account
         // 添加判断一下如果是本账号则不再需要验证
 
@@ -151,9 +159,9 @@
         if (formData.payType === payTypes.GAMECARD) {
           let gameCardList = [60, 61, 62, 63]
           let hasCard = gameCardList.find((value) => {
-            return value === 1
+            return value === that.formData.twoChannel
           })
-          if (hasCard !== 1) {
+          if (!hasCard) {
             flag = false
             this.warnContent = '请选择游戏卡'
             return
@@ -163,9 +171,9 @@
         if (formData.payType === payTypes.PHONECARD) {
           let phoneCardList = [75, 76, 77]
           let hasCard = phoneCardList.find((value) => {
-            return value === 1
+            return value === that.formData.twoChannel
           })
-          if (hasCard !== 1) {
+          if (!hasCard) {
             flag = false
             this.warnContent = '请选择手机卡'
             return
@@ -175,6 +183,15 @@
         if (flag) {
           console.log('all formData is true')
           this.warnContent = ''
+          return true
+        } else {
+          return false
+        }
+      },
+      // 提交
+      submit() {
+        if (this.checkForm()) {
+          this.windowIsOpen = true
         }
       },
       // 选择支付类型
@@ -183,13 +200,17 @@
         this.formData.oneChannel = item.oneChannel
         if (item.twoChannel.length === 1) {
           this.formData.twoChannel = item.twoChannel[0]
+          // this.setFormData(this.formData)
         } else if (item.twoChannel.length > 1) {
           this.formData.twoChannel = ''
+          // this.setFormData(this.formData)
         }
         this.paytypeCurrentIndex = index
         // 调用数据测试
         this.testFormData()
         this.selectPayTypeAlert(this.formData.payType)
+        // 切换支付方式改变订单号
+        this.getOrderId()
       },
       // 切换支付类型提示
       selectPayTypeAlert(type) {
@@ -233,15 +254,17 @@
         this.testFormData()
       },
       // 更新gid
-      getGid(gid, payto) {
+      getGid(gid, payto, gameName) {
         this.formData.gid = gid
         this.formData.payto = payto
+        this.formData.gameName = gameName
         // 调用数据测试
         this.testFormData()
       },
       // 更新sid
-      getSid(sid) {
+      getSid(sid, serverName) {
         this.formData.sid = sid
+        this.formData.serverName = serverName
         // 调用数据测试
         this.testFormData()
       },
@@ -270,7 +293,7 @@
       },
       // 获取充值方式
       getPayType() {
-        user.getPayType()
+        pay.getPayType()
           .then(res => {
             this.payTypeList = res
             this.formData.payType = res[0].payType
@@ -279,6 +302,15 @@
               this.formData.twoChannel = res[0].twoChannel[0]
             }
             // console.log(this.payTypeList)
+          })
+      },
+      cancelWindow() {
+        this.windowIsOpen = false
+      },
+      getOrderId() {
+        pay.getOrderId()
+          .then(res => {
+            this.formData.order_sn = res.orderSn
           })
       }
     },

@@ -1,5 +1,7 @@
 const state = {
-  user: {}
+  user: {},
+  formData: {},
+  openPayWindow: false
 }
 
 export default state
