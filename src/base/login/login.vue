@@ -198,7 +198,7 @@
       border-top 1px solid $color-theme
       .input-wrapper
         &.user
-          margin-top 0
+          margin-top 0!important
     .to-login
       padding 30px 25px
       .title

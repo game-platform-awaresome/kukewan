@@ -18,6 +18,7 @@ export function getOrderId() {
     })
 }
 
+// 充值
 export function charge(formData) {
   const url = 'pay'
   return axios.post(url, formData)

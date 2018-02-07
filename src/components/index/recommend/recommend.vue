@@ -3,7 +3,7 @@
     <public-title :title="title"></public-title>
     <div class="list-wrapper">
       <ul>
-        <router-link :to="recommend.url" tag="li"  v-for="(recommend,index) in recommends" :key="index"
+        <router-link :to="{path: `/game-hall/${recommend.id}`}" tag="li"  v-for="(recommend,index) in recommends" :key="index"
         @mouseover="overIndex(index)" @mouseout="outIndex" class="list-item">
           <div class="game-image-wrapper">
               <img :src="recommend.img" alt="">
@@ -19,7 +19,7 @@
           <div class="game-content-wrapper">
             <span class="name">{{recommend.name}}</span>
             <type-icon :typeIcon="recommend.type"></type-icon>
-            <span class="btn" data-url="recommend.url">开始游戏</span>
+            <span class="btn" data-url="recommend.id">开始游戏</span>
           </div>
         </router-link>
       </ul>

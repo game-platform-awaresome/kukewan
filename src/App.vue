@@ -11,6 +11,7 @@
 <script type="text/ecmascript-6">
 import KHeader from 'components/k-header/k-header'
 import KFooter from 'components/k-footer/k-footer'
+import {mapActions} from 'vuex'
 
 export default {
   created () {
@@ -21,6 +22,9 @@ export default {
   },
   data() {
     return {}
+  },
+  methods: {
+    ...mapActions(['setUser'])
   },
   components: {
     KHeader,

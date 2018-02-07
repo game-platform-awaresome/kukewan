@@ -28,7 +28,7 @@
                       <p class="name">{{content.gameName}}</p>
                       <p class="type">{{content.type}}</p>
                     </div>
-                    <a href="#" target="_blank" class="start-game">进入</a>
+                    <router-link :to="{path: `/game-hall/${content.gid}`}" class="start-game">进入</router-link>
                   </div>
               </li>
             </ul>

@@ -10,7 +10,7 @@
       <div class="game-server-list-right">
         <!-- slider -->
         <div class="slider-wrapper">
-          <el-carousel height="304px">
+          <el-carousel height="317px">
             <el-carousel-item v-for="(item,index) in slider" :key="index">
               <div class="slider-img-wrapper">
                 <img :src="item.image" alt="">
@@ -37,7 +37,7 @@
                 <input type="text" v-model="searchData" @keyup.13="searchServer">
               </div>
               区
-              <div class="search-server-btn">搜索</div>
+              <div class="search-server-btn" @click="searchServer">搜索</div>
             </div>
           </div>
           <div class="select-server-list-wrapper">
@@ -76,7 +76,11 @@
   export default {
     created() {
       this.getSlider()
-      this.getServerList()
+    },
+    mounted () {
+      this.$nextTick(() => {
+        this.getServerList()
+      })
     },
     data () {
       return {
@@ -94,6 +98,7 @@
           })
       },
       getServerList() {
+        this.servers = []
         let gid = this.$route.params.gid
         server.gameServerList(gid)
           .then(({data, headers}) => {
@@ -169,7 +174,7 @@
           border()
           border-top 2px solid $color-theme
           background-color #f7fafe
-          padding-top 17px
+          // padding-top 17px
           padding-bottom 17px
           .input-wrapper
             padding 14px

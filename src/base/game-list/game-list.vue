@@ -5,7 +5,7 @@
         <li v-for="(list,index) in gameList" :key="index" class="list-item"
         @mouseenter="overIndex(index)" @mouseleave="outIndex()">
           <div class="img-wrapper">
-            <router-link to="{path: list.url}">
+            <router-link :to="{path: `/game-hall/${list.id}`}">
               <img :src="list.img" alt="" class="game-img">
             </router-link>
           </div>
@@ -19,7 +19,7 @@
             <span class="link">官网</span>
             <span class="dot">|</span>
             <span class="link">礼包</span>
-            <span class="start-game">开始游戏</span>
+            <router-link tag="span" class="start-game" :to="{path: `/game-hall/${list.id}`}">开始游戏</router-link>
           </div>
         </li>
       </ul>

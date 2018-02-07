@@ -37,7 +37,7 @@
     methods: {
       selectGame(id) {
         this.$router.push({
-          path: `/game-hall/list/${id}`
+          path: `/game-hall/${id}`
         })
       }
     },

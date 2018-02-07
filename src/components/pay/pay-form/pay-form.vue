@@ -84,12 +84,12 @@
   import * as game from 'api/game'
   import * as server from 'api/server'
   import * as user from 'api/user'
-  import * as pay from 'api/pay'
+  // import * as pay from 'api/pay'
 
   export default {
     created () {
       this.allGame()
-      this.getOrderId()
+      // this.getOrderId()
       this.getUnitUrlParams()
       if (localStorage.access_token) {
         this.isCorrectAccount = 0
@@ -207,6 +207,9 @@
           this.showGameServerList = false
         }
         this.showGameList = true
+        if (this.recentPlayList.length === 0 && this.formData.account) {
+          this.recentGame(this.formData.account)
+        }
       },
       openGameServerList() {
         if (this.showGameList) {
@@ -287,41 +290,45 @@
       },
       // 最近的游戏
       recentGame(account) {
-        this.loadingGame.recent = true
-        game.allRecentGame(account)
-          .then(res => {
-            let arr = []
-            for (let key in res) {
-              let obj = res[key]
-              let recentObj = {
-                name: obj.gameName,
-                id: obj.gameid,
-                dataType: 'gameData',
-                payto: obj.payto
+        if (this.isCorrectAccount === 0) {
+          this.loadingGame.recent = true
+          game.allRecentGame(account)
+            .then(res => {
+              let arr = []
+              for (let key in res) {
+                let obj = res[key]
+                let recentObj = {
+                  name: obj.gameName,
+                  id: obj.gameid,
+                  dataType: 'gameData',
+                  payto: obj.payto
+                }
+                arr.push(recentObj)
               }
-              arr.push(recentObj)
-            }
-            this.recentPlayList = arr
-            this.loadingGame.recent = false
-            // console.log(this.recentPlayList)
-          })
+              this.recentPlayList = arr
+              this.loadingGame.recent = false
+              // console.log(this.recentPlayList)
+            })
+        }
       },
       currentGameRecentServer(gid, account) {
-        this.loadingServer.recent = true
-        server.currentGameRecentServer(gid, account)
-          .then(res => {
-            let arr = []
-            res.forEach(element => {
-              let obj = {
-                name: element.serverName,
-                id: element.sid,
-                dataType: 'serverData'
-              }
-              arr.push(obj)
+        if (this.isCorrectAccount === 0) {
+          this.loadingServer.recent = true
+          server.currentGameRecentServer(gid, account)
+            .then(res => {
+              let arr = []
+              res.forEach(element => {
+                let obj = {
+                  name: element.serverName,
+                  id: element.sid,
+                  dataType: 'serverData'
+                }
+                arr.push(obj)
+              })
+              this.recentServerList = arr
+              this.loadingServer.recent = false
             })
-            this.recentServerList = arr
-            this.loadingServer.recent = false
-          })
+        }
       },
       currentGameOfServer(gid) {
         this.loadingServer.all = true
@@ -410,13 +417,13 @@
             this.backAccount(this.isCorrectAccount)
             return Promise.resolve(res)
           })
-      },
-      getOrderId() {
-        pay.getOrderId()
-          .then(res => {
-            this.formData.order_sn = res.orderSn
-          })
       }
+      // getOrderId() {
+      //   pay.getOrderId()
+      //     .then(res => {
+      //       this.formData.order_sn = res.orderSn
+      //     })
+      // }
     }
   }
 </script>

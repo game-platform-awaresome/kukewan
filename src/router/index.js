@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Index from 'components/index/index'
 import GameHall from 'components/game-hall/game-hall'
 import GameServerList from 'components/game-hall/game-server-list'
+import GamePage from 'components/game-hall/game-page'
 import Pay from 'components/pay/pay'
 import User from 'components/user/user'
 import IntergralMall from 'components/intergral-mall/intergral-mall'
@@ -43,6 +44,10 @@ let routes = [
   {
     path: '/game-hall/:gid',
     component: GameServerList
+  },
+  {
+    path: '/game-hall/:gid/:sid',
+    component: GamePage
   },
   {
     path: '/pay',

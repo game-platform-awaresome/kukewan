@@ -1,5 +1,7 @@
 <template>
-  <div class="pay" @click="bodyCloseWindow">
+  <div class="pay" @click="bodyCloseWindow" v-loading="formData.order_sn === 1"
+   element-loading-background="rgb(255,255,255)"
+   element-loading-text="加载中">
     <div class="pay-wrapper">
       <div class="pay-left">
         <!-- user-info -->
@@ -190,8 +192,13 @@
       },
       // 提交
       submit() {
+        // 切换支付方式改变订单号
         if (this.checkForm()) {
-          this.windowIsOpen = true
+          this.formData.order_sn = 1
+          this.getOrderId()
+            .then(() => {
+              this.windowIsOpen = true
+            })
         }
       },
       // 选择支付类型
@@ -209,8 +216,6 @@
         // 调用数据测试
         this.testFormData()
         this.selectPayTypeAlert(this.formData.payType)
-        // 切换支付方式改变订单号
-        this.getOrderId()
       },
       // 切换支付类型提示
       selectPayTypeAlert(type) {
@@ -308,9 +313,10 @@
         this.windowIsOpen = false
       },
       getOrderId() {
-        pay.getOrderId()
+        return pay.getOrderId()
           .then(res => {
             this.formData.order_sn = res.orderSn
+            return Promise.resolve()
           })
       }
     },

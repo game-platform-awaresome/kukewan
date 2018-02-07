@@ -1,6 +1,6 @@
 <template>
   <div class="user-info">
-    <div class="user-info">
+    <div class="user-info" v-show="user.length">
       <div class="sign">
         <span class="sign-text" v-show="user.sign">已签到<i class="el-icon-check"></i></span>
         <span class="sign-text" v-show="!user.sign">未签到</span>
@@ -18,6 +18,16 @@
         <div class="security-bar">
           <div class="range" ref="range"></div>
         </div>
+      </div>
+    </div>
+    <div class="user-info" v-show="!user.length">
+      <div class="avatar">
+        <img src="./avatar.png" alt="">
+      </div>
+      <div class="account not-login">
+        <router-link to="/login">
+          <span class="account-text">尚未登录,去登录</span>
+        </router-link>
       </div>
     </div>
   </div>
@@ -127,6 +137,12 @@
       .account-text
         vertical-align top
         display inline-block
+      &.not-login
+        .account-text
+          padding-top  15px
+          transition 0.4s
+          &:hover
+            color $color-theme
       .account-vip
         display inline-block
         vertical-align top
