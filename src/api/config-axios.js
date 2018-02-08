@@ -2,7 +2,7 @@
  * @Author: Greentea
  * @Date: 2017-12-26 10:34:37
  * @Last Modified by: Greentea
- * @Last Modified time: 2018-01-31 17:29:47
+ * @Last Modified time: 2018-02-08 12:00:09
  */
 import axios from 'axios'
 import qs from 'qs'
@@ -12,7 +12,7 @@ import md5 from 'blueimp-md5'
 // axios 配置
 axios.defaults.timeout = 5000
 const debug = process.env.NODE_ENV !== 'production'
-axios.defaults.baseURL = debug ? 'http://api.yii.com:88' : 'api.kukewan.com'
+axios.defaults.baseURL = !debug ? 'http://api.yii.com:88' : 'http://test.api.kukewan.com'
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 // axios.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 

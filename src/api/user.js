@@ -133,3 +133,12 @@ export function getUserInfoByUid(uid) {
       return Promise.resolve(res.data)
     })
 }
+
+// 更新密码
+export function updatePassword(data) {
+  const url = `/user`
+  return axios.put(url, data)
+    .then(res => {
+      return Promise.resolve(res.data)
+    })
+}

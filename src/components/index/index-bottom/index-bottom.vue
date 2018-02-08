@@ -26,10 +26,10 @@
         </div>
         <div class="list-wrapper">
           <ul>
-            <li v-for="(center,index) in gameCenter" :key="index" class="list-item">
+            <router-link :to="{path: `/game-hall/${center.id}`}" tag="li" v-for="(center,index) in gameCenter" :key="index" class="list-item">
               <span class="title-text">{{center.name}}</span>
               <type-icon :typeIcon="center.type"></type-icon>
-            </li>
+            </router-link>
           </ul>
         </div>
       </div>

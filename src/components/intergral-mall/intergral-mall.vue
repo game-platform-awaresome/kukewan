@@ -55,42 +55,20 @@
   import Rank from 'base/rank/rank'
   import ArticleList from 'base/article-list/article-list'
   import GoodsList from 'components/intergral-mall/goods-list/goods-list'
-
+  import * as article from 'api/article'
   import * as gift from 'api/gift'
 
   export default {
     created () {
       this.getGift()
+      this.getNews()
     },
     data () {
       return {
         // 礼包排行
         rank: [],
         // FAQ
-        news: {
-          title: '新闻公告',
-          notice: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-          lists: [{
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          },
-          {
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          },
-          {
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          },
-          {
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          },
-          {
-            title: '神印王座维护通知维护通知维护通知维护通知维护通知维护通知维护通知',
-            url: ''
-          }]
-        },
+        news: [],
         // 大轮播
         slider: [{
           img: require('common/image/test/intergral-mall/slider.png')
@@ -218,6 +196,12 @@
           .then(res => {
             this.rank = res
           })
+      },
+      getNews() {
+        article.newsList()
+        .then(res => {
+          this.news = res
+        })
       }
     },
     components: {

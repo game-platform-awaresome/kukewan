@@ -2,7 +2,7 @@
  * @Author: Greentea
  * @Date: 2017-12-26 13:34:50
  * @Last Modified by: Greentea
- * @Last Modified time: 2017-12-26 16:41:06
+ * @Last Modified time: 2018-02-08 14:36:59
  */
 <template>
   <div class="intergral-detail">
@@ -17,41 +17,52 @@
       <div class="intergral-detail-left">
         <div class="intergral-detail-info">
           <div class="intergral-goods-img-wrapper">
-            <img :src="goods.img" alt="">
+            <img :src="goods.card_image" alt="">
           </div>
           <div class="intergral-params">
             <p class="title">{{goods.name}}</p>
-            <p class="intergral">所需积分 : <span class="intergral-in-num">{{goods.intergral}}</span>积分</p>
-            <p class="intergral-pre">原价所需 : <span class="intergral-pre-in-num">{{goods.intergral_pre}}积分</span></p>
-            <p class="num">已换购 : <span class="num-in-num">{{goods.num}}</span>件</p>
-            <!-- select server -->
-            <div class="select-server" v-if="goods.type !== 2">
+            <div v-show="goods.card_type_id === 2">
+              <p class="intergral">所需积分 : <span class="intergral-in-num">{{goods.intergral}}</span>积分</p>
+              <p class="intergral-pre">原价所需 : <span class="intergral-pre-in-num">{{goods.intergral_pre}}积分</span></p>
+            </div>
+            <!-- 新手卡 S -->
+            <div v-show="goods.card_type_id === 1">
+              <p class="num">已换购 : <span class="num-in-num">{{goods.part_num}}</span>件</p>
+              <p class="num">剩余 : <span class="num-in-num">{{goods.remain_num}}</span>件</p>
+            </div>
+            <!-- 新手卡 E -->
+            <!-- 非实物 S -->
+            <div class="select-server" v-if="goods.card_type_id !== 3">
               <!-- <span class="select-server-in"></span> -->
               <el-select v-model="data.sid" filterable placeholder="请选择区服">
                 <el-option
-                  v-for="server in goods.server"
+                  v-for="server in servers"
                   :key="server.sid"
-                  :label="server.name"
+                  :label="server.serverName"
                   :value="server.sid">
                 </el-option>
               </el-select>
             </div>
-            <!-- select type -->
-            <div class="select-type" v-if="goods.type === 2">
-              {{data.goods_type}}
+            <!-- 非实物 E -->
+            <!-- 实物 S-->
+            <div class="select-type" v-if="goods.card_type_id === 3">
               <span class="select-type-in">颜色 : </span>
               <el-radio v-for="(type,index) in goods.goods_type" :key="index"
                v-model="data.goods_type" :label="type.id">{{type.name}}</el-radio>
             </div>
-            <div class="select-num" v-if="goods.type !== 0">
+            <!-- 实物 E -->
+            <!-- 新手卡 S -->
+            <div class="select-num" v-if="goods.card_type_id !== 1">
               <span class="select-num-in">数量 : </span>
               <el-input-number size="mini" v-model="data.num"></el-input-number>
             </div>
+            <!-- 新手卡 E -->
             <div class="get-goods-btn">立即兑换</div>
           </div>
         </div>
         <div class="intergral-detail-detail">
           <public-title title="商品详情" :show="false"></public-title>
+          {{goods.card_context}}
         </div>
         <div class="intergral-detail-description">
           <public-title title="兑换说明" :show="false"></public-title>
@@ -81,48 +92,54 @@
   import PublicTitle from 'public/title/title'
   import ArticleList from 'base/article-list/article-list'
   import Gift from 'base/gift/gift'
+  import * as server from 'api/server'
+  import * as gift from 'api/gift'
   export default {
+    created() {
+      this.getGiftDetail()
+    },
     data () {
       return {
         data: {
-          type: 0,  // 商品类型
-          goods_type: 1,  // 商品本身类型
-          num: 0,
-          sid: ''
+          goods_type: '',  // 商品实物选择的礼品类型
+          num: 0, // 选择商品的数量
+          sid: '' // 选择的区服
         },
+        servers: [],
         /*
           接口数据
         */
-        // type: 0 新手卡 1 礼包 2 实物
-        goods: {
-          name: '毛糖儿童智能电话手表',
-          img: require('common/image/test/intergral-mall/goods.png'),
-          intergral: 10000,
-          intergral_pre: 12000,
-          num: 20,
-          type: 1,
-          server: [{
-            sid: 1,
-            name: '双线23222区'
-          },
-          {
-            sid: 2,
-            name: '双线1234区'
-          },
-          {
-            sid: 3,
-            name: '双线09709区'
-          }],
-          goods_type: [{
-            name: '天空蓝',
-            id: 1
-          },
-          {
-            name: '布丁粉',
-            id: 2
-          }],
-          detail: ''
-        },
+        // type: 1 新手卡 2 礼包 3 实物
+        // goods: {
+        //   name: '毛糖儿童智能电话手表',
+        //   img: require('common/image/test/intergral-mall/goods.png'),
+        //   intergral: 10000,
+        //   intergral_pre: 12000,
+        //   num: 20,
+        //   type: 1,
+        //   server: [{
+        //     sid: 1,
+        //     name: '双线23222区'
+        //   },
+        //   {
+        //     sid: 2,
+        //     name: '双线1234区'
+        //   },
+        //   {
+        //     sid: 3,
+        //     name: '双线09709区'
+        //   }],
+        //   goods_type: [{
+        //     name: '天空蓝',
+        //     id: 1
+        //   },
+        //   {
+        //     name: '布丁粉',
+        //     id: 2
+        //   }],
+        //   detail: ''
+        // },
+        goods: {},
         slider: [{
           img: require('common/image/test/intergral-mall/new-hand-card.png')
         },
@@ -192,10 +209,31 @@
         }
       }
     },
+    methods: {
+      getGiftDetail() {
+        const cardId = this.$route.params.gift_id
+        gift.getGiftDetail(cardId)
+          .then(res => {
+            console.log(res)
+            this.goods = res
+            return Promise.resolve(res.gid)
+          })
+          .then(gid => {
+            server.gameServerList(gid)
+              .then(res => {
+                this.servers = res.data
+                console.log(this.servers)
+              })
+          })
+      }
+    },
     components: {
       PublicTitle,
       ArticleList,
       Gift
+    },
+    watch: {
+      '$route': 'getGiftDetail'
     }
   }
 </script>

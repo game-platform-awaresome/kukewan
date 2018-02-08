@@ -102,11 +102,12 @@
 
 <script type="text/ecmascript-6">
   import * as validate from 'common/js/validate'
+  import * as user from 'api/user'
 
   export default {
     data () {
       return {
-        step: 3,
+        step: 0,
         // 边框
         borderFocus: {
           username: false,
@@ -158,12 +159,14 @@
         // username
         if (inputType === 'username') {
           // 调用接口 是否账号存在
-          if (this.formData.username) {
-            this._success(inputType)
-          } else {
-            this._fail(inputType)
-          }
-          return
+          user.hasUsername(this.formData.username)
+            .then(res => {
+              if (res.code === 1) {
+                this._success(inputType)
+              } else {
+                this._fail(inputType)
+              }
+            })
         }
         // password_repeat
         if (inputType === 'password_repeat') {
@@ -173,6 +176,17 @@
             this._fail(inputType)
           }
           return
+        }
+        // phone
+        if (inputType === 'phone') {
+          user.hasPhone(this.formData.phone)
+            .then(res => {
+              if (res.code === 1) {
+                this._success(inputType)
+              } else {
+                this._fail(inputType)
+              }
+            })
         }
         // message_code
         if (inputType === 'message_code') {
@@ -254,6 +268,9 @@
       // 步骤三
       stepThree() {
         if (this.formFlag.password && this.formFlag.password_repeat) {
+          // user.updatePassword({
+
+          // })
           this.step = 3
         }
       }

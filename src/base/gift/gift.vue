@@ -12,7 +12,6 @@
             <p class="number">还剩 : <span class="account">{{gift.card_num}}</span>个</p>
           </div>
           <router-link tag="li" class="btn" :to="{path: `/intergral-mall/list/${gift.id}`}">领取</router-link>
-          <!-- <div class="btn">领取</div> -->
         </li>
       </ul>
     </div>

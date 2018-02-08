@@ -8,3 +8,8 @@ export function giftList() {
   }
   return axios.axiosGet(url, params)
 }
+
+export function getGiftDetail(giftId) {
+  const url = `/card/${giftId}`
+  return axios.axiosGet(url)
+}
