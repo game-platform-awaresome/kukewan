@@ -46,8 +46,11 @@ let routes = [
     component: GameServerList
   },
   {
-    path: '/game-hall/:gid/:sid',
-    component: GamePage
+    path: '/game-hall/:gameid/:serverid',
+    component: GamePage,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/pay',

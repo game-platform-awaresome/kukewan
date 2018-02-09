@@ -41,6 +41,7 @@
     min-height 7px
     padding-bottom 20px
     bg('./register-bg.png')
+    background-size 100%
     padding-top 23px
     .register-wrapper
       clear-fix()

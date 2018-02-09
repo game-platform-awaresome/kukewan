@@ -93,7 +93,7 @@
       <div class="step-form-wrapper"  v-show="step === 3">
         <div class="register-main-form-wrapper">
           <p class="modify-password"><i class="el-icon-success"></i>恭喜您!密码修改成功!</p>
-          <div class="next-btn">返回登录</div>
+          <router-link class="next-btn" to="/login" tag="div">返回登录</router-link>
         </div>
       </div>
     </div>
@@ -108,6 +108,7 @@
     data () {
       return {
         step: 0,
+        token: 0,
         // 边框
         borderFocus: {
           username: false,
@@ -236,21 +237,27 @@
       },
       // 发送验证码
       sendMessageCode() {
-        if (validate.phone(this.formData.phone)) {
-          // 开始进入及时状态
-          this.currentNumber = 59
-          this.messageCodeText = `重新发送(${this.currentNumber})`
-          let countDown = setInterval(() => {
-            this.currentNumber -= 1
+        if (typeof this.currentNumber !== 'number') {
+          if (validate.phone(this.formData.phone)) {
+            // 开始进入及时状态
+            this.currentNumber = 59
             this.messageCodeText = `重新发送(${this.currentNumber})`
-            console.log(this.messageCodeText)
-            console.log(typeof this.currentNumber)
-            if (!this.currentNumber) {
-              clearInterval(countDown)
-              this.messageCodeText = '发送短信验证码'
-              this.currentNumber = ''
-            }
-          }, 1000)
+            let countDown = setInterval(() => {
+              this.currentNumber -= 1
+              this.messageCodeText = `重新发送(${this.currentNumber})`
+              console.log(this.messageCodeText)
+              if (!this.currentNumber) {
+                clearInterval(countDown)
+                this.messageCodeText = '发送短信验证码'
+                this.currentNumber = ''
+              }
+            }, 1000)
+            // 发送接口
+            this.forgetPsdGetMessageCode({
+              mobile: this.formData.phone,
+              account: this.formData.username
+            })
+          }
         }
       },
       // 步骤一
@@ -261,18 +268,54 @@
       },
       // 步骤二
       stepTwo() {
-        if (this.formFlag.message_code) {
+        let params = {
+          mobile: this.formData.phone,
+          account: this.formData.username,
+          captcha: this.formData.message_code
+        }
+        if (this.judgeMessageCode(params)) {
           this.step = 2
         }
       },
       // 步骤三
       stepThree() {
         if (this.formFlag.password && this.formFlag.password_repeat) {
-          // user.updatePassword({
-
-          // })
-          this.step = 3
+          let params = {
+            token: this.token,
+            newPass: this.formData.password
+          }
+          if (this.tokenUpdatePassword(params)) {
+            this.step = 3
+          }
         }
+      },
+      // 获取短信验证码
+      forgetPsdGetMessageCode(params) {
+        user.forgetSendMessageCode(params)
+          .then(res => {
+            if (res.code === 200) {
+              console.log('验证码发送成功!')
+            }
+          })
+      },
+      // 验证短信验证码
+      judgeMessageCode(params) {
+        return user.forgetJudgeMessageCode(params)
+          .then(res => {
+            if (res.code === 200) {
+              this.token = res.token
+              return true
+            }
+          })
+      },
+      // 通过token来更新密码
+      tokenUpdatePassword(data) {
+        return user.forgetTokenUpdatePassword(data)
+          .then(res => {
+            if (res.code === 200) {
+              return true
+            }
+          })
       }
     }
   }
@@ -287,6 +330,7 @@
     padding-top 62px
     height 760px
     bg('../register/register-bg.png')
+    background-size 100%
     .forgot-wrapper
       wrapper()
       border()

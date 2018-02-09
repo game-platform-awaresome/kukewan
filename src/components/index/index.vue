@@ -13,10 +13,11 @@
       </slider>
     </div>
     <!-- index -->
+    <div class="margin-top"></div>
     <div class="index-wrapper">
       <div class="index-left">
         <!-- login -->
-        <login></login>
+        <login :loginCls="3"></login>
         <!-- game-server -->
         <game-server></game-server>
         <!-- gift -->
@@ -123,7 +124,7 @@
   @import "~common/stylus/variable.styl"
 
   .index
-    margin-top 71px
+    padding-top 71px
     position relative
     min-height 1000px
     .slider-wrapper
@@ -138,25 +139,63 @@
           img
             width 100%
             height 100%
+      .slider:hover .btn-left,
+      .slider:hover .btn-right
+        background transparent
+
       .indicators
-        top 426px
-        right 294px
+        top 455px
+        right 50%
         .slider-indicator-icon
           background-color #f9cfce
+          width 16px
+          height 16px
+          border-radius 50%
           &.slider-indicator-active
+            margin 0 10px
+            width 32px
+            border-radius 8px
             background-color $color-theme
+      .btn
+        top 50%
+        height 80px
+        width 40px
+        margin-top -40px
+        background transparent
+        &.btn-left
+          left 20px
+          border-radius 5px
+          &:hover
+            background-color rgba(35,114,244,.8)
+          i
+            margin-left 9px
+        &.btn-right
+          right 20px
+          border-radius 5px
+          border-top-left-radius 5px
+          border-bottom-left-radius 5px
+          &:hover
+            background-color rgba(35,114,244,.8)
+          i
+            margin-right 7px
+    .margin-top
+      width 0
+      height 500px
     .index-wrapper
       wrapper()
       .index-left
+        position relative
         wrapper-left()
         .login-block
-          margin-top 60px
+          position absolute
+          top (-365 - $height-block-top)px
           border-top 2px solid $color-theme
         .game-server
           background-color rgba(255,255,255,.8)
-          margin-top 60px
+          // margin-top 60px
           height 415px
         .gift
+          background-color: rgba(255,255,255,0.8)
           margin-top $height-block-top
           height 438px
         .article-list
@@ -164,8 +203,8 @@
           height 392px
       .index-right
         wrapper-right()
-        &.top
-          margin-top 60px + 60px + 365px
+        // &.top
+        //   margin-top 60px + 60px + 365px
         .boutique
           margin-top $height-block-top
 

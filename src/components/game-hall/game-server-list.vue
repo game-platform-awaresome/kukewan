@@ -42,11 +42,15 @@
           </div>
           <div class="select-server-list-wrapper">
             <ul>
-              <li v-for="(item,index) in servers" :key="index" class="server-list-item">
+              <router-link tag="li" v-for="(item,index) in servers" :key="index"
+              class="server-list-item" :to="{path: `/game-hall/${item.gid}/${item.sid}`}">
                 <span class="icon" :class="item.isRecommend"></span>
                 <span class="server-name">{{item.serverName}}</span>
                 <span class="server-time">{{item.startTime}}</span>
-              </li>
+              </router-link>
+              <!-- <li v-for="(item,index) in servers" :key="index" class="server-list-item">
+
+              </li> -->
             </ul>
           </div>
           <div class="pagination">

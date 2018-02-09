@@ -125,3 +125,9 @@ export function getGameInfoByGid(id) {
   const url = `/game/${id}`
   return axios.axiosGet(url)
 }
+
+// 获取iframe
+export function getIframe(sid) {
+  const url = `/game-login/${sid}`
+  return axios.axiosGet(url)
+}

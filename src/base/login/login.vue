@@ -1,5 +1,5 @@
 <template>
-  <div class="login-block" :class="{ loginIntergralCls: loginCls === 1}">
+  <div class="login-block" :class="{ loginIntergralCls: loginCls === 1, loginIndexCls: loginCls === 3}">
     <div class="to-login" v-if="(!isMain && !isLogined) || isMain">
       <div class="title" v-show="loginCls !== 1">
         <span>{{title}}</span>
@@ -192,6 +192,8 @@
     box-sizing border-box
     background-color rgba(255,255,255,.8)
     overflow hidden
+    &.loginIndexCls
+      width 310px
     &.loginIntergralCls
       height 317px
       border()

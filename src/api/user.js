@@ -142,3 +142,30 @@ export function updatePassword(data) {
       return Promise.resolve(res.data)
     })
 }
+
+// 忘记密码发送短信验证码
+export function forgetSendMessageCode(data) {
+  const url = '/user/forget-pass-send-captcha'
+  return axios.post(url, data)
+    .then(res => {
+      return Promise.resolve(res.data)
+    })
+}
+
+// 忘记密码验证短信验证码
+export function forgetJudgeMessageCode(data) {
+  const url = '/user/forget-pass-validate-captcha'
+  return axios.post(url, data)
+    .then(res => {
+      return Promise.resolve(res.data)
+    })
+}
+
+// 忘记密码,通过token更新密码
+export function forgetTokenUpdatePassword(data) {
+  const url = '/user/forget-pass-submit-new-pass'
+  return axios.post(url, data)
+    .then(res => {
+      return Promise.resolve(res.data)
+    })
+}

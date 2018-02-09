@@ -83,6 +83,7 @@
     margin-top 71px
     height 754px
     bg('./login-bg.png')
+    background-size 100%
     .login-wrapper
       position relative
       wrapper()

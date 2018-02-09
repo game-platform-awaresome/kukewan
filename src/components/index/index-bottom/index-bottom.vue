@@ -113,6 +113,7 @@
   @import "~common/stylus/variable.styl"
 
   .index-bottom
+    clear both
     .ad
       clear both
       height 110px

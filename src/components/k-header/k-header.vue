@@ -1,5 +1,5 @@
 <template>
-  <div class="k-header">
+  <div class="k-header" v-show="headerShow">
     <div class="header-center">
       <div class="logo-wrapper">
         <img src="./logo.png" alt="">
@@ -42,6 +42,7 @@
 
   export default {
     created() {
+      this.deleteHeader()
       nav.getNav()
       .then((res) => {
         this.navs = res
@@ -53,16 +54,25 @@
     data () {
       return {
         navs: [],
-        isLogin: localStorage.access_token
+        isLogin: localStorage.access_token,
+        headerShow: true
       }
     },
     methods: {
       quit() {
         user.quit()
+      },
+      deleteHeader() {
+        if (this.$route.params.gameid && this.$route.params.serverid) {
+          this.headerShow = false
+        }
       }
     },
     components: {
 
+    },
+    watch: {
+      '$route': 'deleteHeader'
     }
   }
 </script>

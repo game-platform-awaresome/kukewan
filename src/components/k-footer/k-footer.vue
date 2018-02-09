@@ -1,5 +1,5 @@
 <template>
-  <div class="k-footer">
+  <div class="k-footer" v-show="footerShow">
     <div class="footer-wrapper">
       <div class="warning">
         <span>健康游戏忠告</span>
@@ -36,8 +36,12 @@
 
 <script type="text/ecmascript-6">
   export default {
+    created() {
+      this.deleteFooter()
+    },
     data () {
       return {
+        footerShow: true,
         links: [{
           name: '人才招聘',
           url: '/zhaopin'
@@ -62,8 +66,18 @@
         recordNum: '备案号 : 粤ICP备14061518号-2  网络文化经营许可证:粤网文[2014]0622-222    ICP证 : 粤B2-20150448'
       }
     },
+    methods: {
+      deleteFooter() {
+        if (this.$route.params.gameid && this.$route.params.serverid) {
+          this.footerShow = false
+        }
+      }
+    },
     components: {
 
+    },
+    watch: {
+      '$route': 'deleteFooter'
     }
   }
 </script>
