@@ -145,6 +145,7 @@ let routes = [
   }
 ]
 let router = new Router({
+  mode: 'history',
   routes,
   linkActiveClass: 'active',
   linkExactActiveClass: 'exact-active'

@@ -1,6 +1,6 @@
 <template>
   <div class="user-info">
-    <div class="user-info" v-show="user.length">
+    <div class="user-info" v-show="localUser">
       <div class="sign">
         <span class="sign-text" v-show="user.sign">已签到<i class="el-icon-check"></i></span>
         <span class="sign-text" v-show="!user.sign">未签到</span>
@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="user-info" v-show="!user.length">
+    <div class="user-info" v-show="!localUser">
       <div class="avatar">
         <img src="./avatar.png" alt="">
       </div>
@@ -42,12 +42,12 @@
   export default {
     mounted() {
       if (this.user.security_level) {
-        this.widthMove()
+        this.loadUser()
       }
     },
     data () {
       return {
-        localUser: this.$store.state.user
+        localUser: ''
       }
     },
     computed: {
@@ -85,12 +85,16 @@
         })
         animations.runAnimation(this.$refs.range, 'move')
       },
+      loadUser() {
+        this.widthMove()
+        this.localUser = this.user
+      },
       quit() {
         user.quit()
       }
     },
     watch: {
-      '$store.state.user': 'widthMove'
+      '$store.state.user': 'loadUser'
     }
   }
 </script>

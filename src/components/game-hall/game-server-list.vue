@@ -19,7 +19,7 @@
           </el-carousel>
         </div>
         <!-- select-server -->
-        <div class="select-server" v-loading="servers.length === 0">
+        <div class="select-server" v-loading="servers.length === 0 && !loading">
           <div class="select-server-nav">
             <div class="desc-wrapper">
               <i class="icon unimpeded"></i>
@@ -42,12 +42,16 @@
           </div>
           <div class="select-server-list-wrapper">
             <ul>
-              <router-link tag="li" v-for="(item,index) in servers" :key="index"
-              class="server-list-item" :to="{path: `/game-hall/${item.gid}/${item.sid}`}">
+              <!-- <router-link tag="li" v-for="(item,index) in servers" :key="index"
+              class="server-list-item" :to="{path: `/game-hall/${item.gid}/${item.sid}`}"> -->
+              <li v-for="(item,index) in servers" :key="index" class="server-list-item">
+                <a :href="`/game-hall/${item.gid}/${item.sid}`" target="_blank">
                 <span class="icon" :class="item.isRecommend"></span>
                 <span class="server-name">{{item.serverName}}</span>
                 <span class="server-time">{{item.startTime}}</span>
-              </router-link>
+                </a>
+              </li>
+              <!-- </router-link> -->
               <!-- <li v-for="(item,index) in servers" :key="index" class="server-list-item">
 
               </li> -->
@@ -85,13 +89,15 @@
       this.$nextTick(() => {
         this.getServerList()
       })
+      // console.log(this.loading)
     },
     data () {
       return {
         headers: {},
         slider: [],
         servers: [],
-        searchData: ''
+        searchData: '',
+        loading: false
       }
     },
     methods: {
@@ -103,6 +109,7 @@
       },
       getServerList() {
         this.servers = []
+        this.loading = false
         let gid = this.$route.params.gid
         server.gameServerList(gid)
           .then(({data, headers}) => {
@@ -133,10 +140,14 @@
         let loadingInstance = Loading.service({target: '.select-server'})
         server.searchServer(gid, serverName)
           .then(res => {
-            this.servers = res
+            // console.log(res)
             this.$nextTick(() => {
               loadingInstance.close()
             })
+            this.servers = res
+            if (this.servers.length === 0) {
+              this.loading = true
+            }
           })
       }
     },
